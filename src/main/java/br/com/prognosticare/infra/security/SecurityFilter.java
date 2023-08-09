@@ -20,15 +20,16 @@ import jakarta.servlet.http.HttpServletResponse;
 public class SecurityFilter  extends OncePerRequestFilter{
 
     @Autowired
-    TokenService tokenService;
+    private TokenService tokenService;
 
     @Autowired
-    UsuarioRepository usuarioRepository;
+    private UsuarioRepository usuarioRepository;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
         String tokenJWT = recuperaTokenJWT(request);
+
         if(tokenJWT != null){
             var subject = tokenService.getSubject(tokenJWT);
             var usuario = usuarioRepository.findUsuarioByEmail(subject);

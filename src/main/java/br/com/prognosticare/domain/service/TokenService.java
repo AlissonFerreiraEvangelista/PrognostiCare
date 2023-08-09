@@ -19,7 +19,7 @@ import br.com.prognosticare.domain.entity.usuario.Usuario;
 @Service
 public class TokenService {
     
-    @Value("${TOKEN.PASSWOR}")
+    @Value("${TOKEN_SECRET}")
     private String secret;
 
     public String gerarToken(Usuario usuario){
