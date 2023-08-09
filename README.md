@@ -1,6 +1,6 @@
 # :dart: <center> PrognostiCare </center>
 
-Bem-vindo ao repositório do Projeto de Trabalho de Conclusão de Semestre (TCS) da 5º fase do curso de Análise e Desenvolvimento de Sistemas da Faculdade SENAC. Neste projeto, estamos desenvolvendo o aplicativo Prognóstico de Saúde, uma ferramenta inovadora que visa auxiliar os usuários a monitorar e prever sua saúde de maneira eficiente e conveniente.
+Bem-vindo ao repositório do Projeto de Trabalho de Conclusão de Semestre (TCS) da 5º fase do curso de Análise e Desenvolvimento de Sistemas da Faculdade SENAC. Neste projeto, estamos desenvolvendo o aplicativo PrognostiCare, uma ferramenta inovadora que visa auxiliar os usuários a monitorar e prever sua saúde de maneira eficiente e conveniente.
 
 # :memo: Descrição do Projeto
 
