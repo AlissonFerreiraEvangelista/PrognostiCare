@@ -87,7 +87,7 @@ Se você tiver alguma dúvida, sugestão ou feedback, sinta-se à vontade para e
 
 - [Contato do Alisson](https://github.com/usuario-alisson) 😊
 - [Contato do Pedro Prazeres](https://github.com/PedroPrazz) 🚀
-- [Contato do Pedro Paulo](https://github.com/usuario-pedropaulo) 🎉
+- [Contato do Pedro Paulo](https://github.com/pdropaullo) 🎉
 - [Contato do Mauricio](https://github.com/MauricioDevJS) 🌟
 - [Contato da Lauren](https://github.com/lauured) 📧
 
