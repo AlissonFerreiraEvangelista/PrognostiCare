@@ -1,6 +1,6 @@
 INSERT INTO tb_user(
 	user_id, email, password, name)
-	VALUES ('9f360616-1811-4621-9b2c-6c7af609ff04', 'user@gmail.com', '$2a$10$PR8KTHSm.iIIOyykg.Nri.EjD9fRDoh5ARDVRLxYKPFiJiV2178P6', 'user');
+	VALUES ('9f360616-1811-4621-9b2c-6c7af609ff04', 'rribeiro.aline11@gmail.com', '$2a$10$PR8KTHSm.iIIOyykg.Nri.EjD9fRDoh5ARDVRLxYKPFiJiV2178P6', 'user');
 
 INSERT INTO tb_user(
 	user_id, email, password, name)

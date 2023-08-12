@@ -1,38 +1,40 @@
 package br.com.prognosticare.web.controller;
 
 import java.util.List;
-import java.util.UUID;
+import java.util.Optional;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.mail.MailException;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
-import br.com.prognosticare.domain.entity.role.RoleEntity;
-import br.com.prognosticare.domain.entity.usuario.Usuario;
-import br.com.prognosticare.domain.entity.usuario.UsuarioDto;
-import br.com.prognosticare.domain.service.AtualizarRolesRequest;
+import br.com.prognosticare.domain.entity.usuario.*;
+import br.com.prognosticare.domain.repository.UsuarioRepository;
+import br.com.prognosticare.domain.service.EmailService;
 import br.com.prognosticare.domain.service.UsuarioService;
 import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @RestController
 @RequestMapping("/register")
 @CrossOrigin("*")
 @SecurityRequirement(name = "bearer-key")
+@RequiredArgsConstructor
 public class UsuarioController {
 
-    @Autowired
-    UsuarioService usuarioService;
+
+    private final EmailService emailService;
+    private final UsuarioService usuarioService;
+    private final UsuarioRepository usuarioRepository;
 
     @PostMapping("/new")
     @ApiResponse(description = "Cadastra um usuário - Perfil de ADMIN")
@@ -62,19 +64,33 @@ public class UsuarioController {
         return ResponseEntity.status(HttpStatus.OK).body(usuarioService.saveAndFlushUser(usuario));
     }
 
-    @PutMapping("/{id}/atualizar-roles")
-    public ResponseEntity<String> atualizaRoles(@PathVariable("id") UUID userId,
-            @RequestBody AtualizarRolesRequest request) {
-        if (request != null) {
-            boolean updated = usuarioService.atualizarRoles(userId, request.roles());
-            if (updated) {
-                return ResponseEntity.ok("Roles Atualizada com sucesso");
-            } else {
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Usuário não encontrado");
+    @PostMapping("/public/forgot-password")
+    public void forgotPassword(@RequestBody @Valid DtoSenhaRestInput dtoSenhaRestInput) {
+        Optional<Usuario> usuarioOptional = usuarioRepository.findByEmail(dtoSenhaRestInput.email());
+        usuarioOptional.ifPresent(usuario -> {
+            String token = usuarioService.gerarToken(usuario);
+            try {
+                emailService.enviarEmailRecuperacaoSenha(usuario, token);
+            } catch (MailException e) {
+                log.error("Erro ao enviar Email", e);
+                e.printStackTrace();
             }
-        } else {
-            return ResponseEntity.status(HttpStatus.OK).body("Roles null");
+            System.out.println(token);
+        });
+
+    }
+
+    @PostMapping("/public/change-password")
+    public void changePassword(@RequestBody @Valid DtoSenhaAlteradaInput dtoSenhaAlteradaInput) {
+
+        try {
+            usuarioService.trocaSenha(dtoSenhaAlteradaInput.password(), dtoSenhaAlteradaInput.token());
+
+        } catch (Exception e) {
+            log.error("Erro ao alterar a senha usando token", e);
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
         }
 
     }
+
 }

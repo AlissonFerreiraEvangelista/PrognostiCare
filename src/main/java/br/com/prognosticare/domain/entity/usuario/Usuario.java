@@ -13,21 +13,23 @@ import br.com.prognosticare.domain.entity.role.RoleEntity;
 import java.util.List;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
-
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 
 
-@Getter
-@Setter
+@Data
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
 @Table(name = "tb_user")
 public class Usuario implements UserDetails {
-    
+  
+    @EqualsAndHashCode.Include
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID user_id;
