@@ -4,20 +4,21 @@ import java.util.Collection;
 import java.util.UUID;
 
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import br.com.prognosticare.domain.entity.role.RoleEntity;
+import jakarta.persistence.*;
 
 import java.util.List;
-import jakarta.persistence.*;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
+
 
 
 
@@ -34,9 +35,6 @@ public class Usuario implements UserDetails {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID user_id;
 
-    @Column(nullable = false)
-    private String name;
-
     @Column(nullable = false,  unique = true)
     private String email;
 
@@ -52,7 +50,8 @@ public class Usuario implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return this.roles;
+        //return this.roles;
+        return List.of(new SimpleGrantedAuthority("ROLE_USER"));
     }
 
     @Override
@@ -63,7 +62,7 @@ public class Usuario implements UserDetails {
 
     @Override
     public String getUsername() {
-        return this.name;
+        return this.email;
     }
 
     @Override
@@ -88,5 +87,21 @@ public class Usuario implements UserDetails {
     public boolean isEnabled() {
         // TODO Auto-generated method stub
         return true;
+    }
+
+    public void atualizarInformacoes(DtoAutenticacao dados) {
+        if (dados.email() != null) {
+            this.email = dados.email();
+        }
+        if (dados.password() != null) {
+          this.email = dados.password();
+        }
+
+    }
+
+    public Usuario (UsuarioDto dados){
+        this.email = dados.email();
+        this.password = dados.password();
+
     }
 }

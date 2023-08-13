@@ -6,6 +6,6 @@ public record DtoSenhaAlteradaInput(
     @NotBlank
     String password, 
     @NotBlank
-    String token) {
+    String tokenResetSenha) {
     
 }

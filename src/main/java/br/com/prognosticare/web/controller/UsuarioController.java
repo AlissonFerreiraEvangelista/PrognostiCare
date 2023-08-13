@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.BeanUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.mail.MailException;
@@ -16,7 +15,6 @@ import br.com.prognosticare.domain.entity.usuario.*;
 import br.com.prognosticare.domain.repository.UsuarioRepository;
 import br.com.prognosticare.domain.service.EmailService;
 import br.com.prognosticare.domain.service.UsuarioService;
-import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
@@ -26,11 +24,10 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @RestController
 @RequestMapping("/register")
-@CrossOrigin("*")
+//@CrossOrigin("*")
 @SecurityRequirement(name = "bearer-key")
 @RequiredArgsConstructor
 public class UsuarioController {
-
 
     private final EmailService emailService;
     private final UsuarioService usuarioService;
@@ -38,7 +35,7 @@ public class UsuarioController {
 
     @PostMapping("/new")
     @ApiResponse(description = "Cadastra um usuário - Perfil de ADMIN")
-    public ResponseEntity<Object> registerUser(@RequestBody UsuarioDto usuarioDto) {
+    public ResponseEntity<Object> registerUser(@RequestBody @Valid UsuarioDto usuarioDto) {
         var usuario = new Usuario();
         BeanUtils.copyProperties(usuarioDto, usuario);
         Usuario user = usuarioService.findUsuarioEmail(usuario.getEmail());
@@ -65,8 +62,8 @@ public class UsuarioController {
     }
 
     @PostMapping("/public/forgot-password")
-    public void forgotPassword(@RequestBody @Valid DtoSenhaRestInput dtoSenhaRestInput) {
-        Optional<Usuario> usuarioOptional = usuarioRepository.findByEmail(dtoSenhaRestInput.email());
+    public void forgotPassword(@RequestBody @Valid DtoSenhaRestInput dto) {
+        Optional<Usuario> usuarioOptional = usuarioRepository.findByEmail(dto.email());
         usuarioOptional.ifPresent(usuario -> {
             String token = usuarioService.gerarToken(usuario);
             try {
@@ -84,7 +81,7 @@ public class UsuarioController {
     public void changePassword(@RequestBody @Valid DtoSenhaAlteradaInput dtoSenhaAlteradaInput) {
 
         try {
-            usuarioService.trocaSenha(dtoSenhaAlteradaInput.password(), dtoSenhaAlteradaInput.token());
+            usuarioService.trocaSenha(dtoSenhaAlteradaInput.password(), dtoSenhaAlteradaInput.tokenResetSenha());
 
         } catch (Exception e) {
             log.error("Erro ao alterar a senha usando token", e);

@@ -1,10 +1,10 @@
 INSERT INTO tb_user(
 	user_id, email, password, name)
-	VALUES ('9f360616-1811-4621-9b2c-6c7af609ff04', 'rribeiro.aline11@gmail.com', '$2a$10$PR8KTHSm.iIIOyykg.Nri.EjD9fRDoh5ARDVRLxYKPFiJiV2178P6', 'user');
+	VALUES ('9f360616-1811-4621-9b2c-6c7af609ff04', 'rribeiro.aline11@gmail.com', '$2a$10$PR8KTHSm.iIIOyykg.Nri.EjD9fRDoh5ARDVRLxYKPFiJiV2178P6');
 
 INSERT INTO tb_user(
 	user_id, email, password, name)
-	VALUES ('d573dbe2-dfaf-41b1-8382-3bb9e686248f', 'admin@gmail.com', '$2a$10$Q8cW7A.PhCE0v04mmaaaJuAJWKimxhd52RfspBQ2oPssbNjkmyQNi', 'admin');
+	VALUES ('d573dbe2-dfaf-41b1-8382-3bb9e686248f', 'admin@gmail.com', '$2a$10$Q8cW7A.PhCE0v04mmaaaJuAJWKimxhd52RfspBQ2oPssbNjkmyQNi');
 
 INSERT INTO tb_role(
 	role_id, role_name)
