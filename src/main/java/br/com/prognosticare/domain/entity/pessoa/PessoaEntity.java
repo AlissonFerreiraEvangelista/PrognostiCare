@@ -110,4 +110,12 @@ public class PessoaEntity {
         this.usuario = new Usuario(dto.usuario());
     }
 
+    public PessoaEntity(String nome, String cpf, LocalDate dataNascimento, Usuario usuario) {
+        this.nome = nome;
+        this.cpf = cpf;
+        this.dataNascimento = dataNascimento;
+        this.usuario = usuario;
+    }
+
+    
 }

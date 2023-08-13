@@ -104,4 +104,11 @@ public class Usuario implements UserDetails {
         this.password = dados.password();
 
     }
+
+    public Usuario(String email, String password) {
+        this.email = email;
+        this.password = password;
+    }
+
+    
 }
