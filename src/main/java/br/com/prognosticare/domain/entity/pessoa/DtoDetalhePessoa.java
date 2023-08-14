@@ -7,7 +7,7 @@ import br.com.prognosticare.domain.entity.usuario.Usuario;
 
 public record DtoDetalhePessoa(
 
-UUID id, 
+UUID pessoa_id, 
 String nome, 
 String cpf,
 LocalDate dataNascimento,

@@ -28,4 +28,8 @@ public class PessoaService {
     public Optional<PessoaEntity> get(UUID pessoa_id){
         return pessoaRepository.findById(pessoa_id);
     }
+
+    public PessoaEntity getReferenceById(UUID pessoa_id) {
+        return pessoaRepository.getReferenceById(pessoa_id);
+    }
 }

@@ -7,7 +7,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.MailException;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.mail.javamail.MimeMessageHelper;
+
 import org.springframework.stereotype.Service;
 
 import br.com.prognosticare.domain.entity.email.EmailModel;
@@ -29,6 +29,7 @@ public class EmailService {
     @Value("${MAIL_USERNAME}")
     String email;
 
+    String ownerRef = "Suporte";
 
     public EmailModel sendEmail(EmailModel emailModel) {
         emailModel.setSendDateEmail(LocalDateTime.now());
@@ -51,14 +52,22 @@ public class EmailService {
 
     public void enviarEmailRecuperacaoSenha(Usuario usuario, String token) {
         String assunto = "Redefinição de Senha";
-        String corpo = "Use o seguinte token para redefinir sua senha: " + token;
-        
+        String recoveryLink = "https://localhost:8080/resetar-senha/" + token;
+        String corpo = "Clique no link abaixo para redefinir sua senha:\n" + recoveryLink;
         EmailModel emailModel = new EmailModel();
-        emailModel.setEmailFrom(email);
-        emailModel.setEmailTo(usuario.getEmail());
-        emailModel.setSubject(assunto);
-        emailModel.setText(corpo);
+        try {
+            emailModel.setEmailFrom(email);
+            emailModel.setOwnerRef(ownerRef);
+            emailModel.setEmailTo(usuario.getEmail());
+            emailModel.setSubject(assunto);
+            emailModel.setText(corpo);
+            emailModel.setSendDateEmail(LocalDateTime.now());
+            sendEmail(emailModel);
+        } catch (MailException e) {
+            emailModel.setStatusEmail(StatusEmail.ERROR);
+        }finally{
+            emailRepository.save(emailModel);
+        }
 
-        sendEmail(emailModel);
     }
 }

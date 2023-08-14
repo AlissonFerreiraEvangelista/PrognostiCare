@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.mail.MailException;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -52,16 +53,17 @@ public class UsuarioController {
     }
 
     @PutMapping("/update")
+    @Transactional
     @PreAuthorize("hasRole('ROLE_USER')")
-    @ApiResponse(description = "Atualiza um usuário - Perfil de USER")
-    public ResponseEntity<?> update(@RequestBody Usuario usuario) {
-        if (usuario.getUser_id() == null) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("ID não informado");
-        }
-        return ResponseEntity.status(HttpStatus.OK).body(usuarioService.saveAndFlushUser(usuario));
+    @ApiResponse(description = "Atualiza email e senha do usuário - Perfil de USER")
+    public ResponseEntity<?> update(@RequestBody @Valid DtoSenhaEmail dtoSenhaEmail) {
+  
+        var usuarioAtualizado = usuarioRepository.getReferenceById(dtoSenhaEmail.user_id());
+        return ResponseEntity.status(HttpStatus.OK).body(new DtoDetalheEmailSenha(usuarioAtualizado));
     }
 
     @PostMapping("/public/forgot-password")
+    @ApiResponse(description = "Envia email para recuperação de senha - Perfil de USER")
     public void forgotPassword(@RequestBody @Valid DtoSenhaRestInput dto) {
         Optional<Usuario> usuarioOptional = usuarioRepository.findByEmail(dto.email());
         usuarioOptional.ifPresent(usuario -> {
@@ -77,11 +79,28 @@ public class UsuarioController {
 
     }
 
-    @PostMapping("/public/change-password")
+    /*
+     * @PostMapping("/public/change-password")
     public void changePassword(@RequestBody @Valid DtoSenhaAlteradaInput dtoSenhaAlteradaInput) {
 
         try {
             usuarioService.trocaSenha(dtoSenhaAlteradaInput.password(), dtoSenhaAlteradaInput.tokenResetSenha());
+
+        } catch (Exception e) {
+            log.error("Erro ao alterar a senha usando token", e);
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+        }
+
+    }
+     */
+
+
+    @PostMapping("/public/change-password/{token}")
+    @ApiResponse(description = "Link com o token para troca da senha - Perfil de USER")
+    public void changePasswordTeste(@PathVariable String token, @RequestBody @Valid DtoSenha dto) {
+
+        try {
+            usuarioService.trocaSenha(dto.password(), token);
 
         } catch (Exception e) {
             log.error("Erro ao alterar a senha usando token", e);

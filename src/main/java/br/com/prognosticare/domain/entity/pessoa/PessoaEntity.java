@@ -1,6 +1,7 @@
 package br.com.prognosticare.domain.entity.pessoa;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -88,20 +89,16 @@ public class PessoaEntity {
     }
 
     public void atualizarInformacoes(DtoAtualizaPessoa dados) {
-        if (dados.nome() != null) {
-            this.nome = dados.nome();
-        }
-        if (dados.cpf() != null) {
-            this.cpf = dados.cpf();
-        }
-        if (dados.cpf() != null) {
-            this.cpf = dados.cpf();
-        }
-        if (dados.usuario() != null) {
-            this.usuario.atualizarInformacoes(dados.usuario());
-        }
-
+        Optional.ofNullable(dados.nome()).ifPresent(this::setNome);
+        Optional.ofNullable(dados.cpf()).ifPresent(this::setCpf);
+        Optional.ofNullable(dados.dataNascimento()).ifPresent(this::setDataNascimento);
+        Optional.ofNullable(dados.tipoSanguineo()).ifPresent(this::setTipoSanguineo);
+        Optional.ofNullable(dados.alergia()).ifPresent(this::setAlergia);
+        Optional.ofNullable(dados.tipoResponsavel()).ifPresent(this::setTipoResponsavel);
+        Optional.ofNullable(dados.cartaoNacional()).ifPresent(this::setCartaoNacional);
+        Optional.ofNullable(dados.cartaoPlanoSaude()).ifPresent(this::setCartaoPlanoSaude);
     }
+    
 
     public PessoaEntity(DtoCadastroPessoa dto) {
         this.nome = dto.nome();
