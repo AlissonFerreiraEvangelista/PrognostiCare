@@ -50,10 +50,10 @@ public class EmailService {
 
     }
 
-    public void enviarEmailRecuperacaoSenha(Usuario usuario, String token) {
+    public void enviarEmailRecuperacaoSenha(Usuario usuario, String senhaDefault) {
+
         String assunto = "Redefinição de Senha";
-        String recoveryLink = "https://localhost:8080/resetar-senha/" + token;
-        String corpo = "Clique no link abaixo para redefinir sua senha:\n" + recoveryLink;
+        String corpo = "Clique no link abaixo para redefinir sua senha:\n" + senhaDefault;
         EmailModel emailModel = new EmailModel();
         try {
             emailModel.setEmailFrom(email);

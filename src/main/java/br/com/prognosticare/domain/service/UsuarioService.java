@@ -57,7 +57,10 @@ public class UsuarioService {
         usuario.setPassword(passwordEncoder().encode(usuario.getPassword()));
         return usuarioRepository.saveAndFlush(usuario);
     }
+    
 
+
+    /*
     @SneakyThrows
     public String gerarToken(Usuario usuario) {
         KeyBasedPersistenceTokenService tokenService = getInstanceFor(usuario);
@@ -65,6 +68,7 @@ public class UsuarioService {
         return token.getKey();
     }
 
+     
     @SneakyThrows
     public void trocaSenha(String novaSenha, String rawToken) {
         SenhaTokenPublica senhaTokenPublica = lerSenhaPublica(rawToken);
@@ -95,12 +99,13 @@ public class UsuarioService {
         tokenService.setSecureRandom(new SecureRandomFactoryBean().getObject());
         return tokenService;
     }
-      public SenhaTokenPublica lerSenhaPublica(String rawToken) {
 
+    public SenhaTokenPublica lerSenhaPublica(String rawToken) {
         String rawTokenDecoded = new String(Base64.getDecoder().decode(rawToken));
         String[] tokenParts = rawTokenDecoded.split(":");
         Long timestamp = Long.parseLong(tokenParts[0]);
         String email = tokenParts[2];
         return new SenhaTokenPublica(email, timestamp);
     }
+    */
 }

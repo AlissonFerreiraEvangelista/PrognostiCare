@@ -2,6 +2,8 @@ package br.com.prognosticare.web.controller;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Random;
+import java.util.UUID;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.http.HttpStatus;
@@ -34,23 +36,6 @@ public class UsuarioController {
     private final UsuarioService usuarioService;
     private final UsuarioRepository usuarioRepository;
 
-    @PostMapping("/new")
-    @ApiResponse(description = "Cadastra um usuário - Perfil de ADMIN")
-    public ResponseEntity<Object> registerUser(@RequestBody @Valid UsuarioDto usuarioDto) {
-        var usuario = new Usuario();
-        BeanUtils.copyProperties(usuarioDto, usuario);
-        Usuario user = usuarioService.findUsuarioEmail(usuario.getEmail());
-        if (user == null) {
-            return ResponseEntity.status(HttpStatus.OK).body(usuarioService.saveUser(usuario));
-        }
-        return ResponseEntity.status(HttpStatus.OK).body("Emails already exist");
-    }
-
-    @GetMapping("/findall")
-    @ApiResponse(description = "Retorna uma lista de usuários - Perfil de ADMIN")
-    public ResponseEntity<List<Usuario>> findAllUser() {
-        return ResponseEntity.status(HttpStatus.OK).body(usuarioService.findAllByUser());
-    }
 
     @PutMapping("/update")
     @Transactional
@@ -66,38 +51,27 @@ public class UsuarioController {
     @ApiResponse(description = "Envia email para recuperação de senha - Perfil de USER")
     public void forgotPassword(@RequestBody @Valid DtoSenhaRestInput dto) {
         Optional<Usuario> usuarioOptional = usuarioRepository.findByEmail(dto.email());
+        String senhaDefault = "abcdef";
         usuarioOptional.ifPresent(usuario -> {
-            String token = usuarioService.gerarToken(usuario);
+            usuario.setPassword(senhaDefault);
+            usuarioService.saveUser(usuario);
             try {
-                emailService.enviarEmailRecuperacaoSenha(usuario, token);
+                emailService.enviarEmailRecuperacaoSenha(usuario, senhaDefault);
             } catch (MailException e) {
                 log.error("Erro ao enviar Email", e);
                 e.printStackTrace();
             }
-            System.out.println(token);
+           
         });
+         System.out.println(senhaDefault);
 
     }
 
-    /*
-     * @PostMapping("/public/change-password")
-    public void changePassword(@RequestBody @Valid DtoSenhaAlteradaInput dtoSenhaAlteradaInput) {
 
-        try {
-            usuarioService.trocaSenha(dtoSenhaAlteradaInput.password(), dtoSenhaAlteradaInput.tokenResetSenha());
-
-        } catch (Exception e) {
-            log.error("Erro ao alterar a senha usando token", e);
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
-        }
-
-    }
-     */
-
-
-    @PostMapping("/public/change-password/{token}")
-    @ApiResponse(description = "Link com o token para troca da senha - Perfil de USER")
-    public void changePasswordTeste(@PathVariable String token, @RequestBody @Valid DtoSenha dto) {
+     /* 
+        @PostMapping("/public/change-password/{token}")
+        @ApiResponse(description = "Link com o token para troca da senha - Perfil de USER")
+        public void changePasswordTeste(@PathVariable String token, @RequestBody @Valid DtoSenha dto) {
 
         try {
             usuarioService.trocaSenha(dto.password(), token);
@@ -108,5 +82,7 @@ public class UsuarioController {
         }
 
     }
+     */
+ 
 
 }
