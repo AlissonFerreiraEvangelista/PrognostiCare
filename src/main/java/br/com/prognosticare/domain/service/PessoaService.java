@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import br.com.prognosticare.domain.entity.pessoa.PessoaEntity;
 import br.com.prognosticare.domain.repository.PessoaRepository;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -32,4 +33,6 @@ public class PessoaService {
     public PessoaEntity getReferenceById(UUID pessoa_id) {
         return pessoaRepository.getReferenceById(pessoa_id);
     }
+
+   
 }

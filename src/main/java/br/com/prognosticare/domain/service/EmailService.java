@@ -53,7 +53,7 @@ public class EmailService {
     public void enviarEmailRecuperacaoSenha(Usuario usuario, String senhaDefault) {
 
         String assunto = "Redefinição de Senha";
-        String corpo = "Clique no link abaixo para redefinir sua senha:\n" + senhaDefault;
+        String corpo = "Segue a senha padrão para acessar o sistema:\n" + senhaDefault;
         EmailModel emailModel = new EmailModel();
         try {
             emailModel.setEmailFrom(email);
