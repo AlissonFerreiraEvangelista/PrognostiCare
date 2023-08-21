@@ -1,14 +1,9 @@
 package br.com.prognosticare.domain.service;
 
-import org.springframework.security.core.token.KeyBasedPersistenceTokenService;
-import org.springframework.security.core.token.SecureRandomFactoryBean;
-import org.springframework.security.core.token.Token;
 
-import java.time.Duration;
-import java.time.Instant;
-import java.util.Base64;
-import java.util.Date;
 import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -16,13 +11,12 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import br.com.prognosticare.domain.entity.usuario.SenhaTokenPublica;
+
 import br.com.prognosticare.domain.entity.usuario.Usuario;
-import br.com.prognosticare.domain.entity.usuario.UsuarioNotFoundExeption;
 import br.com.prognosticare.domain.repository.UsuarioRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import lombok.SneakyThrows;
+
 
 @Service
 @RequiredArgsConstructor
@@ -56,6 +50,10 @@ public class UsuarioService {
     public Usuario saveAndFlushUser(Usuario usuario) {
         usuario.setPassword(passwordEncoder().encode(usuario.getPassword()));
         return usuarioRepository.saveAndFlush(usuario);
+    }
+
+    public Optional<Usuario> findById(UUID id) {
+        return usuarioRepository.findById(id);
     }
     
 

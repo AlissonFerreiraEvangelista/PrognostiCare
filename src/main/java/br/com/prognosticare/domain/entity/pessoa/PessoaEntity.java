@@ -69,20 +69,7 @@ public class PessoaEntity {
     @JoinColumn(name="usuario_id")
     private Usuario usuario;
 
-    private LocalDate dataAtualizacao;
 
-    @PreUpdate
-    public void preUpdate() {
-        dataAtualizacao = LocalDate.now();
-    }
-
-    private LocalDate dataCriacao;
-
-    @PrePersist
-    public void prePersist() {
-        dataCriacao = LocalDate.now();
-        dataAtualizacao = dataCriacao;
-    }
 
    public void excluir() {
         this.ativo = false;
