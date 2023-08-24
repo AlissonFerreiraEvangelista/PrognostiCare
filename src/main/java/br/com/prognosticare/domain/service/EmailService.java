@@ -14,9 +14,11 @@ import br.com.prognosticare.domain.entity.email.EmailModel;
 import br.com.prognosticare.domain.entity.email.StatusEmail;
 import br.com.prognosticare.domain.entity.pessoa.PessoaEntity;
 import br.com.prognosticare.domain.repository.EmailRepository;
+import lombok.extern.slf4j.Slf4j;
 
 
 @Service
+@Slf4j
 public class EmailService {
 
     @Autowired
@@ -64,6 +66,8 @@ public class EmailService {
             sendEmail(emailModel);
         } catch (MailException e) {
             emailModel.setStatusEmail(StatusEmail.ERROR);
+            log.error("Erro ao enviar Email", e);
+            e.printStackTrace();
         }finally{
             emailRepository.save(emailModel);
         }

@@ -57,8 +57,7 @@ public class PessoaController {
             UriComponentsBuilder uriBuilder) {
         var pessoa = new PessoaEntity(dto);
         pessoaService.save(pessoa);
-        var uri = uriBuilder.path("/pessoa/{id}").buildAndExpand(pessoa.getPessoa_id()).toUri();
-        return ResponseEntity.created(uri).body(new DtoDetalhePessoa(pessoa));
+        return ResponseEntity.status(HttpStatus.CREATED).body(new DtoDetalhePessoa(pessoa));
 
     }
 
@@ -92,12 +91,7 @@ public class PessoaController {
         pessoaOptional.ifPresent(pessoa -> {
             pessoa.setPassword(senhaDefault);
             pessoaService.save(pessoa);
-            try {
-                emailService.enviarEmailRecuperacaoSenha(pessoa, senhaDefault);
-            } catch (MailException e) {
-                log.error("Erro ao enviar Email", e);
-                e.printStackTrace();
-            }
+            emailService.enviarEmailRecuperacaoSenha(pessoa, senhaDefault);  
 
         });
 
@@ -133,6 +127,7 @@ public class PessoaController {
         var dependente = new PessoaEntity(dto);
         dependente.setResponsavel(pessoa);
         dependente.setPassword(senhaDefault);
+        dependente.setContato(pessoa.getContato());
         pessoa.getDependente().add(dependente);
 
         pessoaService.save(dependente);

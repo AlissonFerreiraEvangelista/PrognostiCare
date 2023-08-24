@@ -42,6 +42,8 @@ public class PessoaEntity implements UserDetails {
     @Enumerated(EnumType.STRING)
     private TipoSanguineo tipoSanguineo;
 
+    private String contato;
+
     private Boolean alergia;
 
     private Boolean tipoResponsavel;
@@ -72,6 +74,7 @@ public class PessoaEntity implements UserDetails {
         Optional.ofNullable(dados.cpf()).ifPresent(this::setCpf);
         Optional.ofNullable(dados.dataNascimento()).ifPresent(this::setDataNascimento);
         Optional.ofNullable(dados.tipoSanguineo()).ifPresent(this::setTipoSanguineo);
+         Optional.ofNullable(dados.contato()).ifPresent(this::setContato);
         Optional.ofNullable(dados.alergia()).ifPresent(this::setAlergia);
         Optional.ofNullable(dados.tipoResponsavel()).ifPresent(this::setTipoResponsavel);
         Optional.ofNullable(dados.cartaoNacional()).ifPresent(this::setCartaoNacional);

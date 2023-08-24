@@ -9,6 +9,7 @@ public record DtoDetalheDependente(
         String nome,
         String cpf,
         LocalDate dataNascimento,
+        String contato,
         TipoSanguineo tipoSanguineo,
         Boolean alergia,
         Boolean tipoResponsavel,
@@ -18,6 +19,7 @@ public record DtoDetalheDependente(
 ) {
     public DtoDetalheDependente(PessoaEntity pessoa) {
         this(pessoa.getPessoa_id(), pessoa.getNome(), pessoa.getCpf(), pessoa.getDataNascimento(),
+        pessoa.getContato(),
                 pessoa.getTipoSanguineo(), pessoa.getAlergia(), pessoa.getTipoResponsavel(),
                 pessoa.getCartaoNacional(), pessoa.getCartaoPlanoSaude());
     }
