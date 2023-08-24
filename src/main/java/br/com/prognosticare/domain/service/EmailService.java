@@ -26,7 +26,7 @@ public class EmailService {
     @Autowired
     JavaMailSender emailSender;
 
-    @Value("${MAIL_USERNAME}")
+    @Value("${spring.mail.username}")
     String email;
 
     String ownerRef = "Suporte";
