@@ -12,7 +12,9 @@ import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTCreationException;
 import com.auth0.jwt.exceptions.JWTVerificationException;
 
-import br.com.prognosticare.domain.entity.usuario.Usuario;
+import br.com.prognosticare.domain.entity.pessoa.PessoaEntity;
+
+
 
 
 
@@ -22,12 +24,12 @@ public class TokenService {
     @Value("${TOKEN_SECRET}")
     private String secret;
 
-    public String gerarToken(Usuario usuario){
+    public String gerarToken(PessoaEntity pessoa){
         try {
             var algorithm = Algorithm.HMAC512(secret);
             return JWT.create()
             .withIssuer("API Prognosticare")
-            .withSubject(usuario.getEmail())
+            .withSubject(pessoa.getEmail())
             .withExpiresAt(dataExpiracao())
             .sign(algorithm);
             

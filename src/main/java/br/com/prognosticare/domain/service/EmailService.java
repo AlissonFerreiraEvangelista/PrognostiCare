@@ -12,10 +12,9 @@ import org.springframework.stereotype.Service;
 
 import br.com.prognosticare.domain.entity.email.EmailModel;
 import br.com.prognosticare.domain.entity.email.StatusEmail;
-import br.com.prognosticare.domain.entity.usuario.Usuario;
+import br.com.prognosticare.domain.entity.pessoa.PessoaEntity;
 import br.com.prognosticare.domain.repository.EmailRepository;
-import jakarta.mail.MessagingException;
-import jakarta.mail.internet.MimeMessage;
+
 
 @Service
 public class EmailService {
@@ -50,7 +49,7 @@ public class EmailService {
 
     }
 
-    public void enviarEmailRecuperacaoSenha(Usuario usuario, String senhaDefault) {
+    public void enviarEmailRecuperacaoSenha(PessoaEntity pessoa, String senhaDefault) {
 
         String assunto = "Redefinição de Senha";
         String corpo = "Segue a senha padrão para acessar o sistema:\n" + senhaDefault;
@@ -58,7 +57,7 @@ public class EmailService {
         try {
             emailModel.setEmailFrom(email);
             emailModel.setOwnerRef(ownerRef);
-            emailModel.setEmailTo(usuario.getEmail());
+            emailModel.setEmailTo(pessoa.getEmail());
             emailModel.setSubject(assunto);
             emailModel.setText(corpo);
             emailModel.setSendDateEmail(LocalDateTime.now());

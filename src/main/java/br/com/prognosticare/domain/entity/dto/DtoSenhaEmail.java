@@ -1,14 +1,11 @@
-package br.com.prognosticare.domain.entity.usuario;
+package br.com.prognosticare.domain.entity.dto;
 
-import java.util.UUID;
 
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
+
 import jakarta.validation.constraints.Size;
 
 public record DtoSenhaEmail(
-    @NotNull
-    UUID user_id,
 
     @NotBlank
     String email,

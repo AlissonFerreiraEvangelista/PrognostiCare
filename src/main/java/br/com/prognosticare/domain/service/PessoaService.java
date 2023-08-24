@@ -3,14 +3,13 @@ package br.com.prognosticare.domain.service;
 import java.util.Optional;
 import java.util.UUID;
 
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import br.com.prognosticare.domain.entity.pessoa.PessoaEntity;
 import br.com.prognosticare.domain.repository.PessoaRepository;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -22,7 +21,7 @@ public class PessoaService {
 
     @Transactional
     public PessoaEntity save(PessoaEntity pessoa) {
-        pessoa.getUsuario().setPassword(pEncoder.encode(pessoa.getUsuario().getPassword()));
+        pessoa.setPassword(pEncoder.encode(pessoa.getPassword()));
         return pessoaRepository.save(pessoa);
     }
 
@@ -32,6 +31,10 @@ public class PessoaService {
 
     public PessoaEntity getReferenceById(UUID pessoa_id) {
         return pessoaRepository.getReferenceById(pessoa_id);
+    }
+
+    public Optional<PessoaEntity> findByEmail(String email) {
+        return pessoaRepository.findPessoaEntityByEmail(email);
     }
 
    

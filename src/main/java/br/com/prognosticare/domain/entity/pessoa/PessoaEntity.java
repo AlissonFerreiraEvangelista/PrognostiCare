@@ -1,27 +1,19 @@
 package br.com.prognosticare.domain.entity.pessoa;
 import java.time.LocalDate;
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-import br.com.prognosticare.domain.entity.usuario.Usuario;
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.OneToOne;
-import jakarta.persistence.Table;
+
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -34,7 +26,7 @@ import lombok.Setter;
 @AllArgsConstructor
 @Entity
 @Table(name = "tb_pessoa")
-public class PessoaEntity {
+public class PessoaEntity implements UserDetails{
 
 
     @Id @GeneratedValue(strategy = GenerationType.AUTO)
@@ -60,15 +52,14 @@ public class PessoaEntity {
 
     private Boolean ativo;
 
+    private String email;
+
+    private String password;
+
     @JsonIgnore
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "pessoa_id")
     private List<PessoaEntity> dependente;
-
-
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name="usuario_id")
-    private Usuario usuario;
 
 
 
@@ -92,14 +83,56 @@ public class PessoaEntity {
         this.nome = dto.nome();
         this.cpf = dto.cpf();
         this.dataNascimento = dto.dataNascimento();
-        this.usuario = new Usuario(dto.usuario());
+        this.email = dto.email();
+        this.password = dto.password();
     }
 
-    public PessoaEntity(String nome, String cpf, LocalDate dataNascimento, Usuario usuario) {
+    public PessoaEntity(String nome, String cpf, LocalDate dataNascimento, String email, String password) {
         this.nome = nome;
         this.cpf = cpf;
         this.dataNascimento = dataNascimento;
-        this.usuario = usuario;
+        this.email = email;
+        this.password = password;
+    }
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return List.of(new SimpleGrantedAuthority("ROLE_USER"));
+    }
+
+    @Override
+    public String getPassword() {
+        
+        return password;
+    }
+
+    @Override
+    public String getUsername() {
+        return this.email;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+       
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+
+        return true;
     }
 
     

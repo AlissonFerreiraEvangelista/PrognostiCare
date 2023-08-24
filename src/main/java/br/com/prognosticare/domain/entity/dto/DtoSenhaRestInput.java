@@ -1,4 +1,4 @@
-package br.com.prognosticare.domain.entity.usuario;
+package br.com.prognosticare.domain.entity.dto;
 
 
 

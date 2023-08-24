@@ -5,11 +5,10 @@ import java.io.IOException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
-import br.com.prognosticare.domain.repository.UsuarioRepository;
+import br.com.prognosticare.domain.repository.PessoaRepository;
 import br.com.prognosticare.domain.service.TokenService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -23,7 +22,7 @@ public class SecurityFilter  extends OncePerRequestFilter{
     private TokenService tokenService;
 
     @Autowired
-    private UsuarioRepository usuarioRepository;
+    private PessoaRepository pessoaRepository;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
@@ -32,8 +31,8 @@ public class SecurityFilter  extends OncePerRequestFilter{
 
         if(tokenJWT != null){
             var subject = tokenService.getSubject(tokenJWT);
-            var usuario = usuarioRepository.findUsuarioByEmail(subject);
-            var authentication = new UsernamePasswordAuthenticationToken(usuario, null, usuario.getAuthorities());
+            var pessoa = pessoaRepository.findByEmail(subject);
+            var authentication = new UsernamePasswordAuthenticationToken(pessoa, null, pessoa.getAuthorities());
             SecurityContextHolder.getContext().setAuthentication(authentication);
         }
         filterChain.doFilter(request, response);

@@ -4,7 +4,6 @@ import java.time.LocalDate;
 import java.util.Optional;
 import java.util.UUID;
 
-import br.com.prognosticare.domain.entity.usuario.Usuario;
 
 public record DtoDetalhePessoa(
         UUID pessoa_id,
@@ -16,12 +15,13 @@ public record DtoDetalhePessoa(
         Boolean tipoResponsavel,
         String cartaoNacional,
         String cartaoPlanoSaude,
-        Usuario usuario
+        String email,
+        String password
 ) {
     public DtoDetalhePessoa(PessoaEntity pessoa) {
         this(pessoa.getPessoa_id(), pessoa.getNome(), pessoa.getCpf(), pessoa.getDataNascimento(),
                 pessoa.getTipoSanguineo(), pessoa.getAlergia(), pessoa.getTipoResponsavel(),
-                pessoa.getCartaoNacional(), pessoa.getCartaoPlanoSaude(), pessoa.getUsuario());
+                pessoa.getCartaoNacional(), pessoa.getCartaoPlanoSaude(), pessoa.getEmail(), pessoa.getPassword());
     }
 
     public DtoDetalhePessoa(Optional<PessoaEntity> pessoa) {
