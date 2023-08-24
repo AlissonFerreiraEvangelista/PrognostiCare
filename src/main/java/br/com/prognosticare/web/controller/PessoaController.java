@@ -1,8 +1,9 @@
 package br.com.prognosticare.web.controller;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
-
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -20,7 +21,9 @@ import org.springframework.web.util.UriComponentsBuilder;
 import br.com.prognosticare.domain.entity.dto.DtoSenha;
 import br.com.prognosticare.domain.entity.dto.DtoSenhaRestInput;
 import br.com.prognosticare.domain.entity.pessoa.DtoAtualizaPessoa;
+import br.com.prognosticare.domain.entity.pessoa.DtoCadastroDependente;
 import br.com.prognosticare.domain.entity.pessoa.DtoCadastroPessoa;
+import br.com.prognosticare.domain.entity.pessoa.DtoDetalheDependente;
 import br.com.prognosticare.domain.entity.pessoa.DtoDetalhePessoa;
 import br.com.prognosticare.domain.entity.pessoa.PessoaEntity;
 import br.com.prognosticare.domain.repository.PessoaRepository;
@@ -31,6 +34,7 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.springframework.transaction.annotation.Transactional;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
+
 @Slf4j
 @RestController
 @RequestMapping("register-person")
@@ -49,7 +53,8 @@ public class PessoaController {
     @PostMapping("/save")
     @ApiResponse(description = "Cadastro Inicial de uma pessoa")
     @Transactional
-    public ResponseEntity<?> cadastrarPessoa(@RequestBody @Valid DtoCadastroPessoa dto, UriComponentsBuilder uriBuilder) {
+    public ResponseEntity<?> cadastrarPessoa(@RequestBody @Valid DtoCadastroPessoa dto,
+            UriComponentsBuilder uriBuilder) {
         var pessoa = new PessoaEntity(dto);
         pessoaService.save(pessoa);
         var uri = uriBuilder.path("/pessoa/{id}").buildAndExpand(pessoa.getPessoa_id()).toUri();
@@ -78,8 +83,6 @@ public class PessoaController {
         return ResponseEntity.status(HttpStatus.OK).body(new DtoDetalhePessoa(pessoa));
     }
 
-
-
     @PostMapping("/public/forgot-password")
     @ApiResponse(description = "Envia email para recuperação de senha")
     public void forgotPassword(@RequestBody @Valid DtoSenhaRestInput dto) {
@@ -102,7 +105,7 @@ public class PessoaController {
 
     @PutMapping("/public/change-password/{id}")
     @ApiResponse(description = "Troca da senha")
-    public ResponseEntity<?> changePassword(@PathVariable (value = "id") UUID id, @RequestBody @Valid DtoSenha dto) {
+    public ResponseEntity<?> changePassword(@PathVariable(value = "id") UUID id, @RequestBody @Valid DtoSenha dto) {
         var pessoa = pessoaRepository.getReferenceById(id);
 
         if (pessoa != null) {
@@ -113,4 +116,47 @@ public class PessoaController {
         }
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Usuario não encontrado");
     }
+
+    @PostMapping("/add-dependent/{id}")
+    @ApiResponse(description = "Adiciona um dependente a uma pessoa")
+    @Transactional
+    public ResponseEntity<?> adicionarDependente(
+            @PathVariable @Valid UUID id,
+            @RequestBody @Valid DtoCadastroDependente dto,
+            UriComponentsBuilder uriBuilder) {
+        var pessoa = pessoaService.get(id).orElse(null);
+
+        if (pessoa == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        String senhaDefault = "abcdef";
+        var dependente = new PessoaEntity(dto);
+        dependente.setResponsavel(pessoa);
+        dependente.setPassword(senhaDefault);
+        pessoa.getDependente().add(dependente);
+
+        pessoaService.save(dependente);
+
+        var uri = uriBuilder.path("/dependente/{id}").buildAndExpand(dependente.getPessoa_id()).toUri();
+        return ResponseEntity.created(uri).body(new DtoDetalheDependente(dependente));
+    }
+
+    @GetMapping("/list-dependents/{id}")
+    @ApiResponse(description = "Lista os dependentes de uma pessoa responsável")
+    public ResponseEntity<?> listarDependentes(@PathVariable @Valid UUID id) {
+        var pessoaResponsavel = pessoaService.get(id).orElse(null);
+
+        if (pessoaResponsavel == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+
+        List<PessoaEntity> dependentes = pessoaResponsavel.getDependente();
+
+        List<DtoDependente> dtoDependentes = dependentes.stream()
+                .map(DtoDependente::new)
+                .collect(Collectors.toList());
+
+        return ResponseEntity.status(HttpStatus.OK).body(dtoDependentes);
+    }
+
 }

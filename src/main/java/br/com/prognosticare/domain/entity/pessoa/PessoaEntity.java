@@ -1,4 +1,5 @@
 package br.com.prognosticare.domain.entity.pessoa;
+
 import java.time.LocalDate;
 import java.util.Collection;
 import java.util.List;
@@ -12,13 +13,12 @@ import org.springframework.security.core.userdetails.UserDetails;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-
 import jakarta.persistence.*;
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
 
 @Getter
 @Setter
@@ -26,17 +26,17 @@ import lombok.Setter;
 @AllArgsConstructor
 @Entity
 @Table(name = "tb_pessoa")
-public class PessoaEntity implements UserDetails{
+public class PessoaEntity implements UserDetails {
 
-
-    @Id @GeneratedValue(strategy = GenerationType.AUTO)
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID pessoa_id;
 
     private String nome;
 
     private String cpf;
 
-    @JsonFormat(shape=JsonFormat.Shape.STRING, pattern="dd/MM/yyyy")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy")
     private LocalDate dataNascimento;
 
     @Enumerated(EnumType.STRING)
@@ -56,14 +56,14 @@ public class PessoaEntity implements UserDetails{
 
     private String password;
 
-    @JsonIgnore
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JoinColumn(name = "pessoa_id")
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "responsavel_id")
+    private PessoaEntity responsavel;
+
+    @OneToMany(mappedBy = "responsavel", cascade = CascadeType.ALL)
     private List<PessoaEntity> dependente;
 
-
-
-   public void excluir() {
+    public void excluir() {
         this.ativo = false;
     }
 
@@ -77,12 +77,12 @@ public class PessoaEntity implements UserDetails{
         Optional.ofNullable(dados.cartaoNacional()).ifPresent(this::setCartaoNacional);
         Optional.ofNullable(dados.cartaoPlanoSaude()).ifPresent(this::setCartaoPlanoSaude);
     }
-    
 
     public PessoaEntity(DtoCadastroPessoa dto) {
         this.nome = dto.nome();
         this.cpf = dto.cpf();
         this.dataNascimento = dto.dataNascimento();
+        this.tipoResponsavel = true;
         this.email = dto.email();
         this.password = dto.password();
     }
@@ -102,7 +102,7 @@ public class PessoaEntity implements UserDetails{
 
     @Override
     public String getPassword() {
-        
+
         return password;
     }
 
@@ -113,7 +113,7 @@ public class PessoaEntity implements UserDetails{
 
     @Override
     public boolean isAccountNonExpired() {
-       
+
         return true;
     }
 
@@ -125,7 +125,7 @@ public class PessoaEntity implements UserDetails{
 
     @Override
     public boolean isCredentialsNonExpired() {
-        
+
         return true;
     }
 
@@ -135,5 +135,15 @@ public class PessoaEntity implements UserDetails{
         return true;
     }
 
-    
+    public PessoaEntity(@Valid DtoCadastroDependente dto) {
+        this.nome = dto.nome();
+        this.cpf = dto.cpf();
+        this.dataNascimento = dto.dataNascimento();
+        this.alergia = dto.alergia();
+        this.tipoSanguineo = dto.tipoSanguineo();
+        this.tipoResponsavel = false;
+        this.cartaoNacional = dto.cartaoNacional();
+        this.cartaoPlanoSaude = dto.cartaoNacional();
+    }
+
 }

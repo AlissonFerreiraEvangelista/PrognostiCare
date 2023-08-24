@@ -1,0 +1,28 @@
+package br.com.prognosticare.domain.entity.pessoa;
+
+import java.time.LocalDate;
+import java.util.Optional;
+import java.util.UUID;
+
+public record DtoDetalheDependente(
+        UUID pessoa_id,
+        String nome,
+        String cpf,
+        LocalDate dataNascimento,
+        TipoSanguineo tipoSanguineo,
+        Boolean alergia,
+        Boolean tipoResponsavel,
+        String cartaoNacional,
+        String cartaoPlanoSaude
+
+) {
+    public DtoDetalheDependente(PessoaEntity pessoa) {
+        this(pessoa.getPessoa_id(), pessoa.getNome(), pessoa.getCpf(), pessoa.getDataNascimento(),
+                pessoa.getTipoSanguineo(), pessoa.getAlergia(), pessoa.getTipoResponsavel(),
+                pessoa.getCartaoNacional(), pessoa.getCartaoPlanoSaude());
+    }
+
+    public DtoDetalheDependente(Optional<PessoaEntity> pessoa) {
+        this(pessoa.orElse(null)); 
+    }
+}
