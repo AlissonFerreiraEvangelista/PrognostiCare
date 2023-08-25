@@ -13,6 +13,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import br.com.prognosticare.domain.entity.agenda.AgendaEntity;
 import jakarta.persistence.*;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
@@ -54,6 +55,7 @@ public class PessoaEntity implements UserDetails {
 
     private Boolean ativo;
 
+    @Column(nullable = false, unique = true)
     private String email;
 
     private String password;
@@ -65,6 +67,10 @@ public class PessoaEntity implements UserDetails {
     @OneToMany(mappedBy = "responsavel", cascade = CascadeType.ALL)
     private List<PessoaEntity> dependente;
 
+    @OneToMany(mappedBy = "pessoa",fetch=FetchType.LAZY)
+    private List<AgendaEntity> agendas;
+
+
     public void excluir() {
         this.ativo = false;
     }
@@ -74,7 +80,7 @@ public class PessoaEntity implements UserDetails {
         Optional.ofNullable(dados.cpf()).ifPresent(this::setCpf);
         Optional.ofNullable(dados.dataNascimento()).ifPresent(this::setDataNascimento);
         Optional.ofNullable(dados.tipoSanguineo()).ifPresent(this::setTipoSanguineo);
-         Optional.ofNullable(dados.contato()).ifPresent(this::setContato);
+        Optional.ofNullable(dados.contato()).ifPresent(this::setContato);
         Optional.ofNullable(dados.alergia()).ifPresent(this::setAlergia);
         Optional.ofNullable(dados.tipoResponsavel()).ifPresent(this::setTipoResponsavel);
         Optional.ofNullable(dados.cartaoNacional()).ifPresent(this::setCartaoNacional);

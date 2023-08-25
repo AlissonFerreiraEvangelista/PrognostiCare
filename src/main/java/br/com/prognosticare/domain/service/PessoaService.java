@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import br.com.prognosticare.domain.entity.pessoa.PessoaEntity;
 import br.com.prognosticare.domain.repository.PessoaRepository;
+import br.com.prognosticare.infra.exception.ValidacaoException;
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -21,6 +22,12 @@ public class PessoaService {
 
     @Transactional
     public PessoaEntity save(PessoaEntity pessoa) {
+
+        var verificaPessoa = pessoaRepository.findByEmail(pessoa.getEmail());
+        if(verificaPessoa != null){
+            throw new ValidacaoException("Email já cadastrado");
+        }
+       
         pessoa.setPassword(pEncoder.encode(pessoa.getPassword()));
         return pessoaRepository.save(pessoa);
     }

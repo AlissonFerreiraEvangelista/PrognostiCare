@@ -1,5 +1,7 @@
 package br.com.prognosticare.domain.entity.acompanhamento;
 
+
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 import jakarta.persistence.Column;
@@ -26,6 +28,8 @@ public class AcompanhamentoEntity {
     private String medicacao;
 
     private char statusEvento;
+
+    private LocalDateTime dataAcompanhamento;
 
     private char tipoTemporarioControlado;
 
