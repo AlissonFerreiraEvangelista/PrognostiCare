@@ -64,7 +64,7 @@ public class PessoaController {
     @PutMapping("/update")
     @ApiResponse(description = "Atualiza as informações da Pessoa")
     @Transactional
-    public ResponseEntity<?> atualizaPessoa(@RequestBody @Valid DtoAtualizaPessoa dto) {
+    public ResponseEntity<DtoDetalhePessoa> atualizaPessoa(@RequestBody @Valid DtoAtualizaPessoa dto) {
         var pessoa = pessoaService.getReferenceById(dto.pessoa_id());
         pessoa.atualizarInformacoes(dto);
         return ResponseEntity.ok(new DtoDetalhePessoa(pessoa));
@@ -72,7 +72,7 @@ public class PessoaController {
 
     @GetMapping("find/{id}")
     @ApiResponse(description = "Encontra uma pessoa por ID")
-    public ResponseEntity<Object> encontraPorID(@PathVariable @Valid UUID id) {
+    public ResponseEntity<DtoDetalhePessoa> encontraPorID(@PathVariable @Valid UUID id) {
 
         var pessoa = pessoaService.get(id).orElse(null);
         if (pessoa == null) {
@@ -84,29 +84,21 @@ public class PessoaController {
 
     @PostMapping("/public/forgot-password")
     @ApiResponse(description = "Envia email para recuperação de senha")
-    public void forgotPassword(@RequestBody @Valid DtoSenhaRestInput dto) {
+    public ResponseEntity<?> forgotPassword(@RequestBody @Valid DtoSenhaRestInput dto) {
 
-        Optional<PessoaEntity> pessoaOptional = pessoaService.findByEmail(dto.email());
-        String senhaDefault = "abcdef";
-        pessoaOptional.ifPresent(pessoa -> {
-            pessoa.setPassword(senhaDefault);
-            pessoaService.save(pessoa);
-            emailService.enviarEmailRecuperacaoSenha(pessoa, senhaDefault);  
-
-        });
-
+        pessoaService.findByEmail(dto.email());
+        return ResponseEntity.ok().body("Email enviado com Sucesso!!");
+       
     }
 
     @PutMapping("/public/change-password/{id}")
     @ApiResponse(description = "Troca da senha")
     public ResponseEntity<?> changePassword(@PathVariable(value = "id") UUID id, @RequestBody @Valid DtoSenha dto) {
-        var pessoa = pessoaRepository.getReferenceById(id);
 
-        if (pessoa != null) {
-            pessoa.setPassword(dto.password());
-            pessoaService.save(pessoa);
+        var pessoa = pessoaService.savePassword(id, dto.password());
+
+        if (pessoa.isEnabled()) {
             return ResponseEntity.status(HttpStatus.OK).body("Senha Alterada com Sucesso!");
-
         }
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Usuario não encontrado");
     }

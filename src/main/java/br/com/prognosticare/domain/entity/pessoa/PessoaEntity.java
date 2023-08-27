@@ -35,6 +35,7 @@ public class PessoaEntity implements UserDetails {
 
     private String nome;
 
+    @Column(nullable = false, unique = true)
     private String cpf;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy")
