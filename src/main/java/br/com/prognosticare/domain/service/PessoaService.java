@@ -12,11 +12,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import br.com.prognosticare.domain.entity.pessoa.DtoCadastroDependente;
+import br.com.prognosticare.domain.entity.pessoa.DtoDependente;
 import br.com.prognosticare.domain.entity.pessoa.DtoDetalheDependente;
 import br.com.prognosticare.domain.entity.pessoa.PessoaEntity;
 import br.com.prognosticare.domain.repository.PessoaRepository;
 import br.com.prognosticare.infra.exception.ValidacaoException;
-import br.com.prognosticare.web.controller.DtoDependente;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
@@ -56,7 +56,8 @@ public class PessoaService {
     public void findByEmail(String email) {
         var pessoa = pessoaRepository.findByEmail(email);
         if(pessoa!=null){
-            pessoa.setPassword(passwordDefault);
+            pessoa.setPassword(pEncoder.encode(passwordDefault));
+
             pessoaRepository.save(pessoa);
             emailService.enviarEmailRecuperacaoSenha(pessoa, passwordDefault);
 

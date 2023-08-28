@@ -23,6 +23,7 @@ import br.com.prognosticare.domain.entity.dto.DtoSenhaRestInput;
 import br.com.prognosticare.domain.entity.pessoa.DtoAtualizaPessoa;
 import br.com.prognosticare.domain.entity.pessoa.DtoCadastroDependente;
 import br.com.prognosticare.domain.entity.pessoa.DtoCadastroPessoa;
+import br.com.prognosticare.domain.entity.pessoa.DtoDependente;
 import br.com.prognosticare.domain.entity.pessoa.DtoDetalheDependente;
 import br.com.prognosticare.domain.entity.pessoa.DtoDetalhePessoa;
 import br.com.prognosticare.domain.entity.pessoa.PessoaEntity;

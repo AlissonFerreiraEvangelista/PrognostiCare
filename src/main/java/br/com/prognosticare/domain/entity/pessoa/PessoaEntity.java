@@ -48,6 +48,8 @@ public class PessoaEntity implements UserDetails {
 
     private Boolean alergia;
 
+    private String tipoAlergia;
+
     private Boolean tipoResponsavel;
 
     private String cartaoNacional;
@@ -81,6 +83,7 @@ public class PessoaEntity implements UserDetails {
         Optional.ofNullable(dados.cpf()).ifPresent(this::setCpf);
         Optional.ofNullable(dados.dataNascimento()).ifPresent(this::setDataNascimento);
         Optional.ofNullable(dados.tipoSanguineo()).ifPresent(this::setTipoSanguineo);
+        Optional.ofNullable(dados.tipoAlergia()).ifPresent(this::setTipoAlergia);
         Optional.ofNullable(dados.contato()).ifPresent(this::setContato);
         Optional.ofNullable(dados.alergia()).ifPresent(this::setAlergia);
         Optional.ofNullable(dados.tipoResponsavel()).ifPresent(this::setTipoResponsavel);

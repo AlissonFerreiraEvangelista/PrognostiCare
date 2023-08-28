@@ -33,6 +33,8 @@ public record DtoAtualizaPessoa(
 
     Boolean alergia,
 
+    String tipoAlergia,
+
     Boolean tipoResponsavel,
 
     String cartaoNacional,

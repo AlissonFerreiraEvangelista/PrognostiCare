@@ -23,6 +23,8 @@ public record DtoCadastroDependente(
 
         Boolean tipoResponsavel,
 
+        String tipoAlergia,
+
         String cartaoNacional,
 
         String cartaoPlanoSaude) {
