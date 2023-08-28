@@ -56,7 +56,7 @@ public class PessoaEntity implements UserDetails {
 
     private Boolean ativo;
 
-    @Column(nullable = false, unique = true)
+    @Column(unique = true)
     private String email;
 
     private String password;

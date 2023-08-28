@@ -16,8 +16,6 @@ public interface PessoaRepository extends JpaRepository<PessoaEntity, UUID>{
     @Query(value = "FROM PessoaEntity p WHERE p.pessoa_id = ?1")
     PessoaEntity pesquisaPorIdUsuario(UUID pessoa_id);
 
-   // @Query(value="FROM PessoaEntity p WHERE p.email = ?1")
-    //Optional<PessoaEntity> findPessoaEntityByEmail(String email);
 
     @Query(value="FROM PessoaEntity p WHERE p.email = ?1")
     PessoaEntity findByEmail(String email);

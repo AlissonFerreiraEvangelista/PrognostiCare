@@ -106,44 +106,32 @@ public class PessoaController {
     @PostMapping("/add-dependent/{id}")
     @ApiResponse(description = "Adiciona um dependente a uma pessoa")
     @Transactional
-    public ResponseEntity<?> adicionarDependente(
+    public ResponseEntity<DtoDetalheDependente> adicionarDependente(
             @PathVariable @Valid UUID id,
             @RequestBody @Valid DtoCadastroDependente dto,
             UriComponentsBuilder uriBuilder) {
-        var pessoa = pessoaService.get(id).orElse(null);
+            
+            var dependente = pessoaService.adicionarDependente(id, dto);
 
-        if (pessoa == null) {
+        if (dependente == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-        String senhaDefault = "abcdef";
-        var dependente = new PessoaEntity(dto);
-        dependente.setResponsavel(pessoa);
-        dependente.setPassword(senhaDefault);
-        dependente.setContato(pessoa.getContato());
-        pessoa.getDependente().add(dependente);
-
-        pessoaService.save(dependente);
-
-        var uri = uriBuilder.path("/dependente/{id}").buildAndExpand(dependente.getPessoa_id()).toUri();
-        return ResponseEntity.created(uri).body(new DtoDetalheDependente(dependente));
+      
+        var uri = uriBuilder.path("/dependente/{id}").buildAndExpand(dependente.getClass()).toUri();
+        return ResponseEntity.created(uri).body(dependente);
     }
 
     @GetMapping("/list-dependents/{id}")
     @ApiResponse(description = "Lista os dependentes de uma pessoa responsável")
-    public ResponseEntity<?> listarDependentes(@PathVariable @Valid UUID id) {
-        var pessoaResponsavel = pessoaService.get(id).orElse(null);
+    public ResponseEntity<List<DtoDependente>> listarDependentes(@PathVariable @Valid UUID id) {
 
-        if (pessoaResponsavel == null) {
+        var listaDependentes = pessoaService.listarDependentes(id);
+       
+        if (listaDependentes == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
-        List<PessoaEntity> dependentes = pessoaResponsavel.getDependente();
-
-        List<DtoDependente> dtoDependentes = dependentes.stream()
-                .map(DtoDependente::new)
-                .collect(Collectors.toList());
-
-        return ResponseEntity.status(HttpStatus.OK).body(dtoDependentes);
+        return ResponseEntity.status(HttpStatus.OK).body(listaDependentes);
     }
 
 }

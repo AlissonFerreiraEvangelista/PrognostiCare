@@ -1,7 +1,9 @@
 package br.com.prognosticare.domain.service;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -9,9 +11,13 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import br.com.prognosticare.domain.entity.pessoa.DtoCadastroDependente;
+import br.com.prognosticare.domain.entity.pessoa.DtoDetalheDependente;
 import br.com.prognosticare.domain.entity.pessoa.PessoaEntity;
 import br.com.prognosticare.domain.repository.PessoaRepository;
 import br.com.prognosticare.infra.exception.ValidacaoException;
+import br.com.prognosticare.web.controller.DtoDependente;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -72,6 +78,38 @@ public class PessoaService {
         return null;      
         
     }
+
+
+    public DtoDetalheDependente adicionarDependente(@Valid UUID id, @Valid DtoCadastroDependente dto) {
+        var pessoa = get(id).orElse(null);
+        if(pessoa ==null){
+            throw new ValidacaoException("Pessoa não encontrada");
+        }
+
+        var dependente = new PessoaEntity(dto);
+        dependente.setResponsavel(pessoa);
+        dependente.setContato(pessoa.getContato());
+        pessoa.getDependente().add(dependente);
+
+        pessoaRepository.save(dependente);
+        
+
+        return new DtoDetalheDependente(dependente);
+    }
+
+
+	public List<DtoDependente> listarDependentes(@Valid UUID id) {
+        var pessoaResponsavel = get(id).orElse(null);
+        if(pessoaResponsavel ==null){
+            throw new ValidacaoException("Dependente não encontrados!!");
+        }
+        List<PessoaEntity> dependentes = pessoaResponsavel.getDependente();
+
+        List<DtoDependente> dtoDependentes = dependentes.stream()
+                .map(DtoDependente::new)
+                .collect(Collectors.toList());
+		return dtoDependentes;
+	}
 
    
 }
