@@ -34,6 +34,7 @@ public class SecurityConfiguration {
                         .requestMatchers("/email/**").permitAll()
                         .requestMatchers("/v3/api-docs/**", "/swagger-ui.html", "/swagger-ui/**").permitAll()
                         .requestMatchers("/register-person/**").permitAll()
+                        .requestMatchers("/notification").permitAll()
                         .requestMatchers(HttpMethod.POST,"/register/public/forgot-password").permitAll()
                         .requestMatchers(HttpMethod.PUT,"/register/public/change-password/**").permitAll()
                         .anyRequest().authenticated())

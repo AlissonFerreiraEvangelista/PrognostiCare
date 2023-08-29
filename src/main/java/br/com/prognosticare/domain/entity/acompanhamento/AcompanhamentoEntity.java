@@ -31,11 +31,15 @@ public class AcompanhamentoEntity {
 
     private LocalDateTime dataAcompanhamento;
 
+    private int intervaloHora;
+
     private char tipoTemporarioControlado;
 
     @Column(columnDefinition = "TEXT")
     private String prescricaoMedica;
 
     
-    
+    public void atualizaProxaMedicacao(){
+        this.dataAcompanhamento = dataAcompanhamento.plusHours(intervaloHora);
+    }
 }
