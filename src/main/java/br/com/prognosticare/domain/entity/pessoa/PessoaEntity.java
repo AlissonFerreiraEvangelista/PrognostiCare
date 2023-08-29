@@ -70,9 +70,8 @@ public class PessoaEntity implements UserDetails {
     @OneToMany(mappedBy = "responsavel", cascade = CascadeType.ALL)
     private List<PessoaEntity> dependente;
 
-    @OneToMany(mappedBy = "pessoa",fetch=FetchType.LAZY)
+    @OneToMany(mappedBy = "pessoa", fetch = FetchType.LAZY)
     private List<AgendaEntity> agendas;
-
 
     public void excluir() {
         this.ativo = false;
