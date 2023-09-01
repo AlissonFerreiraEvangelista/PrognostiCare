@@ -35,8 +35,6 @@ public record DtoAtualizaPessoa(
 
     String tipoAlergia,
 
-    Boolean tipoResponsavel,
-
     String cartaoNacional,
 
     String cartaoPlanoSaude
