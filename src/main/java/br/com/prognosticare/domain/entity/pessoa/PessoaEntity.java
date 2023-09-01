@@ -59,6 +59,8 @@ public class PessoaEntity implements UserDetails {
 
     private Boolean ativo;
 
+    private Boolean doador;
+
     @Column(unique = true)
     private String email;
 
@@ -87,7 +89,7 @@ public class PessoaEntity implements UserDetails {
         Optional.ofNullable(dados.tipoAlergia()).ifPresent(this::setTipoAlergia);
         Optional.ofNullable(dados.contato()).ifPresent(this::setContato);
         Optional.ofNullable(dados.alergia()).ifPresent(this::setAlergia);
-       // Optional.ofNullable(dados.tipoResponsavel()).ifPresent(this::setTipoResponsavel);
+        Optional.ofNullable(dados.doador()).ifPresent(this::setDoador);
         Optional.ofNullable(dados.cartaoNacional()).ifPresent(this::setCartaoNacional);
         Optional.ofNullable(dados.cartaoPlanoSaude()).ifPresent(this::setCartaoPlanoSaude);
     }
