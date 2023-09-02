@@ -14,16 +14,14 @@ jobs:
     - name: Checkout Code
       uses: actions/checkout@v3.6.0
 
-    - name: Set up JDK 17
+    - name: Setup Java JDK
       uses: actions/setup-java@v3.12.0
       with:
+        distribution: 'temurin'
         java-version: 17
-        distribution: 'adopt'
-        
-    - name: Build JAR
-      run: |
-        ./mvnw clean package -DskipTests=true
-        mv target/*.jar app.jar  
+        cache: 'maven'        
+    - name: Build with Maven
+      run: mvn -B package --file pom.xml
 
     - name: Doker Login
       uses: docker/login-action@v2.2.0
