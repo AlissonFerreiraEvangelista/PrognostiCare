@@ -10,7 +10,7 @@ public record DtoDetalhePessoa(
         UUID pessoa_id,
         String nome,
         String cpf,
-        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy hh:mm:ss")
+        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy")
         LocalDate dataNascimento,
         String contato,
         TipoSanguineo tipoSanguineo,

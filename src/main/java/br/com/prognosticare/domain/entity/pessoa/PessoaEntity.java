@@ -11,7 +11,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonIgnore;
+
 
 import br.com.prognosticare.domain.entity.agenda.AgendaEntity;
 import jakarta.persistence.*;
@@ -39,7 +39,6 @@ public class PessoaEntity implements UserDetails {
     private String cpf;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy")
-    @Column(columnDefinition = "DATE")
     private LocalDate dataNascimento;
 
     @Enumerated(EnumType.STRING)
