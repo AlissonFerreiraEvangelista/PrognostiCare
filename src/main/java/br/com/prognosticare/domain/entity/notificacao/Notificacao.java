@@ -9,6 +9,4 @@ public class Notificacao {
     private String title;
     private String body;
     private String img;
-
-    
 }

@@ -2,9 +2,13 @@ package br.com.prognosticare.domain.service;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.UUID;
 
 
-
+import br.com.prognosticare.domain.entity.acompanhamento.DtoAtualizaAcompanhamento;
+import br.com.prognosticare.domain.entity.acompanhamento.DtoCadastroAcompanhamento;
+import br.com.prognosticare.domain.entity.acompanhamento.DtoDetalheAcompanhamento;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -68,4 +72,17 @@ public class AcompanhamentoService {
         return acompanhamentos;
     }
 
+    @Transactional
+    public AcompanhamentoEntity save(AcompanhamentoEntity acompanhamento) {
+        return acompanhamentoRepository.save(acompanhamento);
+    }
+
+    public AcompanhamentoEntity getReferenceById(DtoAtualizaAcompanhamento dto) {
+        var acompanhamento = acompanhamentoRepository.getReferenceById(dto.id());
+        if(acompanhamento == null){
+            throw  new ValidacaoException("Não encontrado");
+        }
+        acompanhamento.atualizaInformacao(dto);
+        return acompanhamentoRepository.saveAndFlush(acompanhamento);
+    }
 }
