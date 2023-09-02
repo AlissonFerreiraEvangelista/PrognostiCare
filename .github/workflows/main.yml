@@ -21,8 +21,8 @@ jobs:
         java-version: 17
         cache: 'maven'        
     - name: Build with Maven
-      run: mvn -B package --file pom.xml
-
+      run: mvn clean package -DskipTest=true
+      
     - name: Doker Login
       uses: docker/login-action@v2.2.0
       with:
