@@ -1,5 +1,7 @@
 package br.com.prognosticare.domain.entity.pessoa;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import java.time.LocalDate;
 import java.util.Optional;
 import java.util.UUID;
@@ -8,6 +10,7 @@ public record DtoDetalhePessoa(
         UUID pessoa_id,
         String nome,
         String cpf,
+        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy")
         LocalDate dataNascimento,
         String contato,
         TipoSanguineo tipoSanguineo,

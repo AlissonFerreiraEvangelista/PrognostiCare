@@ -54,7 +54,7 @@ public class PessoaController {
     @PostMapping("/save")
     @ApiResponse(description = "Cadastro Inicial de uma pessoa")
     @Transactional
-    public ResponseEntity<?> cadastrarPessoa(@RequestBody @Valid DtoCadastroPessoa dto,
+    public ResponseEntity<DtoDetalhePessoa> cadastrarPessoa(@RequestBody @Valid DtoCadastroPessoa dto,
             UriComponentsBuilder uriBuilder) {
         var pessoa = new PessoaEntity(dto);
         pessoaService.save(pessoa);
@@ -66,7 +66,7 @@ public class PessoaController {
     @ApiResponse(description = "Atualiza as informações da Pessoa")
     @Transactional
     public ResponseEntity<DtoDetalhePessoa> atualizaPessoa(@RequestBody @Valid DtoAtualizaPessoa dto) {
-        var pessoa = pessoaService.getReferenceById(dto.pessoa_id());
+        var pessoa = pessoaService.getReferenceById(dto);
         pessoa.atualizarInformacoes(dto);
         return ResponseEntity.ok(new DtoDetalhePessoa(pessoa));
     }

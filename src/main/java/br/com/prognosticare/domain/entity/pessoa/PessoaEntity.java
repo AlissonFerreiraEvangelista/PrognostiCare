@@ -11,7 +11,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonIgnore;
+
 
 import br.com.prognosticare.domain.entity.agenda.AgendaEntity;
 import jakarta.persistence.*;
@@ -39,7 +39,6 @@ public class PessoaEntity implements UserDetails {
     private String cpf;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy")
-    @Column(columnDefinition = "DATE")
     private LocalDate dataNascimento;
 
     @Enumerated(EnumType.STRING)
@@ -58,6 +57,8 @@ public class PessoaEntity implements UserDetails {
     private String cartaoPlanoSaude;
 
     private Boolean ativo;
+
+    private Boolean doador;
 
     @Column(unique = true)
     private String email;
@@ -86,7 +87,7 @@ public class PessoaEntity implements UserDetails {
         Optional.ofNullable(dados.tipoAlergia()).ifPresent(this::setTipoAlergia);
         Optional.ofNullable(dados.contato()).ifPresent(this::setContato);
         Optional.ofNullable(dados.alergia()).ifPresent(this::setAlergia);
-       // Optional.ofNullable(dados.tipoResponsavel()).ifPresent(this::setTipoResponsavel);
+        Optional.ofNullable(dados.doador()).ifPresent(this::setDoador);
         Optional.ofNullable(dados.cartaoNacional()).ifPresent(this::setCartaoNacional);
         Optional.ofNullable(dados.cartaoPlanoSaude()).ifPresent(this::setCartaoPlanoSaude);
     }

@@ -5,16 +5,13 @@ import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
+import br.com.prognosticare.domain.entity.pessoa.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import br.com.prognosticare.domain.entity.pessoa.DtoCadastroDependente;
-import br.com.prognosticare.domain.entity.pessoa.DtoDependente;
-import br.com.prognosticare.domain.entity.pessoa.DtoDetalheDependente;
-import br.com.prognosticare.domain.entity.pessoa.PessoaEntity;
 import br.com.prognosticare.domain.repository.PessoaRepository;
 import br.com.prognosticare.infra.exception.ValidacaoException;
 import jakarta.validation.Valid;
@@ -49,8 +46,21 @@ public class PessoaService {
         return pessoaRepository.findById(pessoa_id);
     }
 
-    public PessoaEntity getReferenceById(UUID pessoa_id) {
-        return pessoaRepository.getReferenceById(pessoa_id);
+    public PessoaEntity getReferenceById(DtoAtualizaPessoa dto) {
+        var pessoa = pessoaRepository.getReferenceById(dto.pessoa_id());
+        if(pessoa == null){
+            throw  new ValidacaoException("Pessoa não encontrada!!");
+        }
+        pessoa.atualizarInformacoes(dto);
+        return pessoa;
+    }
+
+    public PessoaEntity getReferenceById(UUID id) {
+        var pessoa = pessoaRepository.getReferenceById(id);
+        if(pessoa == null){
+            throw  new ValidacaoException("Pessoa não encontrada!!");
+        }
+        return pessoa;
     }
 
     public void findByEmail(String email) {
@@ -64,8 +74,6 @@ public class PessoaService {
         }else{
             throw new ValidacaoException("Problema no e-mail");
         }
-     
-        
     }
 
     @Transactional
