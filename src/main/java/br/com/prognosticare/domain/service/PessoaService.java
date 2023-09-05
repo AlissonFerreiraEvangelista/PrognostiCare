@@ -89,7 +89,7 @@ public class PessoaService {
     }
 
 
-    public DtoDetalheDependente adicionarDependente(@Valid UUID id, @Valid DtoCadastroDependente dto) {
+    public DtoDetalheDependente adicionarDependente(UUID id, DtoCadastroDependente dto) {
         var pessoa = get(id).orElse(null);
         if(pessoa ==null){
             throw new ValidacaoException("Pessoa não encontrada");

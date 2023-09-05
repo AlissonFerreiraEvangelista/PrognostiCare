@@ -1,19 +1,29 @@
 package br.com.prognosticare.domain.entity.acompanhamento;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
 
 public record DtoDetalheAcompanhamento(
+    
         UUID id,
+
         TipoAcompanhamento tipoAcompanhamento,
+
         String medicacao,
+
         char statusEvento,
+
         @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy hh:mm:ss a")
         LocalDateTime dataAcompanhamento,
-        int intervaloHora,
+        
+        @JsonProperty(defaultValue = "0")
+        Integer intervaloHora,
+
         TipoTemporarioControlado tipoTemporarioControlado,
+
         String prescricaoMedica
 ) {
     public DtoDetalheAcompanhamento(AcompanhamentoEntity acompanhamentoEntity){

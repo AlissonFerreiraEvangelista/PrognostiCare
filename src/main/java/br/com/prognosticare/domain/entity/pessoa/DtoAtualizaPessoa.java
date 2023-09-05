@@ -21,7 +21,7 @@ public record DtoAtualizaPessoa(
     String cpf,
 
     @NotBlank
-    @Pattern(regexp = "\\d{2}\\-\\d{5}\\-\\d{4}")
+    @Pattern(regexp = "\\(\\d{2}\\)\\d{5}-\\d{4}")
     String contato,
 
     @NotNull

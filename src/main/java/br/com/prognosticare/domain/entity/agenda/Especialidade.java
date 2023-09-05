@@ -5,5 +5,6 @@ public enum Especialidade {
     CLINICO_GERAL,
     CARDIOLOGIA,
     GINECOLOGIA,
+    NAO_POSSUI,
     DERMATOLOGIA;
 }

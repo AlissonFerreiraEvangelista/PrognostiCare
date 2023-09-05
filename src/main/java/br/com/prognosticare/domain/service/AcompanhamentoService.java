@@ -2,6 +2,7 @@ package br.com.prognosticare.domain.service;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 
@@ -9,7 +10,10 @@ import br.com.prognosticare.domain.entity.acompanhamento.DtoAtualizaAcompanhamen
 import br.com.prognosticare.domain.entity.acompanhamento.DtoCadastroAcompanhamento;
 import br.com.prognosticare.domain.entity.acompanhamento.DtoDetalheAcompanhamento;
 import jakarta.transaction.Transactional;
+import jakarta.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import com.google.firebase.FirebaseApp;
@@ -25,21 +29,29 @@ public class AcompanhamentoService {
     @Autowired
     AcompanhamentoRepository acompanhamentoRepository;
 
+    @Autowired
+    PessoaService pessoaService;
+
     String tokenFCM;
 
+    @Scheduled(fixedRate = 60000)
     public void checkMedications() {
         LocalDateTime now = LocalDateTime.now();
 
         var acompanhamentos = findAll();
 
         for (AcompanhamentoEntity acompanhamentoEntity : acompanhamentos) {
-            if(now.isAfter(acompanhamentoEntity.getDataAcompanhamento())){
-                sendNotification(acompanhamentoEntity);
+            if(now.isAfter(acompanhamentoEntity.getDataAcompanhamento()) && "A".equals(acompanhamentoEntity.getStatusEvento())){
+               // sendNotification(acompanhamentoEntity);
+               System.out.println(acompanhamentoEntity.getMedicacao());
                 acompanhamentoEntity.atualizaProxaMedicacao();
+                save(acompanhamentoEntity);
             }
         }
         
     }
+
+
 
     private void sendNotification(AcompanhamentoEntity acompanhamento) {
        
@@ -84,5 +96,29 @@ public class AcompanhamentoService {
         }
         acompanhamento.atualizaInformacao(dto);
         return acompanhamentoRepository.saveAndFlush(acompanhamento);
+    }
+    public Optional<AcompanhamentoEntity> get(UUID id){
+        return acompanhamentoRepository.findById(id);
+    }
+
+    public DtoDetalheAcompanhamento adicionaAcompanhamento(@Valid UUID id, @Valid DtoCadastroAcompanhamento dto) {
+        var pessoa = pessoaService.get(id).orElse(null);
+        if(pessoa == null){
+            throw new ValidacaoException("Pessoa não encontrada!!");
+        }
+        var acompanhamento = new AcompanhamentoEntity(dto);
+        acompanhamento.setPessoa(pessoa);
+        pessoa.getAcompanhamentos().add(acompanhamento);
+        save(acompanhamento);
+        return new DtoDetalheAcompanhamento(acompanhamento);
+    }
+
+    public List <DtoDetalheAcompanhamento>listaAcompanhamentos(UUID id) {
+        var pessoa = pessoaService.get(id).orElse(null);
+        if(pessoa==null){
+            throw new ValidacaoException("Pessoa não encontrada!!");
+        }
+       var acompanhamentos =  acompanhamentoRepository.findByAcompanhamentoEntityWherePessoaEntity(pessoa);  
+        return acompanhamentos;
     }
 }
