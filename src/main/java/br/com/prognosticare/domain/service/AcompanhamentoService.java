@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-
 import br.com.prognosticare.domain.entity.acompanhamento.DtoAtualizaAcompanhamento;
 import br.com.prognosticare.domain.entity.acompanhamento.DtoCadastroAcompanhamento;
 import br.com.prognosticare.domain.entity.acompanhamento.DtoDetalheAcompanhamento;
@@ -41,31 +40,27 @@ public class AcompanhamentoService {
         var acompanhamentos = findAll();
 
         for (AcompanhamentoEntity acompanhamentoEntity : acompanhamentos) {
-            if(now.isAfter(acompanhamentoEntity.getDataAcompanhamento()) && "A".equals(acompanhamentoEntity.getStatusEvento())){
-               // sendNotification(acompanhamentoEntity);
-               System.out.println(acompanhamentoEntity.getMedicacao());
+            if (now.isAfter(acompanhamentoEntity.getDataAcompanhamento())
+                    && acompanhamentoEntity.getStatusEvento() == 'A') {
+                // sendNotification(acompanhamentoEntity);
+                System.out.println(acompanhamentoEntity.getMedicacao());
                 acompanhamentoEntity.atualizaProxaMedicacao();
                 save(acompanhamentoEntity);
             }
         }
-        
+
     }
 
-
-
     private void sendNotification(AcompanhamentoEntity acompanhamento) {
-       
-        Message message = Message.builder()
-        .setNotification(Notification.builder()
-            .setTitle("Lembrete de Madicação")
-            .setBody("É hora de tomar " + acompanhamento.getMedicacao())
-            .setImage("tokenFCM")
-            .build()            
-        )
-        .setToken(tokenFCM)
-        .build();
 
-                
+        Message message = Message.builder()
+                .setNotification(Notification.builder()
+                        .setTitle("Lembrete de Madicação")
+                        .setBody("É hora de tomar " + acompanhamento.getMedicacao())
+                        .setImage("tokenFCM")
+                        .build())
+                .setToken(tokenFCM)
+                .build();
 
         try {
             FirebaseApp.initializeApp();
@@ -75,10 +70,10 @@ public class AcompanhamentoService {
         }
     }
 
-    public List<AcompanhamentoEntity> findAll(){
+    public List<AcompanhamentoEntity> findAll() {
         List<AcompanhamentoEntity> acompanhamentos = acompanhamentoRepository.findAll();
-        
-        if(acompanhamentos.isEmpty()){
+
+        if (acompanhamentos.isEmpty()) {
             throw new ValidacaoException("Não tem nenhum acompanhamento!");
         }
         return acompanhamentos;
@@ -91,21 +86,23 @@ public class AcompanhamentoService {
 
     public AcompanhamentoEntity getReferenceById(DtoAtualizaAcompanhamento dto) {
         var acompanhamento = acompanhamentoRepository.getReferenceById(dto.id());
-        if(acompanhamento == null){
-            throw  new ValidacaoException("Não encontrado");
+        if (acompanhamento == null) {
+            throw new ValidacaoException("Não encontrado");
         }
         acompanhamento.atualizaInformacao(dto);
         return acompanhamentoRepository.saveAndFlush(acompanhamento);
     }
-    public Optional<AcompanhamentoEntity> get(UUID id){
-        return acompanhamentoRepository.findById(id);
+
+    public Optional<AcompanhamentoEntity> get(UUID id) {
+        var acompanhamento = acompanhamentoRepository.findById(id);
+        if (!acompanhamento.isPresent()) {
+            throw new ValidacaoException("Acompanhamento não encontrado!!");
+        }
+        return acompanhamento;
     }
 
-    public DtoDetalheAcompanhamento adicionaAcompanhamento(@Valid UUID id, @Valid DtoCadastroAcompanhamento dto) {
+    public DtoDetalheAcompanhamento adicionaAcompanhamento(UUID id, DtoCadastroAcompanhamento dto) {
         var pessoa = pessoaService.get(id).orElse(null);
-        if(pessoa == null){
-            throw new ValidacaoException("Pessoa não encontrada!!");
-        }
         var acompanhamento = new AcompanhamentoEntity(dto);
         acompanhamento.setPessoa(pessoa);
         pessoa.getAcompanhamentos().add(acompanhamento);
@@ -113,12 +110,9 @@ public class AcompanhamentoService {
         return new DtoDetalheAcompanhamento(acompanhamento);
     }
 
-    public List <DtoDetalheAcompanhamento>listaAcompanhamentos(UUID id) {
+    public List<DtoDetalheAcompanhamento> listaAcompanhamentos(UUID id) {
         var pessoa = pessoaService.get(id).orElse(null);
-        if(pessoa==null){
-            throw new ValidacaoException("Pessoa não encontrada!!");
-        }
-       var acompanhamentos =  acompanhamentoRepository.findByAcompanhamentoEntityWherePessoaEntity(pessoa);  
+        var acompanhamentos = acompanhamentoRepository.findByAcompanhamentoEntityWherePessoaEntity(pessoa);
         return acompanhamentos;
     }
 }
