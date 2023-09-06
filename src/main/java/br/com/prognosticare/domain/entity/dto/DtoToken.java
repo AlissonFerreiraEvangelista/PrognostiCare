@@ -6,7 +6,8 @@ import br.com.prognosticare.domain.entity.pessoa.PessoaEntity;
 
 public record DtoToken(
     String token,
-    UUID pessoaEntity
+    UUID pessoaEntity,
+    String nome
 ) {
     
 }

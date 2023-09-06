@@ -43,8 +43,14 @@ public class PessoaService {
 
     
     public Optional<PessoaEntity> get(UUID pessoa_id){
-        return pessoaRepository.findById(pessoa_id);
+        var pessoa = pessoaRepository.findById(pessoa_id);
+        if(pessoa == null){
+            throw new ValidacaoException("Pessoa não encontada!!");
+        }
+        return pessoa;
     }
+
+    
 
     public PessoaEntity getReferenceById(DtoAtualizaPessoa dto) {
         var pessoa = pessoaRepository.getReferenceById(dto.pessoa_id());
@@ -89,7 +95,7 @@ public class PessoaService {
     }
 
 
-    public DtoDetalheDependente adicionarDependente(@Valid UUID id, @Valid DtoCadastroDependente dto) {
+    public DtoDetalheDependente adicionarDependente(UUID id, DtoCadastroDependente dto) {
         var pessoa = get(id).orElse(null);
         if(pessoa ==null){
             throw new ValidacaoException("Pessoa não encontrada");

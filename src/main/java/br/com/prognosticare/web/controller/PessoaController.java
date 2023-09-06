@@ -1,35 +1,21 @@
 package br.com.prognosticare.web.controller;
 
 import java.util.List;
-import java.util.Optional;
+
 import java.util.UUID;
-import java.util.stream.Collectors;
+
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.mail.MailException;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import br.com.prognosticare.domain.entity.dto.DtoSenha;
-import br.com.prognosticare.domain.entity.dto.DtoSenhaRestInput;
-import br.com.prognosticare.domain.entity.pessoa.DtoAtualizaPessoa;
-import br.com.prognosticare.domain.entity.pessoa.DtoCadastroDependente;
-import br.com.prognosticare.domain.entity.pessoa.DtoCadastroPessoa;
-import br.com.prognosticare.domain.entity.pessoa.DtoDependente;
-import br.com.prognosticare.domain.entity.pessoa.DtoDetalheDependente;
-import br.com.prognosticare.domain.entity.pessoa.DtoDetalhePessoa;
-import br.com.prognosticare.domain.entity.pessoa.PessoaEntity;
+import br.com.prognosticare.domain.entity.dto.*;
+import br.com.prognosticare.domain.entity.pessoa.*;
 import br.com.prognosticare.domain.repository.PessoaRepository;
-import br.com.prognosticare.domain.service.EmailService;
-import br.com.prognosticare.domain.service.PessoaService;
+import br.com.prognosticare.domain.service.*;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.springframework.transaction.annotation.Transactional;

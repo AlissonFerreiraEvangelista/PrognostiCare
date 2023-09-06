@@ -12,7 +12,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
-
+import br.com.prognosticare.domain.entity.acompanhamento.AcompanhamentoEntity;
 import br.com.prognosticare.domain.entity.agenda.AgendaEntity;
 import jakarta.persistence.*;
 import jakarta.validation.Valid;
@@ -75,6 +75,14 @@ public class PessoaEntity implements UserDetails {
     @OneToMany(mappedBy = "pessoa", fetch = FetchType.LAZY)
     private List<AgendaEntity> agendas;
 
+<<<<<<< HEAD
+=======
+
+    @OneToMany(mappedBy = "pessoa", fetch = FetchType.LAZY)
+    private List<AcompanhamentoEntity> acompanhamentos;
+
+
+>>>>>>> 38ce6d544b29421319041c6ceb4c2bc0a7c206df
     public void excluir() {
         this.ativo = false;
     }

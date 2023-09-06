@@ -5,8 +5,10 @@ import java.time.LocalDateTime;
 import java.util.Optional;
 import java.util.UUID;
 
-import br.com.prognosticare.domain.entity.pessoa.DtoAtualizaPessoa;
+
 import com.fasterxml.jackson.annotation.JsonFormat;
+
+import br.com.prognosticare.domain.entity.pessoa.PessoaEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -30,16 +32,21 @@ public class AcompanhamentoEntity {
     private String medicacao;
 
     private char statusEvento;
+    
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy hh:mm:ss a")
     private LocalDateTime dataAcompanhamento;
 
-    private int intervaloHora;
+    private Integer intervaloHora;
 
     @Enumerated(EnumType.STRING)
     private TipoTemporarioControlado tipoTemporarioControlado;
 
     @Column(columnDefinition = "TEXT")
     private String prescricaoMedica;
+
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JoinColumn(name = "pessoa_id")
+    private PessoaEntity pessoa;
 
     public AcompanhamentoEntity(DtoCadastroAcompanhamento dto) {
         this.tipoAcompanhamento = dto.tipoAcompanhamento();
