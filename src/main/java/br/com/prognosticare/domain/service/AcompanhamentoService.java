@@ -5,11 +5,9 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-import br.com.prognosticare.domain.entity.acompanhamento.DtoAtualizaAcompanhamento;
-import br.com.prognosticare.domain.entity.acompanhamento.DtoCadastroAcompanhamento;
-import br.com.prognosticare.domain.entity.acompanhamento.DtoDetalheAcompanhamento;
+import br.com.prognosticare.domain.entity.acompanhamento.*;
 import jakarta.transaction.Transactional;
-import jakarta.validation.Valid;
+
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;

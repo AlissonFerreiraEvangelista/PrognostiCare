@@ -32,9 +32,9 @@ public class SecurityConfiguration {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/v3/api-docs/**", "/swagger-ui.html", "/swagger-ui/**").permitAll()
                         .requestMatchers(HttpMethod.POST, "/login").permitAll()
-                        .requestMatchers(HttpMethod.POST,"/register-person/save").permitAll()
-                        .requestMatchers(HttpMethod.POST,"/register/public/forgot-password").permitAll()
-                        .requestMatchers(HttpMethod.PUT,"/register/public/change-password/**").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/register-person/save").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/register-person/public/forgot-password").permitAll()
+                        .requestMatchers(HttpMethod.PUT, "/register-person/public/change-password/**").permitAll()
                         .requestMatchers("/email/**").permitAll()
                         .requestMatchers(HttpMethod.POST,"/register-person/add-dependent").permitAll()
                         .requestMatchers(HttpMethod.GET,"/register-person/list-dependents").permitAll()
