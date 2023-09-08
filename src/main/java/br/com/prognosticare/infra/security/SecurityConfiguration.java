@@ -40,6 +40,7 @@ public class SecurityConfiguration {
                         .requestMatchers(HttpMethod.GET,"/register-person/list-dependents").permitAll()
                         .requestMatchers("/notification").permitAll()
                         .requestMatchers("/to-accompany/**").permitAll()
+                        .requestMatchers("/to-scheduling/**").permitAll()
                         .anyRequest().authenticated())
                 .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)
                 .httpBasic(Customizer.withDefaults())

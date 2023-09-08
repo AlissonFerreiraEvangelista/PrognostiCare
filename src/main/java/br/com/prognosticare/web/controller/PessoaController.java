@@ -57,7 +57,7 @@ public class PessoaController {
         return ResponseEntity.ok(new DtoDetalhePessoa(pessoa));
     }
 
-    @GetMapping("find/{id}")
+    @GetMapping("find/{pessoa_id}")
     @ApiResponse(description = "Encontra uma pessoa por ID")
     public ResponseEntity<DtoDetalhePessoa> encontraPorID(@PathVariable @Valid UUID id) {
 
@@ -78,9 +78,9 @@ public class PessoaController {
        
     }
 
-    @PutMapping("/public/change-password/{id}")
+    @PutMapping("/public/change-password/{pessoa_id}")
     @ApiResponse(description = "Troca da senha")
-    public ResponseEntity<?> changePassword(@PathVariable(value = "id") UUID id, @RequestBody @Valid DtoSenha dto) {
+    public ResponseEntity<?> changePassword(@PathVariable(value = "pessoa_id") UUID id, @RequestBody @Valid DtoSenha dto) {
 
         var pessoa = pessoaService.savePassword(id, dto.password());
 
@@ -90,7 +90,7 @@ public class PessoaController {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Usuario não encontrado");
     }
 
-    @PostMapping("/add-dependent/{id}")
+    @PostMapping("/add-dependent/{pessoa_id}")
     @ApiResponse(description = "Adiciona um dependente a uma pessoa")
     @Transactional
     public ResponseEntity<DtoDetalheDependente> adicionarDependente(

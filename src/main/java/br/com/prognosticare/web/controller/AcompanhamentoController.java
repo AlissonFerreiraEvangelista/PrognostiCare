@@ -5,7 +5,7 @@ import br.com.prognosticare.domain.entity.acompanhamento.DtoAtualizaAcompanhamen
 import br.com.prognosticare.domain.entity.acompanhamento.DtoCadastroAcompanhamento;
 import br.com.prognosticare.domain.entity.acompanhamento.DtoDetalheAcompanhamento;
 import br.com.prognosticare.domain.service.AcompanhamentoService;
-import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 
@@ -25,16 +25,9 @@ public class AcompanhamentoController {
     @Autowired
     AcompanhamentoService acompanhamentoService;
 
-
-    @PutMapping("/update")
-    public ResponseEntity<DtoDetalheAcompanhamento>atualizaAcompanhamento(@RequestBody @Valid DtoAtualizaAcompanhamento dto){
-        var acompanhamento = acompanhamentoService.getReferenceById(dto);
-        return ResponseEntity.status(HttpStatus.OK).body(new DtoDetalheAcompanhamento(acompanhamento));
-    }
-
-    @PostMapping("/save/{id}")
-    @ApiResponse(description = "Salva Acompanhamentos de uma pessoa")
-    public ResponseEntity<DtoDetalheAcompanhamento> cadastraAcompanhamento(@PathVariable(value = "id") @Valid UUID id, @RequestBody @Valid DtoCadastroAcompanhamento dto){
+    @PostMapping("/save/{pessoa_id}")
+    @Operation(summary= "Salva Acompanhamentos de uma pessoa")
+    public ResponseEntity<DtoDetalheAcompanhamento> cadastraAcompanhamento(@PathVariable(value = "pessoa_id") @Valid UUID id, @RequestBody @Valid DtoCadastroAcompanhamento dto){
         var acompanhamento = acompanhamentoService.adicionaAcompanhamento(id, dto);
         if(acompanhamento == null){
             return new  ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -43,8 +36,17 @@ public class AcompanhamentoController {
         return ResponseEntity.status(HttpStatus.CREATED).body(acompanhamento);
     }
 
-    @GetMapping("/list/{id}")
-    public ResponseEntity<List<DtoDetalheAcompanhamento>> listaAcompanhamentos(@PathVariable @Valid UUID id){
+    @PutMapping("/update")
+    @Operation(summary= "Atualiza o Acompanhamentos de uma pessoa")
+    public ResponseEntity<DtoDetalheAcompanhamento>atualizaAcompanhamento(@RequestBody @Valid DtoAtualizaAcompanhamento dto){
+        var acompanhamento = acompanhamentoService.getReferenceById(dto);
+        return ResponseEntity.status(HttpStatus.OK).body(new DtoDetalheAcompanhamento(acompanhamento));
+    }
+
+
+    @GetMapping("/list/{pessoa_id}")
+    @Operation(summary= "Lista os Acompanhamentos de uma pessoa")
+    public ResponseEntity<List<DtoDetalheAcompanhamento>> listaAcompanhamentos(@PathVariable(value = "pessoa_id") @Valid UUID id){
         var listaAcompanhamentos = acompanhamentoService.listaAcompanhamentos(id);
         if(listaAcompanhamentos.isEmpty())
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
