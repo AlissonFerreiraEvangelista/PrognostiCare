@@ -1,6 +1,6 @@
 package br.com.prognosticare.domain.service;
 
-import java.time.LocalDateTime;
+
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -10,11 +10,8 @@ import jakarta.transaction.Transactional;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.scheduling.annotation.Scheduled;
-import org.springframework.stereotype.Service;
 
-import com.google.firebase.FirebaseApp;
-import com.google.firebase.messaging.*;
+import org.springframework.stereotype.Service;
 
 import br.com.prognosticare.domain.entity.acompanhamento.AcompanhamentoEntity;
 import br.com.prognosticare.domain.enums.Status;
@@ -30,44 +27,7 @@ public class AcompanhamentoService {
     @Autowired
     PessoaService pessoaService;
 
-    String tokenFCM;
-
-    @Scheduled(fixedRate = 60000)
-    public void checkMedications() {
-        LocalDateTime now = LocalDateTime.now();
-
-        var acompanhamentos = acompanhamentoRepository.findAllByStatusEventoAberto();
-
-        for (AcompanhamentoEntity acompanhamentoEntity : acompanhamentos) {
-            if (now.isAfter(acompanhamentoEntity.getDataAcompanhamento())
-                    && acompanhamentoEntity.getStatusEvento() == Status.ABERTO) {
-                // sendNotification(acompanhamentoEntity);
-                System.out.println(acompanhamentoEntity.getMedicacao());
-                acompanhamentoEntity.atualizaProxaMedicacao();
-                save(acompanhamentoEntity);
-            }
-        }
-
-    }
-
-    private void sendNotification(AcompanhamentoEntity acompanhamento) {
-
-        Message message = Message.builder()
-                .setNotification(Notification.builder()
-                        .setTitle("Lembrete de Madicação")
-                        .setBody("É hora de tomar " + acompanhamento.getMedicacao())
-                        .setImage("tokenFCM")
-                        .build())
-                .setToken(tokenFCM)
-                .build();
-
-        try {
-            FirebaseApp.initializeApp();
-            FirebaseMessaging.getInstance().send(message);
-        } catch (FirebaseMessagingException e) {
-            e.printStackTrace();
-        }
-    }
+    
 
     public List<AcompanhamentoEntity> findAll() {
         List<AcompanhamentoEntity> acompanhamentos = acompanhamentoRepository.findAll();
@@ -113,5 +73,11 @@ public class AcompanhamentoService {
         var pessoa = pessoaService.get(id).orElse(null);
         var acompanhamentos = acompanhamentoRepository.findByAcompanhamentoEntityWherePessoaEntity(pessoa);
         return acompanhamentos;
+    }
+
+    @Transactional
+    public List<AcompanhamentoEntity> findAllByStatusEventoAberto() {
+
+        return acompanhamentoRepository.findAllByStatusEvento();
     }
 }

@@ -14,6 +14,7 @@ import org.springframework.data.repository.query.Param;
 import br.com.prognosticare.domain.entity.acompanhamento.AcompanhamentoEntity;
 import br.com.prognosticare.domain.entity.acompanhamento.DtoDetalheAcompanhamento;
 import br.com.prognosticare.domain.entity.pessoa.PessoaEntity;
+import br.com.prognosticare.domain.enums.Status;
 import jakarta.persistence.LockModeType;
 import jakarta.persistence.QueryHint;
 
@@ -22,12 +23,48 @@ public interface AcompanhamentoRepository extends JpaRepository<AcompanhamentoEn
     @Query(value = "FROM AcompanhamentoEntity a WHERE a.pessoa = :pessoa")
     List<DtoDetalheAcompanhamento> findByAcompanhamentoEntityWherePessoaEntity(@Param("pessoa") PessoaEntity pessoa);
 
-    @QueryHints({
+    
+      @QueryHints({
         @QueryHint(
         name = "javax.persistence.lock.timeout", 
-        value = "0") 
+        value = "5000") 
         })
     //@Lock(LockModeType.PESSIMISTIC_WRITE)
     @Query(nativeQuery = true, value = "SELECT * FROM tb_acompanhamento a WHERE a.status_evento = 'ABERTO' ORDER BY a.data_acompanhamento ASC FOR UPDATE SKIP LOCKED")
-    List<AcompanhamentoEntity> findAllByStatusEventoAberto();
+    List<AcompanhamentoEntity> findAllByStatusEvento();
+     
+    
+
+     /*
+      *
+       @QueryHints({
+        @QueryHint(
+            name = "javax.persistence.lock.timeout", 
+            value = "5000" 
+        )
+    })
+    @Query("SELECT a FROM AcompanhamentoEntity a WHERE a.statusEvento = :statusEvento")
+    @Lock(LockModeType.PESSIMISTIC_WRITE)
+    List<AcompanhamentoEntity> findAllByStatusEvento(
+        @Param("statusEvento") Status statusEvento
+    );
+    
+      */
+
+     /*
+        @QueryHints({
+            @QueryHint(
+                name = "jakarta.persistence.lock.timeout", 
+                value = LockOptions.SKIP_LOCKED + ""
+            )
+        })
+        @Query("SELECT a FROM AcompanhamentoEntity a WHERE a.statusEvento = :statusEvento")
+        @Lock(LockModeType.PESSIMISTIC_WRITE)
+        List<AcompanhamentoEntity> findAllByStatusEvento(
+            @Param("statusEvento") Status statusEvento
+        );
+     
+     */ 
+   
+    
 }
