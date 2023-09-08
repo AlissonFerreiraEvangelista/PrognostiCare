@@ -3,6 +3,8 @@ package br.com.prognosticare.domain.entity.acompanhamento;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 import br.com.prognosticare.domain.entity.pessoa.PessoaEntity;
+import br.com.prognosticare.domain.enums.TipoAcompanhamento;
+import br.com.prognosticare.domain.enums.TipoTemporarioControlado;
 import jakarta.validation.constraints.NotNull;
 
 

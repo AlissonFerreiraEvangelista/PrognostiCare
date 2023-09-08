@@ -1,4 +1,4 @@
-package br.com.prognosticare.domain.entity.pessoa;
+package br.com.prognosticare.domain.enums;
 
 public enum TipoSanguineo {
     A_POSITIVO,

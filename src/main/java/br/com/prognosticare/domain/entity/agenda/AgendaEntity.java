@@ -6,6 +6,9 @@ import java.util.UUID;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 import br.com.prognosticare.domain.entity.pessoa.PessoaEntity;
+import br.com.prognosticare.domain.enums.Especialidade;
+import br.com.prognosticare.domain.enums.Status;
+import br.com.prognosticare.domain.enums.TipoExame;
 
 import java.time.LocalDateTime;
 import java.util.Optional;
@@ -36,7 +39,8 @@ public class AgendaEntity {
     @Column(columnDefinition= "TEXT")
     private String descricao;
 
-    private char statusEvento;
+    @Enumerated(EnumType.STRING)
+    private Status statusEvento;
 
     @Column(columnDefinition= "TEXT")
     private String observacao;
@@ -56,7 +60,7 @@ public class AgendaEntity {
         this.dataAgenda = dto.dataAgenda();
         this.descricao= dto.descricao();
         this.local= dto.local();
-        this.statusEvento= 'A';
+        this.statusEvento= Status.ABERTO;
         this.intervaloData = dto.intervaloData();
         this.observacao= dto.observacao();
         this.especialista= dto.especialista();

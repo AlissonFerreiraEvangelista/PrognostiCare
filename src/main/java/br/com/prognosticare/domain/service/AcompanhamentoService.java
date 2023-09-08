@@ -17,6 +17,7 @@ import com.google.firebase.FirebaseApp;
 import com.google.firebase.messaging.*;
 
 import br.com.prognosticare.domain.entity.acompanhamento.AcompanhamentoEntity;
+import br.com.prognosticare.domain.enums.Status;
 import br.com.prognosticare.domain.repository.AcompanhamentoRepository;
 import br.com.prognosticare.infra.exception.ValidacaoException;
 
@@ -35,11 +36,11 @@ public class AcompanhamentoService {
     public void checkMedications() {
         LocalDateTime now = LocalDateTime.now();
 
-        var acompanhamentos = findAll();
+        var acompanhamentos = acompanhamentoRepository.findAllByStatusEventoAberto();
 
         for (AcompanhamentoEntity acompanhamentoEntity : acompanhamentos) {
             if (now.isAfter(acompanhamentoEntity.getDataAcompanhamento())
-                    && acompanhamentoEntity.getStatusEvento() == 'A') {
+                    && acompanhamentoEntity.getStatusEvento() == Status.ABERTO) {
                 // sendNotification(acompanhamentoEntity);
                 System.out.println(acompanhamentoEntity.getMedicacao());
                 acompanhamentoEntity.atualizaProxaMedicacao();

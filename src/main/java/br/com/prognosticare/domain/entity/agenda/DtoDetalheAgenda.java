@@ -5,6 +5,7 @@ import java.util.UUID;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
+import br.com.prognosticare.domain.enums.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
@@ -18,7 +19,7 @@ public record DtoDetalheAgenda(
     @NotBlank
     String local,
 
-    char statusEvento,
+    Status statusEvento,
 
     String descricao,
 

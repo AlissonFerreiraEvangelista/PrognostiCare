@@ -9,6 +9,7 @@ import java.util.UUID;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 import br.com.prognosticare.domain.entity.pessoa.PessoaEntity;
+import br.com.prognosticare.domain.enums.*;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -31,7 +32,8 @@ public class AcompanhamentoEntity {
 
     private String medicacao;
 
-    private char statusEvento;
+    @Enumerated(EnumType.STRING)
+    private Status statusEvento;
     
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy hh:mm:ss a")
     private LocalDateTime dataAcompanhamento;
@@ -51,7 +53,7 @@ public class AcompanhamentoEntity {
     public AcompanhamentoEntity(DtoCadastroAcompanhamento dto) {
         this.tipoAcompanhamento = dto.tipoAcompanhamento();
         this.medicacao = dto.medicacao();
-        this.statusEvento = 'A';
+        this.statusEvento = Status.ABERTO;
         this.dataAcompanhamento = dto.dataAcompanhamento();
         this.intervaloHora = dto.intervaloHora();
         this.tipoTemporarioControlado = dto.tipoTemporarioControlado();

@@ -4,6 +4,8 @@ import java.time.LocalDate;
 import java.util.Optional;
 import java.util.UUID;
 
+import br.com.prognosticare.domain.enums.TipoSanguineo;
+
 public record DtoDetalheDependente(
         UUID pessoa_id,
         String nome,

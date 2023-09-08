@@ -1,4 +1,4 @@
-package br.com.prognosticare.domain.entity.agenda;
+package br.com.prognosticare.domain.enums;
 
 public enum Especialidade {
     ORTOPEDIA,
