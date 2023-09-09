@@ -4,7 +4,6 @@ import java.util.List;
 
 import java.util.UUID;
 
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,7 +16,6 @@ import br.com.prognosticare.domain.entity.pessoa.*;
 import br.com.prognosticare.domain.repository.PessoaRepository;
 import br.com.prognosticare.domain.service.*;
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.springframework.transaction.annotation.Transactional;
 import jakarta.validation.Valid;
@@ -39,7 +37,7 @@ public class PessoaController {
     EmailService emailService;
 
     @PostMapping("/save")
-    @Operation(summary= "Cadastro Inicial de uma pessoa")
+    @Operation(summary = "Cadastro Inicial de uma pessoa")
     @Transactional
     public ResponseEntity<DtoDetalhePessoa> cadastrarPessoa(@RequestBody @Valid DtoCadastroPessoa dto,
             UriComponentsBuilder uriBuilder) {
@@ -50,7 +48,7 @@ public class PessoaController {
     }
 
     @PutMapping("/update")
-    @Operation(summary= "Atualiza as informações da Pessoa")
+    @Operation(summary = "Atualiza as informações da Pessoa")
     @Transactional
     public ResponseEntity<DtoDetalhePessoa> atualizaPessoa(@RequestBody @Valid DtoAtualizaPessoa dto) {
         var pessoa = pessoaService.getReferenceById(dto);
@@ -59,7 +57,7 @@ public class PessoaController {
     }
 
     @GetMapping("find/{pessoa_id}")
-    @Operation(summary= "Encontra uma pessoa por ID")
+    @Operation(summary = "Encontra uma pessoa por ID")
     public ResponseEntity<DtoDetalhePessoa> encontraPorID(@PathVariable @Valid UUID id) {
 
         var pessoa = pessoaService.get(id).orElse(null);
@@ -71,17 +69,18 @@ public class PessoaController {
     }
 
     @PostMapping("/public/forgot-password")
-    @Operation(summary= "Envia email para recuperação de senha")
+    @Operation(summary = "Envia email para recuperação de senha")
     public ResponseEntity<?> forgotPassword(@RequestBody @Valid DtoSenhaRestInput dto) {
 
         pessoaService.findByEmail(dto.email());
         return ResponseEntity.ok().body("Email enviado com Sucesso!!");
-       
+
     }
 
     @PutMapping("/public/change-password/{pessoa_id}")
-    @Operation(summary= "Troca da senha")
-    public ResponseEntity<?> changePassword(@PathVariable(value = "pessoa_id") UUID id, @RequestBody @Valid DtoSenha dto) {
+    @Operation(summary = "Troca da senha")
+    public ResponseEntity<?> changePassword(@PathVariable(value = "pessoa_id") UUID id,
+            @RequestBody @Valid DtoSenha dto) {
 
         var pessoa = pessoaService.savePassword(id, dto.password());
 
@@ -92,29 +91,29 @@ public class PessoaController {
     }
 
     @PostMapping("/add-dependent/{pessoa_id}")
-    @Operation(summary= "Adiciona um dependente a uma pessoa")
+    @Operation(summary = "Adiciona um dependente a uma pessoa")
     @Transactional
     public ResponseEntity<DtoDetalheDependente> adicionarDependente(
             @PathVariable @Valid UUID id,
             @RequestBody @Valid DtoCadastroDependente dto,
             UriComponentsBuilder uriBuilder) {
-            
-            var dependente = pessoaService.adicionarDependente(id, dto);
+
+        var dependente = pessoaService.adicionarDependente(id, dto);
 
         if (dependente == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-      
+
         var uri = uriBuilder.path("/dependente/{id}").buildAndExpand(dependente.getClass()).toUri();
         return ResponseEntity.created(uri).body(dependente);
     }
 
     @GetMapping("/list-dependents/{id}")
-    @Operation(summary= "Lista os dependentes de uma pessoa responsável")
+    @Operation(summary = "Lista os dependentes de uma pessoa responsável")
     public ResponseEntity<List<DtoDependente>> listarDependentes(@PathVariable @Valid UUID id) {
 
         var listaDependentes = pessoaService.listarDependentes(id);
-       
+
         if (listaDependentes == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }

@@ -2,31 +2,24 @@ package br.com.prognosticare.domain.entity.acompanhamento;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
-import br.com.prognosticare.domain.entity.pessoa.PessoaEntity;
 import br.com.prognosticare.domain.enums.TipoAcompanhamento;
 import br.com.prognosticare.domain.enums.TipoTemporarioControlado;
 import jakarta.validation.constraints.NotNull;
 
-
 import java.time.LocalDateTime;
 
-
 public record DtoCadastroAcompanhamento(
-        @NotNull
-        TipoAcompanhamento tipoAcompanhamento,
+                @NotNull TipoAcompanhamento tipoAcompanhamento,
 
-        String medicacao,
+                String medicacao,
 
-        @NotNull
-        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy hh:mm:ss a")
-        LocalDateTime dataAcompanhamento,
+                @NotNull @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy hh:mm:ss a") LocalDateTime dataAcompanhamento,
 
-        Integer intervaloHora,
+                Integer intervaloHora,
 
-        @NotNull
-        TipoTemporarioControlado tipoTemporarioControlado,
+                @NotNull TipoTemporarioControlado tipoTemporarioControlado,
 
-        String prescricaoMedica
+                String prescricaoMedica
 
 ) {
 }

@@ -76,14 +76,13 @@ public class PessoaEntity implements UserDetails {
     @OneToMany(mappedBy = "pessoa", fetch = FetchType.LAZY)
     private List<AgendaEntity> agendas;
 
-<<<<<<< HEAD
-=======
+    // <<<<<<< HEAD
+    // =======
 
-    @OneToMany(mappedBy = "pessoa", fetch = FetchType.LAZY)
-    private List<AcompanhamentoEntity> acompanhamentos;
+    // @OneToMany(mappedBy = "pessoa", fetch = FetchType.LAZY)
+    // private List<AcompanhamentoEntity> acompanhamentos;
 
-
->>>>>>> 38ce6d544b29421319041c6ceb4c2bc0a7c206df
+    // >>>>>>> 38ce6d544b29421319041c6ceb4c2bc0a7c206df
     public void excluir() {
         this.ativo = false;
     }
@@ -167,6 +166,10 @@ public class PessoaEntity implements UserDetails {
         this.tipoResponsavel = false;
         this.cartaoNacional = dto.cartaoNacional();
         this.cartaoPlanoSaude = dto.cartaoNacional();
+    }
+
+    public List<AcompanhamentoEntity> getAcompanhamentos() {
+        return null;
     }
 
 }

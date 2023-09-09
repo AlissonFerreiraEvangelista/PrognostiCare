@@ -1,6 +1,5 @@
 package br.com.prognosticare;
 
-import java.io.FileInputStream;
 import java.io.IOException;
 
 import org.springframework.boot.SpringApplication;
@@ -23,17 +22,15 @@ public class Application {
 	}
 
 	@Bean
-	FirebaseMessaging firebaseMessaging() throws IOException{
+	FirebaseMessaging firebaseMessaging() throws IOException {
 		GoogleCredentials googleCredentials = GoogleCredentials.fromStream(
-			new ClassPathResource("firebase-service-account.json").getInputStream());
+				new ClassPathResource("firebase-service-account.json").getInputStream());
 
 		FirebaseOptions firebaseOptions = FirebaseOptions.builder()
-			.setCredentials(googleCredentials).build();
+				.setCredentials(googleCredentials).build();
 		FirebaseApp app = FirebaseApp.initializeApp(firebaseOptions, "API PrognostiCare");
 		return FirebaseMessaging.getInstance(app);
 
 	}
-
-
 
 }
