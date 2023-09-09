@@ -1,4 +1,4 @@
-package br.com.prognosticare.domain.entity.acompanhamento;
+package br.com.prognosticare.domain.enums;
 
 public enum TipoTemporarioControlado {
 

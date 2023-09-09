@@ -1,23 +1,19 @@
 package br.com.prognosticare.domain.entity.agenda;
 
-import java.time.LocalDateTime;
+
 import java.util.UUID;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 
 import br.com.prognosticare.domain.entity.pessoa.PessoaEntity;
+import br.com.prognosticare.domain.enums.Especialidade;
+import br.com.prognosticare.domain.enums.Status;
+import br.com.prognosticare.domain.enums.TipoExame;
 
-
+import java.time.LocalDateTime;
 import java.util.Optional;
 
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -33,30 +29,39 @@ public class AgendaEntity {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID id;
 
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy hh:mm:ss a")
     private LocalDateTime dataAgenda;
 
     private String local;
 
+    private Integer intervaloData;
+
     @Column(columnDefinition= "TEXT")
     private String descricao;
 
-    private char statusEvento;
+    @Enumerated(EnumType.STRING)
+    private Status statusEvento;
 
     @Column(columnDefinition= "TEXT")
     private String observacao;
 
+    @Enumerated(EnumType.STRING)
     private Especialidade especialista;
     
+    @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
     private TipoExame tipoExame;
 
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JoinColumn(name = "pessoa_id")
     private PessoaEntity pessoa;
    
     public AgendaEntity(DtoCadastroAgenda dto){
         this.dataAgenda = dto.dataAgenda();
         this.descricao= dto.descricao();
         this.local= dto.local();
-        this.statusEvento= 'A';
+        this.statusEvento= Status.ABERTO;
+        this.intervaloData = dto.intervaloData();
         this.observacao= dto.observacao();
         this.especialista= dto.especialista();
         this.tipoExame= dto.tipoExame();
@@ -71,7 +76,12 @@ public class AgendaEntity {
         Optional.ofNullable(dados.observacao()).ifPresent(this::setObservacao);
         Optional.ofNullable(dados.especialista()).ifPresent(this::setEspecialista);
         Optional.ofNullable(dados.tipoExame()).ifPresent(this::setTipoExame);
+        Optional.ofNullable(dados.intervaloData()).ifPresent(this::setIntervaloData);
 
+    }
+
+    public void atualizaAgenda(){
+        this.dataAgenda = dataAgenda.plusDays(intervaloData);
     }
 
    

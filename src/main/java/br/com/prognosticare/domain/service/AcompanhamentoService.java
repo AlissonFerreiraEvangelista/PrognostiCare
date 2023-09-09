@@ -1,24 +1,20 @@
 package br.com.prognosticare.domain.service;
 
-import java.time.LocalDateTime;
+
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-import br.com.prognosticare.domain.entity.acompanhamento.DtoAtualizaAcompanhamento;
-import br.com.prognosticare.domain.entity.acompanhamento.DtoCadastroAcompanhamento;
-import br.com.prognosticare.domain.entity.acompanhamento.DtoDetalheAcompanhamento;
+import br.com.prognosticare.domain.entity.acompanhamento.*;
 import jakarta.transaction.Transactional;
-import jakarta.validation.Valid;
+
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.scheduling.annotation.Scheduled;
+
 import org.springframework.stereotype.Service;
 
-import com.google.firebase.FirebaseApp;
-import com.google.firebase.messaging.*;
-
 import br.com.prognosticare.domain.entity.acompanhamento.AcompanhamentoEntity;
+import br.com.prognosticare.domain.enums.Status;
 import br.com.prognosticare.domain.repository.AcompanhamentoRepository;
 import br.com.prognosticare.infra.exception.ValidacaoException;
 
@@ -31,44 +27,7 @@ public class AcompanhamentoService {
     @Autowired
     PessoaService pessoaService;
 
-    String tokenFCM;
-
-    @Scheduled(fixedRate = 60000)
-    public void checkMedications() {
-        LocalDateTime now = LocalDateTime.now();
-
-        var acompanhamentos = findAll();
-
-        for (AcompanhamentoEntity acompanhamentoEntity : acompanhamentos) {
-            if (now.isAfter(acompanhamentoEntity.getDataAcompanhamento())
-                    && acompanhamentoEntity.getStatusEvento() == 'A') {
-                // sendNotification(acompanhamentoEntity);
-                System.out.println(acompanhamentoEntity.getMedicacao());
-                acompanhamentoEntity.atualizaProxaMedicacao();
-                save(acompanhamentoEntity);
-            }
-        }
-
-    }
-
-    private void sendNotification(AcompanhamentoEntity acompanhamento) {
-
-        Message message = Message.builder()
-                .setNotification(Notification.builder()
-                        .setTitle("Lembrete de Madicação")
-                        .setBody("É hora de tomar " + acompanhamento.getMedicacao())
-                        .setImage("tokenFCM")
-                        .build())
-                .setToken(tokenFCM)
-                .build();
-
-        try {
-            FirebaseApp.initializeApp();
-            FirebaseMessaging.getInstance().send(message);
-        } catch (FirebaseMessagingException e) {
-            e.printStackTrace();
-        }
-    }
+    
 
     public List<AcompanhamentoEntity> findAll() {
         List<AcompanhamentoEntity> acompanhamentos = acompanhamentoRepository.findAll();
@@ -114,5 +73,11 @@ public class AcompanhamentoService {
         var pessoa = pessoaService.get(id).orElse(null);
         var acompanhamentos = acompanhamentoRepository.findByAcompanhamentoEntityWherePessoaEntity(pessoa);
         return acompanhamentos;
+    }
+
+    @Transactional
+    public List<AcompanhamentoEntity> findAllByStatusEventoAberto() {
+
+        return acompanhamentoRepository.findAllByStatusEvento();
     }
 }

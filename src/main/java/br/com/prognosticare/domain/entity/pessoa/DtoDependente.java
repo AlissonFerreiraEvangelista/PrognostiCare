@@ -3,6 +3,8 @@ package br.com.prognosticare.domain.entity.pessoa;
 import java.time.LocalDate;
 import java.util.UUID;
 
+import br.com.prognosticare.domain.enums.TipoSanguineo;
+
 public record DtoDependente(
                 UUID pessoa_id,
                 String nome,

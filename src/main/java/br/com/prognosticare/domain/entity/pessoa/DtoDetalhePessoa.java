@@ -2,6 +2,8 @@ package br.com.prognosticare.domain.entity.pessoa;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
+import br.com.prognosticare.domain.enums.TipoSanguineo;
+
 import java.time.LocalDate;
 import java.util.Optional;
 import java.util.UUID;
