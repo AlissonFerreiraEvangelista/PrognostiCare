@@ -26,7 +26,7 @@ public interface AcompanhamentoRepository extends JpaRepository<AcompanhamentoEn
     
       @QueryHints({
         @QueryHint(
-        name = "javax.persistence.lock.timeout", 
+        name = "jakarta.persistence.lock.timeout", 
         value = "5000") 
         })
     //@Lock(LockModeType.PESSIMISTIC_WRITE)
