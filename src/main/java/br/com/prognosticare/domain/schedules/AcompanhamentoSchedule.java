@@ -45,7 +45,7 @@ public class AcompanhamentoSchedule {
                 .setNotification(Notification.builder()
                         .setTitle("Lembrete de Madicação")
                         .setBody("É hora de tomar " + acompanhamento.getMedicacao())
-                        .setImage("tokenFCM")
+                        //.setImage("tokenFCM")
                         .build())
                 .setToken(tokenFCM)
                 .build();

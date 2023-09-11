@@ -24,7 +24,7 @@ public interface AcompanhamentoRepository extends JpaRepository<AcompanhamentoEn
     List<DtoDetalheAcompanhamento> findByAcompanhamentoEntityWherePessoaEntity(@Param("pessoa") PessoaEntity pessoa);
 
     
-      @QueryHints({
+    @QueryHints({
         @QueryHint(
         name = "jakarta.persistence.lock.timeout", 
         value = "5000") 
