@@ -21,6 +21,7 @@ import jakarta.validation.Valid;
 @RestController
 @SecurityRequirement(name = "bearer-key")
 @RequestMapping("/to-scheduling")
+@CrossOrigin("*")
 public class AgendaController {
 
     @Autowired

@@ -61,6 +61,8 @@ public class PessoaEntity implements UserDetails {
 
     private Boolean doador;
 
+    private String tokenFCM;
+
     @Column(unique = true)
     private String email;
 

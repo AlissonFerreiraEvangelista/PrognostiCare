@@ -1,32 +1,42 @@
 package br.com.prognosticare.web.controller;
 
 import java.util.List;
-
 import java.util.UUID;
-
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-
-import org.springframework.web.bind.annotation.*;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import br.com.prognosticare.domain.entity.dto.*;
-import br.com.prognosticare.domain.entity.pessoa.*;
+import br.com.prognosticare.domain.entity.dto.DtoSenha;
+import br.com.prognosticare.domain.entity.dto.DtoSenhaRestInput;
+import br.com.prognosticare.domain.entity.pessoa.DtoAtualizaPessoa;
+import br.com.prognosticare.domain.entity.pessoa.DtoCadastroDependente;
+import br.com.prognosticare.domain.entity.pessoa.DtoCadastroPessoa;
+import br.com.prognosticare.domain.entity.pessoa.DtoDependente;
+import br.com.prognosticare.domain.entity.pessoa.DtoDetalheDependente;
+import br.com.prognosticare.domain.entity.pessoa.DtoDetalhePessoa;
+import br.com.prognosticare.domain.entity.pessoa.PessoaEntity;
 import br.com.prognosticare.domain.repository.PessoaRepository;
-import br.com.prognosticare.domain.service.*;
+import br.com.prognosticare.domain.service.EmailService;
+import br.com.prognosticare.domain.service.PessoaService;
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import io.swagger.v3.oas.annotations.security.SecurityRequirement;
-import org.springframework.transaction.annotation.Transactional;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @RestController
 @RequestMapping("register-person")
-@SecurityRequirement(name = "bearer-key")
+@CrossOrigin("*")
 public class PessoaController {
 
     @Autowired
@@ -60,7 +70,7 @@ public class PessoaController {
 
     @GetMapping("find/{pessoa_id}")
     @Operation(summary= "Encontra uma pessoa por ID")
-    public ResponseEntity<DtoDetalhePessoa> encontraPorID(@PathVariable @Valid UUID id) {
+    public ResponseEntity<DtoDetalhePessoa> encontraPorID(@PathVariable(value = "pessoa_id") @Valid UUID id) {
 
         var pessoa = pessoaService.get(id).orElse(null);
         if (pessoa == null) {
@@ -95,7 +105,7 @@ public class PessoaController {
     @Operation(summary= "Adiciona um dependente a uma pessoa")
     @Transactional
     public ResponseEntity<DtoDetalheDependente> adicionarDependente(
-            @PathVariable @Valid UUID id,
+            @PathVariable (value = "pessoa_id") @Valid UUID id,
             @RequestBody @Valid DtoCadastroDependente dto,
             UriComponentsBuilder uriBuilder) {
             
@@ -111,7 +121,7 @@ public class PessoaController {
 
     @GetMapping("/list-dependents/{id}")
     @Operation(summary= "Lista os dependentes de uma pessoa responsável")
-    public ResponseEntity<List<DtoDependente>> listarDependentes(@PathVariable @Valid UUID id) {
+    public ResponseEntity<List<DtoDependente>> listarDependentes(@PathVariable (value = "id") @Valid UUID id) {
 
         var listaDependentes = pessoaService.listarDependentes(id);
        
