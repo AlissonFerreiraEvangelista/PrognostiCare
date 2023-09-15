@@ -157,7 +157,7 @@ public class PessoaEntity implements UserDetails {
         return true;
     }
 
-    public PessoaEntity(@Valid DtoCadastroDependente dto) {
+    public PessoaEntity(DtoCadastroDependente dto) {
         this.nome = dto.nome();
         this.cpf = dto.cpf();
         this.dataNascimento = dto.dataNascimento();

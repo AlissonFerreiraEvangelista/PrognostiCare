@@ -22,8 +22,6 @@ public record DtoCadastroDependente(
 
         Boolean alergia,
 
-        Boolean tipoResponsavel,
-
         String tipoAlergia,
 
         String cartaoNacional,
