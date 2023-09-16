@@ -46,7 +46,6 @@ public class SecurityConfiguration {
                 .httpBasic(Customizer.withDefaults())
                 .logout(Customizer.withDefaults());
                 
-
         return httpSecurity.build();
 
     }

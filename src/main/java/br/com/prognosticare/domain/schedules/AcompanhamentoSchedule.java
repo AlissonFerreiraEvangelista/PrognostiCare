@@ -31,7 +31,7 @@ public class AcompanhamentoSchedule {
             if (now.isAfter(acompanhamentoEntity.getDataAcompanhamento())
                     && acompanhamentoEntity.getStatusEvento() == Status.ABERTO) {
                 // sendNotification(acompanhamentoEntity);
-                System.out.println(acompanhamentoEntity.getMedicacao());
+                System.out.println(acompanhamentoEntity.getMedicacao() + LocalDateTime.now());
                 acompanhamentoEntity.atualizaProxaMedicacao();
                 aService.save(acompanhamentoEntity);
             }
@@ -45,7 +45,7 @@ public class AcompanhamentoSchedule {
                 .setNotification(Notification.builder()
                         .setTitle("Lembrete de Madicação")
                         .setBody("É hora de tomar " + acompanhamento.getMedicacao())
-                        .setImage("tokenFCM")
+                        //.setImage("tokenFCM")
                         .build())
                 .setToken(tokenFCM)
                 .build();

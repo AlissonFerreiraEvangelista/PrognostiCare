@@ -56,4 +56,10 @@ public class AgendaService {
         var agendas = agendaRepository.findByAgendaEntityWherePessoaEntity(pessoa);
         return agendas;
     }
+
+
+    @Transactional
+    public List<AgendaEntity> findAllByStatusEventoAberto() {
+        return agendaRepository.findAllByStatusEventoAberto();
+    }
 }

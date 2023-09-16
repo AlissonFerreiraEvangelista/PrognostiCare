@@ -55,12 +55,15 @@ public class AgendaEntity {
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "pessoa_id")
     private PessoaEntity pessoa;
+
+    private Boolean notificacao;
    
     public AgendaEntity(DtoCadastroAgenda dto){
         this.dataAgenda = dto.dataAgenda();
         this.descricao= dto.descricao();
         this.local= dto.local();
         this.statusEvento= Status.ABERTO;
+        this.notificacao = false;
         this.intervaloData = dto.intervaloData();
         this.observacao= dto.observacao();
         this.especialista= dto.especialista();
@@ -81,7 +84,7 @@ public class AgendaEntity {
     }
 
     public void atualizaAgenda(){
-        this.dataAgenda = dataAgenda.plusDays(intervaloData);
+        this.notificacao = true;
     }
 
    

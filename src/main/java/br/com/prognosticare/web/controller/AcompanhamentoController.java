@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @SecurityRequirement(name = "bearer-key")
 @RequestMapping("/to-accompany")
+@CrossOrigin("*")
 public class AcompanhamentoController {
 
     @Autowired

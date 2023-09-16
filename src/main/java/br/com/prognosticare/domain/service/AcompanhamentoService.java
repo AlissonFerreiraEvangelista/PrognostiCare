@@ -6,14 +6,14 @@ import java.util.Optional;
 import java.util.UUID;
 
 import br.com.prognosticare.domain.entity.acompanhamento.*;
+import jakarta.persistence.LockModeType;
 import jakarta.transaction.Transactional;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
-
+import org.springframework.data.jpa.repository.Lock;
 import org.springframework.stereotype.Service;
 
-import br.com.prognosticare.domain.entity.acompanhamento.AcompanhamentoEntity;
 import br.com.prognosticare.domain.enums.Status;
 import br.com.prognosticare.domain.repository.AcompanhamentoRepository;
 import br.com.prognosticare.infra.exception.ValidacaoException;
@@ -39,8 +39,9 @@ public class AcompanhamentoService {
     }
 
     @Transactional
+    @Lock(LockModeType.PESSIMISTIC_WRITE)
     public AcompanhamentoEntity save(AcompanhamentoEntity acompanhamento) {
-        return acompanhamentoRepository.save(acompanhamento);
+        return acompanhamentoRepository.saveAndFlush(acompanhamento);
     }
 
     public AcompanhamentoEntity getReferenceById(DtoAtualizaAcompanhamento dto) {
