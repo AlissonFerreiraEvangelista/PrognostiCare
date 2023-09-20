@@ -19,7 +19,6 @@ public class AcompanhamentoSchedule {
     @Autowired
     AcompanhamentoService aService;
 
-    String tokenFCM;
 
     @Scheduled(fixedRate = 60000)
     public void checkMedications() {
@@ -30,7 +29,7 @@ public class AcompanhamentoSchedule {
         for (AcompanhamentoEntity acompanhamentoEntity : acompanhamentos) {
             if (now.isAfter(acompanhamentoEntity.getDataAcompanhamento())
                     && acompanhamentoEntity.getStatusEvento() == Status.ABERTO) {
-                // sendNotification(acompanhamentoEntity);
+               // sendNotification(acompanhamentoEntity);
                 System.out.println(acompanhamentoEntity.getMedicacao() + LocalDateTime.now());
                 acompanhamentoEntity.atualizaProxaMedicacao();
                 aService.save(acompanhamentoEntity);
@@ -40,6 +39,8 @@ public class AcompanhamentoSchedule {
     }
 
     private void sendNotification(AcompanhamentoEntity acompanhamento) {
+
+        String tokenFCM = acompanhamento.getPessoa().getTokenFCM();
 
         Message message = Message.builder()
                 .setNotification(Notification.builder()

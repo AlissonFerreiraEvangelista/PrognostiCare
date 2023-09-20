@@ -14,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import br.com.prognosticare.domain.repository.PessoaRepository;
 import br.com.prognosticare.infra.exception.ValidacaoException;
+import br.com.prognosticare.web.controller.DtoTokenFCM;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
@@ -125,6 +126,15 @@ public class PessoaService {
                 .collect(Collectors.toList());
 		return dtoDependentes;
 	}
+
+    
+    public void setTokenFCM(UUID id,String tokenFCM) {
+        var pessoa = getReferenceById(id);
+        pessoa.setTokenFCM(tokenFCM);
+        pessoaRepository.save(pessoa);
+         
+
+    }
 
    
 }

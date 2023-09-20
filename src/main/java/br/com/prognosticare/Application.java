@@ -14,12 +14,15 @@ import com.google.firebase.FirebaseApp;
 import com.google.firebase.FirebaseOptions;
 import com.google.firebase.messaging.FirebaseMessaging;
 
+import jakarta.annotation.PostConstruct;
+
 @SpringBootApplication
 @EnableScheduling
 public class Application {
 
 	public static void main(String[] args) {
 		SpringApplication.run(Application.class, args);
+		
 	}
 
 	@Bean
