@@ -19,6 +19,9 @@ public class AcompanhamentoSchedule {
     @Autowired
     AcompanhamentoService aService;
 
+    @Autowired
+    FirebaseMessaging firebaseMessaging;
+
 
     @Scheduled(fixedRate = 60000)
     public void checkMedications() {
@@ -29,7 +32,7 @@ public class AcompanhamentoSchedule {
         for (AcompanhamentoEntity acompanhamentoEntity : acompanhamentos) {
             if (now.isAfter(acompanhamentoEntity.getDataAcompanhamento())
                     && acompanhamentoEntity.getStatusEvento() == Status.ABERTO) {
-               // sendNotification(acompanhamentoEntity);
+                sendNotification(acompanhamentoEntity);
                 System.out.println(acompanhamentoEntity.getMedicacao() + LocalDateTime.now());
                 acompanhamentoEntity.atualizaProxaMedicacao();
                 aService.save(acompanhamentoEntity);
@@ -37,6 +40,8 @@ public class AcompanhamentoSchedule {
         }
 
     }
+
+    
 
     private void sendNotification(AcompanhamentoEntity acompanhamento) {
 
@@ -46,14 +51,12 @@ public class AcompanhamentoSchedule {
                 .setNotification(Notification.builder()
                         .setTitle("Lembrete de Madicação")
                         .setBody("É hora de tomar " + acompanhamento.getMedicacao())
-                        //.setImage("tokenFCM")
                         .build())
                 .setToken(tokenFCM)
                 .build();
 
         try {
-            FirebaseApp.initializeApp();
-            FirebaseMessaging.getInstance().send(message);
+            firebaseMessaging.send(message);
         } catch (FirebaseMessagingException e) {
             e.printStackTrace();
         }
