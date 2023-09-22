@@ -46,7 +46,7 @@ public class AcompanhamentoEntity {
     @Column(columnDefinition = "TEXT")
     private String prescricaoMedica;
 
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name = "pessoa_id")
     private PessoaEntity pessoa;
 

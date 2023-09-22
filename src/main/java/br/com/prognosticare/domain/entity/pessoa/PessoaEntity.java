@@ -164,6 +164,7 @@ public class PessoaEntity implements UserDetails {
         this.cpf = dto.cpf();
         this.dataNascimento = dto.dataNascimento();
         this.alergia = dto.alergia();
+        this.tipoAlergia = dto.tipoAlergia();
         this.tipoSanguineo = dto.tipoSanguineo();
         this.tipoResponsavel = false;
         this.cartaoNacional = dto.cartaoNacional();

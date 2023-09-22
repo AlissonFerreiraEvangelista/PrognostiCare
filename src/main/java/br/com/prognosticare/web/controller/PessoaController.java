@@ -31,8 +31,6 @@ import br.com.prognosticare.domain.service.EmailService;
 import br.com.prognosticare.domain.service.PessoaService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import io.swagger.v3.oas.annotations.security.SecurityRequirement;
-import org.springframework.transaction.annotation.Transactional;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 
@@ -72,8 +70,8 @@ public class PessoaController {
     }
 
     @GetMapping("find/{pessoa_id}")
-    @Operation(summary= "Encontra uma pessoa por ID")
-    public ResponseEntity<DtoDetalhePessoa> encontraPorID(@PathVariable @Valid UUID id) {
+    @Operation(summary = "Encontra uma pessoa por ID")
+    public ResponseEntity<DtoDetalhePessoa> encontraPorID(@PathVariable(value = "pessoa_id") @Valid UUID id) {
 
         var pessoa = pessoaService.get(id).orElse(null);
         if (pessoa == null) {
@@ -109,7 +107,7 @@ public class PessoaController {
     @Operation(summary = "Adiciona um dependente a uma pessoa")
     @Transactional
     public ResponseEntity<DtoDetalheDependente> adicionarDependente(
-            @PathVariable (value = "pessoa_id") @Valid UUID id,
+            @PathVariable(value = "pessoa_id") @Valid UUID id,
             @RequestBody @Valid DtoCadastroDependente dto,
             UriComponentsBuilder uriBuilder) {
 
@@ -124,8 +122,8 @@ public class PessoaController {
     }
 
     @GetMapping("/list-dependents/{id}")
-    @Operation(summary= "Lista os dependentes de uma pessoa responsável")
-    public ResponseEntity<List<DtoDependente>> listarDependentes(@PathVariable @Valid UUID id) {
+    @Operation(summary = "Lista os dependentes de uma pessoa responsável")
+    public ResponseEntity<List<DtoDependente>> listarDependentes(@PathVariable(value = "id") @Valid UUID id) {
 
         var listaDependentes = pessoaService.listarDependentes(id);
 
@@ -136,4 +134,14 @@ public class PessoaController {
         return ResponseEntity.status(HttpStatus.OK).body(listaDependentes);
     }
 
+    @PutMapping("/tokenFCM/{id}")
+    @Transactional
+    @ApiResponse(description = "Token FCM")
+    public ResponseEntity<?> tokenFCM(@PathVariable(value = "id") @Valid UUID id,
+            @RequestBody @Valid DtoTokenFCM tokenFCM) {
+
+        pessoaService.setTokenFCM(id, tokenFCM.tokenFCM());
+        return ResponseEntity.ok().body("TokenFCM Cadastrado!!");
+
+    }
 }

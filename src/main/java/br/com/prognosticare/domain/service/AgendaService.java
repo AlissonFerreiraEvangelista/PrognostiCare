@@ -10,9 +10,12 @@ import org.springframework.stereotype.Service;
 import br.com.prognosticare.domain.entity.agenda.AgendaEntity;
 import br.com.prognosticare.domain.entity.agenda.DtoCadastroAgenda;
 import br.com.prognosticare.domain.entity.agenda.DtoDetalheAgenda;
+import br.com.prognosticare.domain.enums.Especialidade;
+import br.com.prognosticare.domain.enums.TipoExame;
 import br.com.prognosticare.domain.repository.AgendaRepository;
 import br.com.prognosticare.infra.exception.ValidacaoException;
 import jakarta.transaction.Transactional;
+import jakarta.validation.Valid;
 
 
 
@@ -61,5 +64,23 @@ public class AgendaService {
     @Transactional
     public List<AgendaEntity> findAllByStatusEventoAberto() {
         return agendaRepository.findAllByStatusEventoAberto();
+    }
+
+
+    public List<DtoDetalheAgenda> getEspecialidades(Especialidade especialidade) {
+        var especialidades = agendaRepository.findByAgendaEntityWhereEspecialista(especialidade);
+        if(especialidades.isEmpty()){
+            throw new ValidacaoException("Não tem agenda com essa Especialidade");
+        }
+        return especialidades;
+    }
+
+
+    public List<DtoDetalheAgenda> getTipoConsulta(TipoExame tipoExame) {
+         var consultas = agendaRepository.findByAgendaEntityWhereTipoExame(tipoExame);
+        if(consultas.isEmpty()){
+            throw new ValidacaoException("Não tem agenda com esse Tipo de Exame");
+        }
+        return consultas;
     }
 }

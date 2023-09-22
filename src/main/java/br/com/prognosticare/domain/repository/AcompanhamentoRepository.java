@@ -30,7 +30,8 @@ public interface AcompanhamentoRepository extends JpaRepository<AcompanhamentoEn
         value = "5000") 
         })
     //@Lock(LockModeType.PESSIMISTIC_WRITE)
-    @Query(nativeQuery = true, value = "SELECT * FROM tb_acompanhamento a WHERE a.status_evento = 'ABERTO' ORDER BY a.data_acompanhamento ASC FOR UPDATE SKIP LOCKED")
+    @Query(nativeQuery = true,
+     value = "SELECT * FROM tb_acompanhamento a WHERE a.status_evento = 'ABERTO' ORDER BY a.data_acompanhamento ASC FOR UPDATE SKIP LOCKED")
     List<AcompanhamentoEntity> findAllByStatusEvento();
      
     
