@@ -12,10 +12,11 @@ import br.com.prognosticare.domain.entity.vacina.DtoDetalheVacina;
 import br.com.prognosticare.domain.entity.vacina.TipoVacina;
 import br.com.prognosticare.domain.service.VacinaService;
 import jakarta.validation.Valid;
-import jakarta.websocket.server.PathParam;
+
 
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.PathVariable;
+
 
 
 @RestController
@@ -26,7 +27,7 @@ public class VacinasController {
     VacinaService vService;
 
     @GetMapping(value="/list/{tipoVacina}")
-    public ResponseEntity<List<DtoDetalheVacina>> getMethodName(@PathParam(value = "tipoVacina") @Valid TipoVacina tipoVacina) {
+    public ResponseEntity<List<DtoDetalheVacina>> getMethodName(@PathVariable(value = "tipoVacina") @Valid TipoVacina tipoVacina) {
 
         var vacinas = vService.findAllByTipoVacina(tipoVacina);
         return ResponseEntity.status(HttpStatus.OK).body(vacinas);

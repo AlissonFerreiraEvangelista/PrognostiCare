@@ -1,6 +1,8 @@
 package br.com.prognosticare.domain.entity.vacina;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -19,7 +21,8 @@ public class VacinaEntity {
     @Id @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    private TipoVacina TipoVacina;
+    @Enumerated(EnumType.STRING)
+    private TipoVacina tipoVacina;
 
     private String vacina;
 

@@ -41,6 +41,7 @@ public class SecurityConfiguration {
                         .requestMatchers("/notification").permitAll()
                         .requestMatchers("/to-accompany/**").permitAll()
                         .requestMatchers("/to-scheduling/**").permitAll()
+                        .requestMatchers("/vaccines/**").permitAll()
                         .anyRequest().authenticated())
                 .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)
                 .httpBasic(Customizer.withDefaults())
