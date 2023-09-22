@@ -11,6 +11,8 @@ import org.springframework.data.repository.query.Param;
 import br.com.prognosticare.domain.entity.agenda.AgendaEntity;
 import br.com.prognosticare.domain.entity.agenda.DtoDetalheAgenda;
 import br.com.prognosticare.domain.entity.pessoa.PessoaEntity;
+import br.com.prognosticare.domain.enums.Especialidade;
+import br.com.prognosticare.domain.enums.TipoExame;
 import jakarta.persistence.QueryHint;
 
 public interface AgendaRepository extends JpaRepository<AgendaEntity, UUID> {
@@ -19,6 +21,12 @@ public interface AgendaRepository extends JpaRepository<AgendaEntity, UUID> {
     List<DtoDetalheAgenda> findByAgendaEntityWherePessoaEntity(@Param("pessoa") PessoaEntity pessoa);
 
 
+    @Query(value = "FROM AgendaEntity  WHERE especialidade =:especialidade")
+    List<DtoDetalheAgenda> findByAgendaEntityWhereEspecialista(@Param("especialidade") Especialidade especialidade);
+
+    @Query(value = "FROM AgendaEntity  WHERE especialidade =:tipoExame")
+    List<DtoDetalheAgenda> findByAgendaEntityWhereTipoExame(@Param("tipoExame") TipoExame tipoExame);
+
     @QueryHints({
         @QueryHint(
         name = "jakarta.persistence.lock.timeout", 
@@ -26,5 +34,8 @@ public interface AgendaRepository extends JpaRepository<AgendaEntity, UUID> {
         })
     @Query(nativeQuery = true, value = "SELECT * FROM tb_agenda a WHERE a.status_evento = 'ABERTO' ORDER BY a.data_agenda ASC FOR UPDATE SKIP LOCKED")
     List<AgendaEntity> findAllByStatusEventoAberto();
+
+
+    
     
 }
