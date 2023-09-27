@@ -23,7 +23,7 @@ jobs:
     - name: Build with Maven
       run: mvn clean package -DskipTest=true
       
-    - name: Doker Login
+    - name: Docker Login
       uses: docker/login-action@v2.2.0
       with:
         username: ${{ secrets.DOCKER_USER }}
@@ -39,4 +39,10 @@ jobs:
           alissonferreiraevangelista/api_app:latest
           alissonferreiraevangelista/postgres:latest
           alissonferreiraevangelista/nginx:latest
-          
+
+    - name: Set up Firebase credentials
+      run: echo "$FIREBASE_CREDENTIALS" > firebase-service-account.json
+      env:
+        FIREBASE_CREDENTIALS: ${{ secrets.FIREBASE_CREDENTIALS }}
+
+    
