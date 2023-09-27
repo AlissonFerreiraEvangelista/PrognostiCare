@@ -174,4 +174,12 @@ public class PessoaEntity implements UserDetails {
         this.cartaoPlanoSaude = dto.cartaoNacional();
     }
 
+    public PessoaEntity(String nome, String cpf, LocalDate data, String email, String password) {
+        this.nome = nome;
+        this.cpf = cpf;
+        this.dataNascimento = data;
+        this.email = email;
+        this.password = password;
+    }
+
 }
