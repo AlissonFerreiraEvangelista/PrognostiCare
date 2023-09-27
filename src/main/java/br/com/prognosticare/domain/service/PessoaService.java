@@ -52,7 +52,7 @@ public class PessoaService {
     }
 
     
-
+    @Transactional
     public PessoaEntity getReferenceById(DtoAtualizaPessoa dto) {
         var pessoa = pessoaRepository.getReferenceById(dto.pessoa_id());
         if(pessoa == null){
@@ -105,6 +105,7 @@ public class PessoaService {
         var dependente = new PessoaEntity(dto);
         dependente.setResponsavel(pessoa);
         dependente.setContato(pessoa.getContato());
+        dependente.setTipoResponsavel(false);
         pessoa.getDependente().add(dependente);
 
         pessoaRepository.save(dependente);
@@ -134,6 +135,23 @@ public class PessoaService {
         pessoaRepository.save(pessoa);
          
 
+    }
+
+
+    public PessoaEntity getReferenceById(DtoAtualizaDependente dto) {
+        var dependent = pessoaRepository.getReferenceById(dto.pessoa_id());
+        if(dependent == null){
+            throw new ValidacaoException("Dependente não encontrado!");
+        }
+        dependent.atualizarDependente(dto);
+        return dependent;
+    }
+
+    public Boolean inativaPessoa(UUID id){
+        var pessoa = getReferenceById(id);
+        pessoa.setAtivo(false);
+        pessoaRepository.save(pessoa);
+        return true;
     }
 
    

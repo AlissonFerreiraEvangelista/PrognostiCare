@@ -21,10 +21,10 @@ public interface AgendaRepository extends JpaRepository<AgendaEntity, UUID> {
     List<DtoDetalheAgenda> findByAgendaEntityWherePessoaEntity(@Param("pessoa") PessoaEntity pessoa);
 
 
-    @Query(value = "FROM AgendaEntity  WHERE especialidade =:especialidade")
-    List<DtoDetalheAgenda> findByAgendaEntityWhereEspecialista(@Param("especialidade") Especialidade especialidade);
+    @Query(value = "FROM AgendaEntity  WHERE especialista =:especialista")
+    List<DtoDetalheAgenda> findByAgendaEntityWhereEspecialista(@Param("especialista") Especialidade especialista);
 
-    @Query(value = "FROM AgendaEntity  WHERE especialidade =:tipoExame")
+    @Query(value = "FROM AgendaEntity  WHERE tipoExame =:tipoExame")
     List<DtoDetalheAgenda> findByAgendaEntityWhereTipoExame(@Param("tipoExame") TipoExame tipoExame);
 
     @QueryHints({

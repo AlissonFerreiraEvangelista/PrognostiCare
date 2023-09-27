@@ -38,6 +38,7 @@ public class SecurityConfiguration {
                         .requestMatchers("/email/**").permitAll()
                         .requestMatchers(HttpMethod.POST,"/register-person/add-dependent").permitAll()
                         .requestMatchers(HttpMethod.GET,"/register-person/list-dependents").permitAll()
+                        .requestMatchers(HttpMethod.PUT,"/register-person/disable/**").permitAll()
                         .requestMatchers("/notification").permitAll()
                         .requestMatchers("/to-accompany/**").permitAll()
                         .requestMatchers("/to-scheduling/**").permitAll()
