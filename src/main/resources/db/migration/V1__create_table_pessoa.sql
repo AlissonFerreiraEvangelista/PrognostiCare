@@ -10,6 +10,7 @@ CREATE TABLE tb_pessoa(
     tipo_responsavel BOOLEAN,
     cartao_nacional VARCHAR(255),
     cartao_plano_saude VARCHAR(255),
+    tokenfcm VARCHAR(255),
     ativo BOOLEAN,
     doador BOOLEAN,
     email VARCHAR(255) UNIQUE,

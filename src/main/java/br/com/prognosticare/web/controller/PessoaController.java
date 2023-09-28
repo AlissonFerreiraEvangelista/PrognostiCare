@@ -19,6 +19,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import br.com.prognosticare.domain.entity.dto.DtoSenha;
 import br.com.prognosticare.domain.entity.dto.DtoSenhaRestInput;
+import br.com.prognosticare.domain.entity.pessoa.DtoAtualizaDependente;
 import br.com.prognosticare.domain.entity.pessoa.DtoAtualizaPessoa;
 import br.com.prognosticare.domain.entity.pessoa.DtoCadastroDependente;
 import br.com.prognosticare.domain.entity.pessoa.DtoCadastroPessoa;
@@ -30,6 +31,7 @@ import br.com.prognosticare.domain.repository.PessoaRepository;
 import br.com.prognosticare.domain.service.EmailService;
 import br.com.prognosticare.domain.service.PessoaService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 
@@ -49,7 +51,7 @@ public class PessoaController {
     EmailService emailService;
 
     @PostMapping("/save")
-    @Operation(summary= "Cadastro Inicial de uma pessoa")
+    @Operation(summary = "Cadastro Inicial de uma pessoa")
     @Transactional
     public ResponseEntity<DtoDetalhePessoa> cadastrarPessoa(@RequestBody @Valid DtoCadastroPessoa dto,
             UriComponentsBuilder uriBuilder) {
@@ -60,16 +62,14 @@ public class PessoaController {
     }
 
     @PutMapping("/update")
-    @Operation(summary= "Atualiza as informações da Pessoa")
-    @Transactional
+    @Operation(summary = "Atualiza as informações da Pessoa")
     public ResponseEntity<DtoDetalhePessoa> atualizaPessoa(@RequestBody @Valid DtoAtualizaPessoa dto) {
         var pessoa = pessoaService.getReferenceById(dto);
-        pessoa.atualizarInformacoes(dto);
         return ResponseEntity.ok(new DtoDetalhePessoa(pessoa));
     }
 
     @GetMapping("find/{pessoa_id}")
-    @Operation(summary= "Encontra uma pessoa por ID")
+    @Operation(summary = "Encontra uma pessoa por ID")
     public ResponseEntity<DtoDetalhePessoa> encontraPorID(@PathVariable(value = "pessoa_id") @Valid UUID id) {
 
         var pessoa = pessoaService.get(id).orElse(null);
@@ -81,17 +81,18 @@ public class PessoaController {
     }
 
     @PostMapping("/public/forgot-password")
-    @Operation(summary= "Envia email para recuperação de senha")
+    @Operation(summary = "Envia email para recuperação de senha")
     public ResponseEntity<?> forgotPassword(@RequestBody @Valid DtoSenhaRestInput dto) {
 
         pessoaService.findByEmail(dto.email());
         return ResponseEntity.ok().body("Email enviado com Sucesso!!");
-       
+
     }
 
     @PutMapping("/public/change-password/{pessoa_id}")
-    @Operation(summary= "Troca da senha")
-    public ResponseEntity<?> changePassword(@PathVariable(value = "pessoa_id") UUID id, @RequestBody @Valid DtoSenha dto) {
+    @Operation(summary = "Troca da senha")
+    public ResponseEntity<?> changePassword(@PathVariable(value = "pessoa_id") UUID id,
+            @RequestBody @Valid DtoSenha dto) {
 
         var pessoa = pessoaService.savePassword(id, dto.password());
 
@@ -102,29 +103,37 @@ public class PessoaController {
     }
 
     @PostMapping("/add-dependent/{pessoa_id}")
-    @Operation(summary= "Adiciona um dependente a uma pessoa")
+    @Operation(summary = "Adiciona um dependente a uma pessoa")
     @Transactional
     public ResponseEntity<DtoDetalheDependente> adicionarDependente(
-            @PathVariable (value = "pessoa_id") @Valid UUID id,
+            @PathVariable(value = "pessoa_id") @Valid UUID id,
             @RequestBody @Valid DtoCadastroDependente dto,
             UriComponentsBuilder uriBuilder) {
-            
-            var dependente = pessoaService.adicionarDependente(id, dto);
+
+        var dependente = pessoaService.adicionarDependente(id, dto);
 
         if (dependente == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-      
+
         var uri = uriBuilder.path("/dependente/{id}").buildAndExpand(dependente.getClass()).toUri();
         return ResponseEntity.created(uri).body(dependente);
     }
 
+    @PutMapping("/update-dependent")
+    @Operation(summary = "Atualiza as informações do dependent")
+    @Transactional
+    public ResponseEntity<DtoDetalheDependente> atualizaDependente(@RequestBody @Valid DtoAtualizaDependente dto) {
+        var dependent = pessoaService.getReferenceById(dto);
+        return ResponseEntity.ok(new DtoDetalheDependente(dependent));
+    }
+
     @GetMapping("/list-dependents/{id}")
-    @Operation(summary= "Lista os dependentes de uma pessoa responsável")
-    public ResponseEntity<List<DtoDependente>> listarDependentes(@PathVariable (value = "id") @Valid UUID id) {
+    @Operation(summary = "Lista os dependentes de uma pessoa responsável")
+    public ResponseEntity<List<DtoDependente>> listarDependentes(@PathVariable(value = "id") @Valid UUID id) {
 
         var listaDependentes = pessoaService.listarDependentes(id);
-       
+
         if (listaDependentes == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
@@ -132,4 +141,24 @@ public class PessoaController {
         return ResponseEntity.status(HttpStatus.OK).body(listaDependentes);
     }
 
+    @PutMapping("/tokenFCM/{id}")
+    @Transactional
+    @ApiResponse(description = "Token FCM")
+    public ResponseEntity<?> tokenFCM(@PathVariable(value = "id") @Valid UUID id, @RequestBody @Valid DtoTokenFCM tokenFCM) {
+
+        pessoaService.setTokenFCM(id, tokenFCM.tokenFCM());
+        return ResponseEntity.ok().body("TokenFCM Cadastrado!!");
+
+    }
+
+    @PutMapping("/disable/{pessoa_id}")
+    public ResponseEntity<?> inativaPessoa(@PathVariable(value = "pessoa_id") UUID id){
+
+        var pessoa = pessoaService.inativaPessoa(id);
+        if(pessoa == false){
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        return ResponseEntity.status(HttpStatus.OK).body("Pessoa Excluida com Sucesso!");
+
+    }
 }

@@ -14,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import br.com.prognosticare.domain.repository.PessoaRepository;
 import br.com.prognosticare.infra.exception.ValidacaoException;
+import br.com.prognosticare.web.controller.DtoTokenFCM;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
@@ -51,7 +52,7 @@ public class PessoaService {
     }
 
     
-
+    @Transactional
     public PessoaEntity getReferenceById(DtoAtualizaPessoa dto) {
         var pessoa = pessoaRepository.getReferenceById(dto.pessoa_id());
         if(pessoa == null){
@@ -104,6 +105,7 @@ public class PessoaService {
         var dependente = new PessoaEntity(dto);
         dependente.setResponsavel(pessoa);
         dependente.setContato(pessoa.getContato());
+        dependente.setTipoResponsavel(false);
         pessoa.getDependente().add(dependente);
 
         pessoaRepository.save(dependente);
@@ -125,6 +127,32 @@ public class PessoaService {
                 .collect(Collectors.toList());
 		return dtoDependentes;
 	}
+
+    
+    public void setTokenFCM(UUID id,String tokenFCM) {
+        var pessoa = getReferenceById(id);
+        pessoa.setTokenFCM(tokenFCM);
+        pessoaRepository.save(pessoa);
+         
+
+    }
+
+
+    public PessoaEntity getReferenceById(DtoAtualizaDependente dto) {
+        var dependent = pessoaRepository.getReferenceById(dto.pessoa_id());
+        if(dependent == null){
+            throw new ValidacaoException("Dependente não encontrado!");
+        }
+        dependent.atualizarDependente(dto);
+        return dependent;
+    }
+
+    public Boolean inativaPessoa(UUID id){
+        var pessoa = getReferenceById(id);
+        pessoa.setAtivo(false);
+        pessoaRepository.save(pessoa);
+        return true;
+    }
 
    
 }

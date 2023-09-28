@@ -5,14 +5,14 @@ import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import br.com.prognosticare.domain.entity.acompanhamento.DtoAtualizaAcompanhamento;
-import br.com.prognosticare.domain.entity.acompanhamento.DtoDetalheAcompanhamento;
+
 import br.com.prognosticare.domain.entity.agenda.DtoCadastroAgenda;
 import br.com.prognosticare.domain.entity.agenda.DtoDetalheAgenda;
+import br.com.prognosticare.domain.enums.Especialidade;
+import br.com.prognosticare.domain.enums.TipoExame;
 import br.com.prognosticare.domain.service.AgendaService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
@@ -56,4 +56,26 @@ public class AgendaController {
         return ResponseEntity.status(HttpStatus.OK).body(listaAgenda);
     }
     
+    @GetMapping("/specialty/{especialidade}")
+    @Operation(summary= "Lista por Especialidade")
+    public ResponseEntity<List<DtoDetalheAgenda>> listaPorEspecialidade(@PathVariable(value = "especialidade") @Valid Especialidade especialidade ){
+
+        var especialidades = agendaService.getEspecialidades(especialidade);
+        if(especialidades.isEmpty()){
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        return ResponseEntity.status(HttpStatus.OK).body(especialidades) ;
+    }
+
+    @GetMapping("/exam/{consulta}")
+    @Operation(summary= "Lista por Consultas")
+    public ResponseEntity<List<DtoDetalheAgenda>> listaPorConsultas(@PathVariable(value = "consulta") @Valid TipoExame tipoExame ){
+
+        var consultas = agendaService.getTipoConsulta(tipoExame);
+        if(consultas.isEmpty()){
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        return ResponseEntity.status(HttpStatus.OK).body(consultas) ;
+    }
+
 }

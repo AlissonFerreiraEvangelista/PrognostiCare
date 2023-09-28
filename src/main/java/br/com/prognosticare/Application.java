@@ -14,26 +14,30 @@ import com.google.firebase.FirebaseApp;
 import com.google.firebase.FirebaseOptions;
 import com.google.firebase.messaging.FirebaseMessaging;
 
+import jakarta.annotation.PostConstruct;
+
 @SpringBootApplication
 @EnableScheduling
 public class Application {
 
 	public static void main(String[] args) {
 		SpringApplication.run(Application.class, args);
+
 	}
 
 	@Bean
-	FirebaseMessaging firebaseMessaging() throws IOException{
+	FirebaseApp firebaseApp() throws IOException {
 		GoogleCredentials googleCredentials = GoogleCredentials.fromStream(
-			new ClassPathResource("firebase-service-account.json").getInputStream());
+				new ClassPathResource("firebase-service-account.json").getInputStream());
 
 		FirebaseOptions firebaseOptions = FirebaseOptions.builder()
-			.setCredentials(googleCredentials).build();
-		FirebaseApp app = FirebaseApp.initializeApp(firebaseOptions, "API PrognostiCare");
-		return FirebaseMessaging.getInstance(app);
-
+				.setCredentials(googleCredentials).build();
+		return FirebaseApp.initializeApp(firebaseOptions, "API PrognostiCare");
 	}
 
-
+	@Bean
+	FirebaseMessaging firebaseMessaging(FirebaseApp firebaseApp) {
+		return FirebaseMessaging.getInstance(firebaseApp);
+	}
 
 }

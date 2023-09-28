@@ -100,21 +100,26 @@ public class PessoaEntity implements UserDetails {
         Optional.ofNullable(dados.cartaoPlanoSaude()).ifPresent(this::setCartaoPlanoSaude);
     }
 
+    public void atualizarDependente(DtoAtualizaDependente dados) {
+        Optional.ofNullable(dados.nome()).ifPresent(this::setNome);
+        Optional.ofNullable(dados.cpf()).ifPresent(this::setCpf);
+        Optional.ofNullable(dados.dataNascimento()).ifPresent(this::setDataNascimento);
+        Optional.ofNullable(dados.tipoSanguineo()).ifPresent(this::setTipoSanguineo);
+        Optional.ofNullable(dados.tipoAlergia()).ifPresent(this::setTipoAlergia);
+        Optional.ofNullable(dados.alergia()).ifPresent(this::setAlergia);
+        Optional.ofNullable(dados.doador()).ifPresent(this::setDoador);
+        Optional.ofNullable(dados.cartaoNacional()).ifPresent(this::setCartaoNacional);
+        Optional.ofNullable(dados.cartaoPlanoSaude()).ifPresent(this::setCartaoPlanoSaude);
+    }
+
     public PessoaEntity(DtoCadastroPessoa dto) {
         this.nome = dto.nome();
         this.cpf = dto.cpf();
         this.dataNascimento = dto.dataNascimento();
         this.tipoResponsavel = true;
+        this.ativo = true;
         this.email = dto.email();
         this.password = dto.password();
-    }
-
-    public PessoaEntity(String nome, String cpf, LocalDate dataNascimento, String email, String password) {
-        this.nome = nome;
-        this.cpf = cpf;
-        this.dataNascimento = dataNascimento;
-        this.email = email;
-        this.password = password;
     }
 
     @Override
@@ -162,10 +167,19 @@ public class PessoaEntity implements UserDetails {
         this.cpf = dto.cpf();
         this.dataNascimento = dto.dataNascimento();
         this.alergia = dto.alergia();
+        this.tipoAlergia = dto.tipoAlergia();
         this.tipoSanguineo = dto.tipoSanguineo();
         this.tipoResponsavel = false;
         this.cartaoNacional = dto.cartaoNacional();
         this.cartaoPlanoSaude = dto.cartaoNacional();
+    }
+
+    public PessoaEntity(String nome, String cpf, LocalDate data, String email, String password) {
+        this.nome = nome;
+        this.cpf = cpf;
+        this.dataNascimento = data;
+        this.email = email;
+        this.password = password;
     }
 
 }

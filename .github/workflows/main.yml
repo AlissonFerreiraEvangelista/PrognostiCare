@@ -27,19 +27,14 @@ jobs:
         username: ${{ secrets.DOCKER_USER }}
         password: ${{ secrets.DOCKER_PASSWORD }}
         
-    - name: Build and push Docker images
-      uses: docker/build-push-action@v4.1.1
-      with:
-        context: .
-        file: .
-        push: true
-        tags: |
-          alissonferreiraevangelista/api_app:latest
-          alissonferreiraevangelista/postgres:latest
-          alissonferreiraevangelista/nginx:latest
-
-    - name: Set up Firebase credentials
-      run: echo "$FIREBASE_CREDENTIALS" > firebase-service-account.json
-      env:
-        FIREBASE_CREDENTIALS: ${{ secrets.FIREBASE_CREDENTIALS }}
-
+#     - name: Build and push Docker images
+#       uses: docker/build-push-action@v4.1.1
+#       with:
+#         context: .
+#         file: .
+#         push: true
+#         tags: |
+#           alissonferreiraevangelista/api_app:latest
+#           alissonferreiraevangelista/postgres:latest
+#           alissonferreiraevangelista/nginx:latest
+          
