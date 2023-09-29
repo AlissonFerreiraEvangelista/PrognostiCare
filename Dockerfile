@@ -18,7 +18,7 @@ WORKDIR $PROJECT_HOME
 COPY . .
 
 # Package the application as a JAR file
-RUN mvn clean package -DskipTests
+RUN mvn clean package -DskipTests=true
 
 # Move file
 RUN mv $PROJECT_HOME/target/$JAR_NAME $PROJECT_HOME/
