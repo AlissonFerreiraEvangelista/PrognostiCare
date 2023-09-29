@@ -1,46 +1,77 @@
-name: Build and Deploy
+name: Deploy
 
 on:
   workflow_dispatch: {}
 
 jobs:
-  build:
-    name: Build Java Application
-    runs-on: ubuntu-latest
-    
+  todosimpleapp-deploy:
+    name: Deploy | Docker-compose
+    runs-on: ${{ matrix.os }}
+
+    strategy:
+      matrix:
+        os: [ubuntu-latest]
+
     steps:
-    - name: Checkout Code
-      uses: actions/checkout@v3.6.0
+      - name: Checkout
+        uses: actions/checkout@v2
 
-    - name: Setup Java JDK
-      uses: actions/setup-java@v3.12.0
-      with:
-        distribution: 'temurin'
-        java-version: 17
-        cache: 'maven'        
-    - name: Build with Maven
-      run: mvn clean package -DskipTest=true
-      
-    - name: Docker Login
-      uses: docker/login-action@v2.2.0
-      with:
-        username: ${{ secrets.DOCKER_USER }}
-        password: ${{ secrets.DOCKER_PASSWORD }}
-        
-    - name: Build and push Docker images
-      uses: docker/build-push-action@v4.1.1
-      with:
-        context: .
-        file: .
-        push: true
-        tags: |
-          alissonferreiraevangelista/api_app:latest
-          alissonferreiraevangelista/postgres:latest
-          alissonferreiraevangelista/nginx:latest
+      - name: Copy Prognosticare to VPS
+        uses: appleboy/scp-action@master
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          port: ${{ secrets.SSH_PORT }}
+          key: ${{ secrets.SSH_KEY }}
+          # Github path
+          source: "**"
+          # VPS path
+          target: "~/prognosticare"
 
-    - name: Set up Firebase credentials
-      run: echo "$FIREBASE_CREDENTIALS" > firebase-service-account.json
-      env:
-        FIREBASE_CREDENTIALS: ${{ secrets.FIREBASE_CREDENTIALS }}
+      - name: Create Prognosticare env.properties file
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          port: ${{ secrets.SSH_PORT }}
+          key: ${{ secrets.SSH_KEY }}
+          script: |
+            cd ~/prognosticare
+            rm env.properties
+            touch env.properties
 
-    
+            # Adicione suas variáveis de ambiente ao arquivo env.properties
+            echo "DATASOURCE_URL=${{ secrets.DATASOURCE_URL }}" >> env.properties
+            echo "DATASOURCE_USERNAME=${{ secrets.DATASOURCE_USERNAME }}" >> env.properties
+            echo "DATASOURCE_PASSWORD=${{ secrets.DATASOURCE_PASSWORD }}" >> env.properties
+            echo "MAIL_HOST=${{ secrets.MAIL_HOST }}" >> env.properties
+            echo "MAIL_PORT=${{ secrets.MAIL_PORT }}" >> env.properties
+            echo "MAIL_USERNAME=${{ secrets.MAIL_USERNAME }}" >> env.properties
+            echo "MAIL_PASSWORD=${{ secrets.MAIL_PASSWORD }}" >> env.properties
+            echo "TOKEN=${{ secrets.TOKEN }}" >> env.properties
+            echo "CLIENT_ID=${{ secrets.CLIENT_ID }}" >> env.properties
+            echo "CLIENT_SECRET=${{ secrets.CLIENT_SECRET }}" >> env.properties
+            echo "CLIENT_URI=${{ secrets.CLIENT_URI }}" >> env.properties
+            echo "PWD_DEFAULT=${{ secrets.PWD_DEFAULT }}" >> env.properties
+
+      - name: Build and Start Docker-compose
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          port: ${{ secrets.SSH_PORT }}
+          key: ${{ secrets.SSH_KEY }}
+          script: |
+            cd ~/prognosticare
+            docker-compose build --no-cache app
+            docker-compose up -d app
+
+      - name: Login to Docker Hub
+        uses: docker/login-action@v2.2.0
+        with:
+          username: ${{ secrets.DOCKER_HUB_USERNAME }}
+          password: ${{ secrets.DOCKER_HUB_PASSWORD }}
+
+      - name: Push Docker images to Docker Hub
+        run: |
+          docker-compose push app
