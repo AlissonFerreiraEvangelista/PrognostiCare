@@ -158,7 +158,7 @@ public class PessoaController {
         if(pessoa == false){
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-        return ResponseEntity.status(HttpStatus.OK).body("Pessoa Excluida com Sucesso!");
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).body("Pessoa Excluida com Sucesso!");
 
     }
 }

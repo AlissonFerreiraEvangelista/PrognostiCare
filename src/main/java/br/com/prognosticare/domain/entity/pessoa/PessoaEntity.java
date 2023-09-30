@@ -172,6 +172,7 @@ public class PessoaEntity implements UserDetails {
         this.tipoResponsavel = false;
         this.cartaoNacional = dto.cartaoNacional();
         this.cartaoPlanoSaude = dto.cartaoNacional();
+        this.doador = dto.doador();
     }
 
     public PessoaEntity(String nome, String cpf, LocalDate data, String email, String password) {

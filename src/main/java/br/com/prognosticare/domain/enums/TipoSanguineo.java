@@ -1,6 +1,7 @@
 package br.com.prognosticare.domain.enums;
 
 public enum TipoSanguineo {
+    SELECIONE,
     A_POSITIVO,
     A_NEGATIVO,
     B_NEGATIVO,

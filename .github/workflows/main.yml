@@ -40,7 +40,7 @@ jobs:
             cd ~/prognosticare/src/main/resources
             rm firebase-service-account.json
             touch firebase-service-account.json
-            echo "${{ secrets.FIREBASE_CREDENTIALS }}" >> firebase-service-account.json
+            echo "${{ secrets.FIREBASE_CREDENTIALS }}" > firebase-service-account.json
         
             
 
