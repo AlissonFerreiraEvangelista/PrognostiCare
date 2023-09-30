@@ -9,7 +9,7 @@ O aplicativo Prognóstico de Saúde tem como objetivo proporcionar aos usuários
 # 🛠 Ferramentas e Tecnologias utilizadas
 <p align="left">
   <a href="https://skillicons.dev">
-    <img src="https://skillicons.dev/icons?i=java,spring,vscode,postgres,docker,nginx,flutter" />
+    <img src="https://skillicons.dev/icons?i=java,spring,vscode,postgres,docker,nginx,flutter,azure,github,git,githubactions" />
   </a>
 </p>
  
