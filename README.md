@@ -77,8 +77,10 @@ spring.mail.properties.mail.smtp.starttls.enable=true
 ```
 
 # Endpoints
-### Swagger
-http://localhost:8080/swagger-ui.html
+### 🚧 Swagger Homologação
+http://prognosticare.ddns.net:8085/swagger-ui/index.html
+
+### 🚀 Swagger Produção
 
 
 # 🍻Contato
