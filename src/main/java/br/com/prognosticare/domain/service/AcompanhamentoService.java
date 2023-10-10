@@ -6,9 +6,10 @@ import java.util.Optional;
 import java.util.UUID;
 
 import br.com.prognosticare.domain.entity.acompanhamento.*;
+import br.com.prognosticare.domain.entity.agenda.DtoStatus;
 import jakarta.persistence.LockModeType;
 import jakarta.transaction.Transactional;
-
+import jakarta.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.repository.Lock;
@@ -80,5 +81,16 @@ public class AcompanhamentoService {
     public List<AcompanhamentoEntity> findAllByStatusEventoAberto() {
 
         return acompanhamentoRepository.findAllByStatusEvento();
+    }
+
+    public DtoDetalheAcompanhamento atualizaStatus(UUID id, @Valid DtoStatus dto) {
+        var acompanhamento = acompanhamentoRepository.getReferenceById(id);
+        if(acompanhamento !=null){
+            acompanhamento.setStatusEvento(dto.statusEvento());
+            acompanhamentoRepository.save(acompanhamento);
+            return new DtoDetalheAcompanhamento(acompanhamento);
+        }
+
+        return null;
     }
 }

@@ -1,6 +1,7 @@
 package br.com.prognosticare.domain.service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +11,7 @@ import org.springframework.stereotype.Service;
 import br.com.prognosticare.domain.entity.agenda.AgendaEntity;
 import br.com.prognosticare.domain.entity.agenda.DtoCadastroAgenda;
 import br.com.prognosticare.domain.entity.agenda.DtoDetalheAgenda;
+import br.com.prognosticare.domain.entity.agenda.DtoStatus;
 import br.com.prognosticare.domain.enums.Especialidade;
 import br.com.prognosticare.domain.enums.TipoExame;
 import br.com.prognosticare.domain.repository.AgendaRepository;
@@ -82,5 +84,18 @@ public class AgendaService {
             throw new ValidacaoException("Não tem agenda com esse Tipo de Exame");
         }
         return consultas;
+    }
+
+
+    @Transactional
+    public DtoDetalheAgenda atualizaStatus(UUID id, DtoStatus dto) {
+        var agenda = agendaRepository.getReferenceById(id);
+        if(agenda!=null){
+            agenda.setStatusEvento(dto.statusEvento());
+            agendaRepository.save(agenda);
+            return new DtoDetalheAgenda(agenda);
+        }
+        return null;
+       
     }
 }

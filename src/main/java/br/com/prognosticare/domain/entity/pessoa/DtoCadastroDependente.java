@@ -19,7 +19,8 @@ public record DtoCadastroDependente(
         @Pattern(regexp = "\\d{3}\\.\\d{3}\\.\\d{3}\\-\\d{2}") String cpf,
 
         @NotNull
-        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy") LocalDate dataNascimento,
+        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy") 
+        LocalDate dataNascimento,
 
         TipoSanguineo tipoSanguineo,
 

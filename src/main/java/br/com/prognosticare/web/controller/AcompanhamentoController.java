@@ -4,6 +4,7 @@ package br.com.prognosticare.web.controller;
 import br.com.prognosticare.domain.entity.acompanhamento.DtoAtualizaAcompanhamento;
 import br.com.prognosticare.domain.entity.acompanhamento.DtoCadastroAcompanhamento;
 import br.com.prognosticare.domain.entity.acompanhamento.DtoDetalheAcompanhamento;
+import br.com.prognosticare.domain.entity.agenda.DtoStatus;
 import br.com.prognosticare.domain.service.AcompanhamentoService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
@@ -53,4 +54,14 @@ public class AcompanhamentoController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         return ResponseEntity.status(HttpStatus.OK).body(listaAcompanhamentos);
     }
+
+    @PutMapping("/update-status/{id}")
+    public ResponseEntity<DtoDetalheAcompanhamento>atualizaStatus(@PathVariable(value = "id") UUID id, @RequestBody @Valid DtoStatus dto){
+        var acompanhamento = acompanhamentoService.atualizaStatus(id, dto);
+        if(acompanhamento==null){
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        return ResponseEntity.status(HttpStatus.OK).body(acompanhamento);
+    }
+
 }

@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 import br.com.prognosticare.domain.entity.agenda.DtoCadastroAgenda;
 import br.com.prognosticare.domain.entity.agenda.DtoDetalheAgenda;
+import br.com.prognosticare.domain.entity.agenda.DtoStatus;
 import br.com.prognosticare.domain.enums.Especialidade;
 import br.com.prognosticare.domain.enums.TipoExame;
 import br.com.prognosticare.domain.service.AgendaService;
@@ -76,6 +77,16 @@ public class AgendaController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         return ResponseEntity.status(HttpStatus.OK).body(consultas) ;
+    }
+
+    @PutMapping("/update-status/{id}")
+    @Operation(summary= "Atualiza o status da agenda")
+    public ResponseEntity<DtoDetalheAgenda> atualizaStatus(@PathVariable(value = "id") UUID id,  @Valid @RequestBody DtoStatus dto){
+        var agenda = agendaService.atualizaStatus(id, dto);
+        if(agenda ==null){
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        return ResponseEntity.status(HttpStatus.OK).body(agenda);
     }
 
 }
