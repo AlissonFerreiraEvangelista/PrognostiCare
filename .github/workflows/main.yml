@@ -13,37 +13,6 @@ jobs:
         os: [ubuntu-latest]
 
     steps:
-<<<<<<< HEAD
-    - name: Checkout Code
-      uses: actions/checkout@v3.6.0
-
-    - name: Setup Java JDK
-      uses: actions/setup-java@v3.12.0
-      with:
-        distribution: 'temurin'
-        java-version: 17
-        cache: 'maven'        
-    - name: Build with Maven
-      run: mvn clean package -DskipTest=true
-      
-    - name: Docker Login
-      uses: docker/login-action@v2.2.0
-      with:
-        username: ${{ secrets.DOCKER_USER }}
-        password: ${{ secrets.DOCKER_PASSWORD }}
-        
-#     - name: Build and push Docker images
-#       uses: docker/build-push-action@v4.1.1
-#       with:
-#         context: .
-#         file: .
-#         push: true
-#         tags: |
-#           alissonferreiraevangelista/api_app:latest
-#           alissonferreiraevangelista/postgres:latest
-#           alissonferreiraevangelista/nginx:latest
-          
-=======
       - name: Checkout
         uses: actions/checkout@v2
 
@@ -96,5 +65,3 @@ jobs:
             cd ~/prognosticare
             docker-compose build --no-cache
             docker-compose up -d
-
->>>>>>> dev
