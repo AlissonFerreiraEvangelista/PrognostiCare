@@ -26,25 +26,8 @@ jobs:
           # Github path
           source: "**"
           # VPS path
-          target: "~/prognosticare"
-
-
-      - name: Create firebase-service json
-        uses: appleboy/ssh-action@master
-        with:
-          host: ${{ secrets.SSH_HOST }}
-          username: ${{ secrets.SSH_USER }}
-          port: ${{ secrets.SSH_PORT }}
-          key: ${{ secrets.SSH_KEY }}
-          script: |
-            cd ~/prognosticare/src/main/resources
-            rm firebase-service-account.json
-            touch firebase-service-account.json
-            echo "${{ secrets.FIREBASE_CREDENTIALS }}" > firebase-service-account.json
-        
-            
-
-
+          target: "~/prognosticare"    
+  
       - name: Create Prognosticare env.properties file
         uses: appleboy/ssh-action@master
         with:
