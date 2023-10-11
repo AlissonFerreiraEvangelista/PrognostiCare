@@ -14,6 +14,7 @@ public record DtoDetalheDependente(
         String contato,
         TipoSanguineo tipoSanguineo,
         Boolean alergia,
+        Boolean ativo,
         Boolean tipoResponsavel,
         String cartaoNacional,
         String cartaoPlanoSaude
@@ -22,8 +23,12 @@ public record DtoDetalheDependente(
     public DtoDetalheDependente(PessoaEntity pessoa) {
         this(pessoa.getPessoa_id(), pessoa.getNome(), pessoa.getCpf(), pessoa.getDataNascimento(),
         pessoa.getContato(),
-                pessoa.getTipoSanguineo(), pessoa.getAlergia(), pessoa.getTipoResponsavel(),
-                pessoa.getCartaoNacional(), pessoa.getCartaoPlanoSaude());
+        pessoa.getTipoSanguineo(), 
+        pessoa.getAlergia(),
+        pessoa.getAtivo(),
+        pessoa.getTipoResponsavel(),
+        pessoa.getCartaoNacional(),
+         pessoa.getCartaoPlanoSaude());
     }
 
     public DtoDetalheDependente(Optional<PessoaEntity> pessoa) {

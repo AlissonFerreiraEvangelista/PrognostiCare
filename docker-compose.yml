@@ -8,7 +8,7 @@ services:
     image: nginx
     restart: always
     ports:
-    - "8085:8085"
+    - "80:80"
     networks:
       - api-network
     volumes:
@@ -35,6 +35,7 @@ services:
       context: .
     image: api_app
     container_name: api_app
+    env_file: ./env.properties
     environment:
       - SPRING_DATASOURCE_URL=jdbc:postgresql://postgresdb:5432/postgres
       - SPRING_DATASOURCE_USERNAME=prognosticare
@@ -53,6 +54,7 @@ services:
       context: .
     image: api_app
     container_name: api_app-1
+    env_file: ./env.properties
     environment:
       - SPRING_DATASOURCE_URL=jdbc:postgresql://postgresdb:5432/postgres
       - SPRING_DATASOURCE_USERNAME=prognosticare

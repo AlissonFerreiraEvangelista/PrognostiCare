@@ -14,6 +14,7 @@ public record DtoDependente(
                 Boolean alergia,
                 String tipoAlergia,
                 Boolean tipoResponsavel,
+                Boolean ativo,
                 String cartaoNacional,
                 String cartaoPlanoSaude) {
 
@@ -26,6 +27,7 @@ public record DtoDependente(
                 pessoa.getAlergia(),
                 pessoa.getTipoAlergia(),
                 pessoa.getTipoResponsavel(),
+                pessoa.getAtivo(),
                 pessoa.getCartaoNacional(),
                 pessoa.getCartaoPlanoSaude());
         }

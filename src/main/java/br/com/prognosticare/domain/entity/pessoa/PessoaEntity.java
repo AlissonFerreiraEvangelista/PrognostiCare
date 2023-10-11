@@ -108,6 +108,7 @@ public class PessoaEntity implements UserDetails {
         Optional.ofNullable(dados.tipoAlergia()).ifPresent(this::setTipoAlergia);
         Optional.ofNullable(dados.alergia()).ifPresent(this::setAlergia);
         Optional.ofNullable(dados.doador()).ifPresent(this::setDoador);
+        Optional.ofNullable(dados.ativo()).ifPresent(this::setAtivo);
         Optional.ofNullable(dados.cartaoNacional()).ifPresent(this::setCartaoNacional);
         Optional.ofNullable(dados.cartaoPlanoSaude()).ifPresent(this::setCartaoPlanoSaude);
     }
@@ -170,8 +171,10 @@ public class PessoaEntity implements UserDetails {
         this.tipoAlergia = dto.tipoAlergia();
         this.tipoSanguineo = dto.tipoSanguineo();
         this.tipoResponsavel = false;
+        this.ativo = true;
         this.cartaoNacional = dto.cartaoNacional();
         this.cartaoPlanoSaude = dto.cartaoNacional();
+        this.doador = dto.doador();
     }
 
     public PessoaEntity(String nome, String cpf, LocalDate data, String email, String password) {

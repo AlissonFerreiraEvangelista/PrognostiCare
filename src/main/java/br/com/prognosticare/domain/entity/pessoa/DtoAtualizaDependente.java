@@ -30,6 +30,8 @@ public record DtoAtualizaDependente(
 
         Boolean doador,
 
+        Boolean ativo,
+
         String cartaoNacional,
 
         String cartaoPlanoSaude) {

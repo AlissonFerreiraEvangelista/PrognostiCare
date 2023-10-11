@@ -1,7 +1,7 @@
 package br.com.prognosticare.domain.entity.pessoa;
 
 import java.time.LocalDate;
-import java.util.UUID;
+
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
@@ -12,11 +12,15 @@ import jakarta.validation.constraints.Pattern;
 
 public record DtoCadastroDependente(
 
-        @NotBlank String nome,
+        @NotBlank 
+        String nome,
 
-        @NotBlank @Pattern(regexp = "\\d{3}\\.\\d{3}\\.\\d{3}\\-\\d{2}") String cpf,
+        @NotBlank
+        @Pattern(regexp = "\\d{3}\\.\\d{3}\\.\\d{3}\\-\\d{2}") String cpf,
 
-        @NotNull @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy") LocalDate dataNascimento,
+        @NotNull
+        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy") 
+        LocalDate dataNascimento,
 
         TipoSanguineo tipoSanguineo,
 
@@ -26,6 +30,9 @@ public record DtoCadastroDependente(
 
         String cartaoNacional,
 
-        String cartaoPlanoSaude) {
+        String cartaoPlanoSaude,
+        
+        Boolean doador
+        ) {
 
 }
