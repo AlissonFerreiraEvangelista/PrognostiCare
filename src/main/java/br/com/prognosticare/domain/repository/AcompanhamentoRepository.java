@@ -1,5 +1,7 @@
 package br.com.prognosticare.domain.repository;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
@@ -33,6 +35,15 @@ public interface AcompanhamentoRepository extends JpaRepository<AcompanhamentoEn
     @Query(nativeQuery = true,
      value = "SELECT * FROM tb_acompanhamento a WHERE a.status_evento = 'ABERTO' ORDER BY a.data_acompanhamento ASC FOR UPDATE SKIP LOCKED")
     List<AcompanhamentoEntity> findAllByStatusEvento();
+
+    @Query(value = "FROM AcompanhamentoEntity a WHERE a.pessoa = :pessoa AND a.dataAcompanhamento >= :dataAcompanhamento AND a.statusEvento ='ABERTO'")
+    List<DtoDetalheAcompanhamento> findByDataAcompanhamentoMaior(@Param("pessoa")PessoaEntity pessoa, @Param("dataAcompanhamento")LocalDateTime dataAcompanhamento);
+
+     @Query(value = "FROM AcompanhamentoEntity a WHERE a.pessoa = :pessoa AND a.dataAcompanhamento <= :dataAcompanhamento AND a.statusEvento ='ABERTO'")
+    List<DtoDetalheAcompanhamento> findByDataAcompanhamentoMenor(@Param("pessoa")PessoaEntity pessoa, @Param("dataAcompanhamento")LocalDateTime dataAcompanhamento);
+
+     @Query(value = "FROM AcompanhamentoEntity a WHERE a.pessoa = :pessoa AND a.statusEvento = 'ABERTO' AND a.dataAcompanhamento BETWEEN :dataAcompanhamento AND :finaldia")
+    List<DtoDetalheAcompanhamento> findByDataAcompanhamentoIgual(@Param("pessoa")PessoaEntity pessoa, @Param("dataAcompanhamento")LocalDateTime dataAcompanhamento,@Param("finaldia") LocalDateTime finaldia);
      
     
 

@@ -5,11 +5,13 @@ import br.com.prognosticare.domain.entity.acompanhamento.DtoAtualizaAcompanhamen
 import br.com.prognosticare.domain.entity.acompanhamento.DtoCadastroAcompanhamento;
 import br.com.prognosticare.domain.entity.acompanhamento.DtoDetalheAcompanhamento;
 import br.com.prognosticare.domain.entity.agenda.DtoStatus;
+import br.com.prognosticare.domain.entity.dto.DtoData;
 import br.com.prognosticare.domain.service.AcompanhamentoService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
 
@@ -63,5 +65,16 @@ public class AcompanhamentoController {
         }
         return ResponseEntity.status(HttpStatus.OK).body(acompanhamento);
     }
+
+    @GetMapping("/list-day/{id}")
+    @Operation(summary= "Lista os Acompanhamentos de uma pessoa com base na data")
+    public ResponseEntity<List<DtoDetalheAcompanhamento>>listaAcompanhamentoData(@PathVariable (value = "id") UUID id, @RequestBody DtoData dto, @RequestParam String filtro){
+        var acompanhamentos = acompanhamentoService.listaAcompanhamentoData(id, dto, filtro);
+        if(acompanhamentos==null){
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        return ResponseEntity.status(HttpStatus.OK).body(acompanhamentos);
+    }
+
 
 }
