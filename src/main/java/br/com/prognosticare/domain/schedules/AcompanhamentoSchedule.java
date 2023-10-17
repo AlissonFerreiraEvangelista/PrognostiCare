@@ -12,6 +12,7 @@ import com.google.firebase.messaging.*;
 import br.com.prognosticare.domain.entity.acompanhamento.AcompanhamentoEntity;
 import br.com.prognosticare.domain.enums.Status;
 import br.com.prognosticare.domain.service.AcompanhamentoService;
+import br.com.prognosticare.infra.exception.ValidacaoException;
 
 @Component
 public class AcompanhamentoSchedule {
@@ -46,20 +47,25 @@ public class AcompanhamentoSchedule {
     private void sendNotification(AcompanhamentoEntity acompanhamento) {
 
         String tokenFCM = acompanhamento.getPessoa().getTokenFCM();
-
-        Message message = Message.builder()
-                .setNotification(Notification.builder()
-                        .setTitle("Lembrete de Madicação")
-                        .setBody("É hora de tomar " + acompanhamento.getMedicacao())
-                        .build())
-                .setToken(tokenFCM)
-                .build();
-
-        try {
-            firebaseMessaging.send(message);
-        } catch (FirebaseMessagingException e) {
-            e.printStackTrace();
+        if(tokenFCM != null && !tokenFCM.isEmpty()){
+            
+            Message message = Message.builder()
+                    .setNotification(Notification.builder()
+                            .setTitle("Lembrete de Madicação")
+                            .setBody("É hora de tomar " + acompanhamento.getMedicacao())
+                            .build())
+                    .setToken(tokenFCM)
+                    .build();
+    
+            try {
+                firebaseMessaging.send(message);
+            } catch (FirebaseMessagingException e) {
+                e.printStackTrace();
+            }
+        }else{
+            throw new ValidacaoException("Erro no AcompanhamentoSchedule");
         }
+      
     }
     
 }

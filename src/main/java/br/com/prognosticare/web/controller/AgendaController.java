@@ -8,10 +8,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-
+import br.com.prognosticare.domain.entity.acompanhamento.DtoDetalheAcompanhamento;
 import br.com.prognosticare.domain.entity.agenda.DtoCadastroAgenda;
 import br.com.prognosticare.domain.entity.agenda.DtoDetalheAgenda;
 import br.com.prognosticare.domain.entity.agenda.DtoStatus;
+import br.com.prognosticare.domain.entity.dto.DtoData;
 import br.com.prognosticare.domain.enums.Especialidade;
 import br.com.prognosticare.domain.enums.TipoExame;
 import br.com.prognosticare.domain.service.AgendaService;
@@ -87,6 +88,16 @@ public class AgendaController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         return ResponseEntity.status(HttpStatus.OK).body(agenda);
+    }
+
+    @GetMapping("/list-day/{id}")
+    @Operation(summary= "Lista os Agendamentos de uma pessoa com base na data")
+    public ResponseEntity<List<DtoDetalheAgenda>>listaAgendamentoData(@PathVariable (value = "id") UUID id, @RequestBody @Valid DtoData dto, @RequestParam String filtro){
+        var agendamentos = agendaService.listaAgendamentoData(id, dto, filtro);
+        if(agendamentos==null){
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        return ResponseEntity.status(HttpStatus.OK).body(agendamentos);
     }
 
 }

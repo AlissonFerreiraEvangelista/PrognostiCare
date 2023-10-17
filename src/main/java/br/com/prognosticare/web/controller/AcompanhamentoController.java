@@ -68,7 +68,7 @@ public class AcompanhamentoController {
 
     @GetMapping("/list-day/{id}")
     @Operation(summary= "Lista os Acompanhamentos de uma pessoa com base na data")
-    public ResponseEntity<List<DtoDetalheAcompanhamento>>listaAcompanhamentoData(@PathVariable (value = "id") UUID id, @RequestBody DtoData dto, @RequestParam String filtro){
+    public ResponseEntity<List<DtoDetalheAcompanhamento>>listaAcompanhamentoData(@PathVariable (value = "id") UUID id, @RequestBody @Valid DtoData dto, @RequestParam String filtro){
         var acompanhamentos = acompanhamentoService.listaAcompanhamentoData(id, dto, filtro);
         if(acompanhamentos==null){
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);

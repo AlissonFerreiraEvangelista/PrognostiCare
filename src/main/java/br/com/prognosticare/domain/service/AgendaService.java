@@ -1,7 +1,6 @@
 package br.com.prognosticare.domain.service;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,12 +11,13 @@ import br.com.prognosticare.domain.entity.agenda.AgendaEntity;
 import br.com.prognosticare.domain.entity.agenda.DtoCadastroAgenda;
 import br.com.prognosticare.domain.entity.agenda.DtoDetalheAgenda;
 import br.com.prognosticare.domain.entity.agenda.DtoStatus;
+import br.com.prognosticare.domain.entity.dto.DtoData;
 import br.com.prognosticare.domain.enums.Especialidade;
 import br.com.prognosticare.domain.enums.TipoExame;
 import br.com.prognosticare.domain.repository.AgendaRepository;
 import br.com.prognosticare.infra.exception.ValidacaoException;
 import jakarta.transaction.Transactional;
-import jakarta.validation.Valid;
+
 
 
 
@@ -97,5 +97,33 @@ public class AgendaService {
         }
         return null;
        
+    }
+
+
+    public List<DtoDetalheAgenda> listaAgendamentoData(UUID id, DtoData dto, String filtro) {
+        var pessoa = pessoaService.get(id).orElse(null);
+        List<DtoDetalheAgenda> agendamentos;
+
+        if(pessoa == null || dto.dataInicial() == null){
+            throw new ValidacaoException("Parâmetros inválidos para listaAcompanhamentoData");
+        }
+
+        if(filtro.equalsIgnoreCase("maior") && dto.dataInicial() != null){
+            agendamentos = agendaRepository.findByDataAgendamentoMaior(pessoa, dto.dataInicial().plusDays(1));
+
+        }else if(filtro.equalsIgnoreCase("menor") && dto.dataInicial() != null){
+
+            agendamentos = agendaRepository.findByDataAgendamentoMenor(pessoa, dto.dataInicial().minusDays(1));
+
+        }else if(filtro.equalsIgnoreCase("igual") && dto.dataInicial() != null){
+
+            agendamentos = agendaRepository.findByDataAgendamentoIgual(pessoa, dto.dataInicial().minusHours(4), dto.dataInicial().plusHours(5));
+        }else{
+            throw new ValidacaoException("Erro no Filtro listaAgendamentoData");
+        }
+        if(agendamentos.isEmpty()){
+            return null;
+        }
+        return agendamentos;
     }
 }

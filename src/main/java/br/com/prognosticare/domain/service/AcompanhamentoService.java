@@ -109,16 +109,16 @@ public class AcompanhamentoService {
         }
 
         if(filtro.equalsIgnoreCase("maior") && data.dataInicial() != null){
-            var plus = data.dataInicial().plusDays(1);
-            acompanhamentos = acompanhamentoRepository.findByDataAcompanhamentoMaior(pessoa, plus);
+
+            acompanhamentos = acompanhamentoRepository.findByDataAcompanhamentoMaior(pessoa, data.dataInicial().plusDays(1));
 
         }else if(filtro.equalsIgnoreCase("menor") && data.dataInicial() != null){
-            var minusDay = data.dataInicial().minusDays(1);
-            acompanhamentos = acompanhamentoRepository.findByDataAcompanhamentoMenor(pessoa, minusDay);
-            
+
+            acompanhamentos = acompanhamentoRepository.findByDataAcompanhamentoMenor(pessoa, data.dataInicial().minusDays(1));
+
         }else if(filtro.equalsIgnoreCase("igual") && data.dataInicial() != null){
-           var finalDoDia = data.dataInicial().plusHours(5);
-            acompanhamentos = acompanhamentoRepository.findByDataAcompanhamentoIgual(pessoa,data.dataInicial(),finalDoDia);
+
+            acompanhamentos = acompanhamentoRepository.findByDataAcompanhamentoIgual(pessoa, data.dataInicial().minusHours(4), data.dataInicial().plusHours(5));
         }else{
             throw new ValidacaoException("Erro no Filtro listaAcompanhamentoData");
         }
