@@ -32,7 +32,8 @@ public class AcompanhamentoSchedule {
 
         for (AcompanhamentoEntity acompanhamentoEntity : acompanhamentos) {
             if (now.isAfter(acompanhamentoEntity.getDataAcompanhamento())
-                    && acompanhamentoEntity.getStatusEvento() == Status.ABERTO) {
+                && acompanhamentoEntity.getStatusEvento() == Status.ABERTO 
+                && acompanhamentoEntity.getIntervaloHora() != 0) {
                 sendNotification(acompanhamentoEntity);
                 System.out.println(acompanhamentoEntity.getMedicacao() + LocalDateTime.now());
                 acompanhamentoEntity.atualizaProxaMedicacao();

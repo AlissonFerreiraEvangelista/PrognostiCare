@@ -31,12 +31,21 @@ public class AgendaService {
 
     public DtoDetalheAgenda adicionaAgenda(UUID id, DtoCadastroAgenda dto) {
         var pessoa = pessoaService.get(id).orElse(null);
-        var agenda = new AgendaEntity(dto);
-        agenda.setPessoa(pessoa);
-        pessoa.getAgendas().add(agenda);
-        save(agenda);
 
-        return new DtoDetalheAgenda(agenda);
+        if(pessoa != null){
+        
+            var agenda = new AgendaEntity(dto);
+            agenda.setPessoa(pessoa);
+            if(agenda.getIntervaloData() == null){
+                agenda.setIntervaloData(0);
+            }
+            pessoa.getAgendas().add(agenda);
+            save(agenda);
+    
+            return new DtoDetalheAgenda(agenda);
+        }else{
+            return null;
+        }
     }
 
    

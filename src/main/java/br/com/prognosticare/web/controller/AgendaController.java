@@ -100,4 +100,10 @@ public class AgendaController {
         return ResponseEntity.status(HttpStatus.OK).body(agendamentos);
     }
 
+    @GetMapping("/between-days/{id}")
+    @Operation(summary= "Lista os Agendamentos no intervalo de datas")
+    public ResponseEntity<List<DtoDetalheAgenda>> listarEntredatas(){
+        return null;
+    }
+
 }

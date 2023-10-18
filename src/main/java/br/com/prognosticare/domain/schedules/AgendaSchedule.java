@@ -38,7 +38,10 @@ public class AgendaSchedule {
             int intervaloData = agendaEntity.getIntervaloData();
             LocalDateTime dataNotificacao = dataAgenda.minusDays(intervaloData);
 
-            if(agendaEntity.getStatusEvento() == Status.ABERTO && dataNotificacao.toLocalDate().isEqual(now.toLocalDate()) && agendaEntity.getNotificacao() == false){
+            if(agendaEntity.getStatusEvento() == Status.ABERTO
+                && dataNotificacao.toLocalDate().isEqual(now.toLocalDate()) 
+                && agendaEntity.getNotificacao() == false
+                && agendaEntity.getIntervaloData() != 0){
                 System.out.println("Agendamento Marcado para: " + agendaEntity.getDataAgenda());
                 sendNotification(agendaEntity);
                 agendaEntity.atualizaAgenda();

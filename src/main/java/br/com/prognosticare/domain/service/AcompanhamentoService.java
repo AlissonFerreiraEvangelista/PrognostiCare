@@ -1,6 +1,5 @@
 package br.com.prognosticare.domain.service;
 
-
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -32,8 +31,6 @@ public class AcompanhamentoService {
 
     @Autowired
     PessoaService pessoaService;
-
-    
 
     public List<AcompanhamentoEntity> findAll() {
         List<AcompanhamentoEntity> acompanhamentos = acompanhamentoRepository.findAll();
@@ -67,13 +64,26 @@ public class AcompanhamentoService {
         return acompanhamento;
     }
 
+    @Transactional
     public DtoDetalheAcompanhamento adicionaAcompanhamento(UUID id, DtoCadastroAcompanhamento dto) {
+
         var pessoa = pessoaService.get(id).orElse(null);
-        var acompanhamento = new AcompanhamentoEntity(dto);
-        acompanhamento.setPessoa(pessoa);
-        pessoa.getAcompanhamentos().add(acompanhamento);
-        save(acompanhamento);
-        return new DtoDetalheAcompanhamento(acompanhamento);
+
+        if (pessoa != null) {
+            var acompanhamento = new AcompanhamentoEntity(dto);
+            acompanhamento.setPessoa(pessoa);
+
+            if (acompanhamento.getIntervaloHora() == null) {
+                acompanhamento.setIntervaloHora(0);
+            }
+
+            save(acompanhamento);
+            pessoa.getAcompanhamentos().add(acompanhamento);
+
+            return new DtoDetalheAcompanhamento(acompanhamento);
+        } else {
+            return null;
+        }
     }
 
     public List<DtoDetalheAcompanhamento> listaAcompanhamentos(UUID id) {
@@ -90,7 +100,7 @@ public class AcompanhamentoService {
 
     public DtoDetalheAcompanhamento atualizaStatus(UUID id, @Valid DtoStatus dto) {
         var acompanhamento = acompanhamentoRepository.getReferenceById(id);
-        if(acompanhamento !=null){
+        if (acompanhamento != null) {
             acompanhamento.setStatusEvento(dto.statusEvento());
             acompanhamentoRepository.save(acompanhamento);
             return new DtoDetalheAcompanhamento(acompanhamento);
@@ -108,22 +118,25 @@ public class AcompanhamentoService {
             throw new ValidacaoException("Parâmetros inválidos para listaAcompanhamentoData");
         }
 
-        if(filtro.equalsIgnoreCase("maior") && data.dataInicial() != null){
+        if (filtro.equalsIgnoreCase("maior") && data.dataInicial() != null) {
 
-            acompanhamentos = acompanhamentoRepository.findByDataAcompanhamentoMaior(pessoa, data.dataInicial().plusDays(1));
+            acompanhamentos = acompanhamentoRepository.findByDataAcompanhamentoMaior(pessoa,
+                    data.dataInicial().plusDays(1));
 
-        }else if(filtro.equalsIgnoreCase("menor") && data.dataInicial() != null){
+        } else if (filtro.equalsIgnoreCase("menor") && data.dataInicial() != null) {
 
-            acompanhamentos = acompanhamentoRepository.findByDataAcompanhamentoMenor(pessoa, data.dataInicial().minusDays(1));
+            acompanhamentos = acompanhamentoRepository.findByDataAcompanhamentoMenor(pessoa,
+                    data.dataInicial().minusDays(1));
 
-        }else if(filtro.equalsIgnoreCase("igual") && data.dataInicial() != null){
+        } else if (filtro.equalsIgnoreCase("igual") && data.dataInicial() != null) {
 
-            acompanhamentos = acompanhamentoRepository.findByDataAcompanhamentoIgual(pessoa, data.dataInicial().minusHours(4), data.dataInicial().plusHours(5));
-        }else{
+            acompanhamentos = acompanhamentoRepository.findByDataAcompanhamentoIgual(pessoa,
+                    data.dataInicial().minusHours(4), data.dataInicial().plusHours(5));
+        } else {
             throw new ValidacaoException("Erro no Filtro listaAcompanhamentoData");
         }
 
-        if (acompanhamentos.isEmpty()){
+        if (acompanhamentos.isEmpty()) {
             return null;
         }
 
