@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
-import com.google.firebase.FirebaseApp;
 import com.google.firebase.messaging.*;
 
 import br.com.prognosticare.domain.entity.acompanhamento.AcompanhamentoEntity;
@@ -33,9 +32,8 @@ public class AcompanhamentoSchedule {
         for (AcompanhamentoEntity acompanhamentoEntity : acompanhamentos) {
             if (now.isAfter(acompanhamentoEntity.getDataAcompanhamento())
                 && acompanhamentoEntity.getStatusEvento() == Status.ABERTO 
-                && acompanhamentoEntity.getIntervaloHora() != 0) {
+                && Boolean.TRUE.equals(acompanhamentoEntity.getNotificacao()) ) {
                 sendNotification(acompanhamentoEntity);
-                System.out.println(acompanhamentoEntity.getMedicacao() + LocalDateTime.now());
                 acompanhamentoEntity.atualizaProxaMedicacao();
                 aService.save(acompanhamentoEntity);
             }
@@ -52,7 +50,7 @@ public class AcompanhamentoSchedule {
             
             Message message = Message.builder()
                     .setNotification(Notification.builder()
-                            .setTitle("Lembrete de Madicação")
+                            .setTitle("Lembrete de Medicação")
                             .setBody("É hora de tomar " + acompanhamento.getMedicacao())
                             .build())
                     .setToken(tokenFCM)

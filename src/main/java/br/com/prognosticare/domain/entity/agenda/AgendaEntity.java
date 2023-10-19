@@ -80,11 +80,12 @@ public class AgendaEntity {
         Optional.ofNullable(dados.especialista()).ifPresent(this::setEspecialista);
         Optional.ofNullable(dados.tipoExame()).ifPresent(this::setTipoExame);
         Optional.ofNullable(dados.intervaloData()).ifPresent(this::setIntervaloData);
+        Optional.ofNullable(dados.notificacao()).ifPresent(this::setNotificacao);
 
     }
 
-    public void atualizaAgenda(){
-        this.notificacao = true;
+    public void atualizaNotificacao(){
+        this.notificacao = false;
     }
 
    

@@ -40,11 +40,10 @@ public class AgendaSchedule {
 
             if(agendaEntity.getStatusEvento() == Status.ABERTO
                 && dataNotificacao.toLocalDate().isEqual(now.toLocalDate()) 
-                && agendaEntity.getNotificacao() == false
-                && agendaEntity.getIntervaloData() != 0){
-                System.out.println("Agendamento Marcado para: " + agendaEntity.getDataAgenda());
+                && Boolean.TRUE.equals(agendaEntity.getNotificacao()) ){
+
                 sendNotification(agendaEntity);
-                agendaEntity.atualizaAgenda();
+                agendaEntity.atualizaNotificacao();
                 aService.save(agendaEntity);
             }
 

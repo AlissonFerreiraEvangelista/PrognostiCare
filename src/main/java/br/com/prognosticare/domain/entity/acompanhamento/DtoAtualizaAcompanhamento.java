@@ -26,6 +26,8 @@ public record DtoAtualizaAcompanhamento (
         @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy hh:mm:ss a")
         LocalDateTime dataAcompanhamento,
 
+        Boolean notificacao,
+
         int intervaloHora,
 
         TipoTemporarioControlado tipoTemporarioControlado,

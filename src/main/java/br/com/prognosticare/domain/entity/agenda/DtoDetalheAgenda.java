@@ -25,6 +25,8 @@ public record DtoDetalheAgenda(
 
     Integer intervaloData,
 
+    Boolean notificacao,
+
     String observacao,
 
     Especialidade especialista,
@@ -42,6 +44,7 @@ public record DtoDetalheAgenda(
             agenda.getStatusEvento(),
             agenda.getDescricao(),
             agenda.getIntervaloData(),
+            agenda.getNotificacao(),
             agenda.getObservacao(),
             agenda.getEspecialista(),
             agenda.getTipoExame()

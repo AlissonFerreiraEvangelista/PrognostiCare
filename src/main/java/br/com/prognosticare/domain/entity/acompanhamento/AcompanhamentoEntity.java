@@ -40,6 +40,8 @@ public class AcompanhamentoEntity {
 
     private Integer intervaloHora;
 
+    private Boolean notificacao;
+
     @Enumerated(EnumType.STRING)
     private TipoTemporarioControlado tipoTemporarioControlado;
 
@@ -55,6 +57,7 @@ public class AcompanhamentoEntity {
         this.medicacao = dto.medicacao();
         this.statusEvento = Status.ABERTO;
         this.dataAcompanhamento = dto.dataAcompanhamento();
+        this.notificacao = dto.notificacao();
         this.intervaloHora = dto.intervaloHora();
         this.tipoTemporarioControlado = dto.tipoTemporarioControlado();
         this.prescricaoMedica = dto.prescricaoMedica();
@@ -71,6 +74,7 @@ public class AcompanhamentoEntity {
         Optional.ofNullable(dados.medicacao()).ifPresent(this::setMedicacao);
         Optional.ofNullable(dados.statusEvento()).ifPresent(this::setStatusEvento);
         Optional.ofNullable(dados.dataAcompanhamento()).ifPresent(this::setDataAcompanhamento);
+        Optional.ofNullable(dados.notificacao()).ifPresent(this::setNotificacao);
         Optional.ofNullable(dados.intervaloHora()).ifPresent(this::setIntervaloHora);
         Optional.ofNullable(dados.tipoTemporarioControlado()).ifPresent(this::setTipoTemporarioControlado);
         Optional.ofNullable(dados.prescricaoMedica()).ifPresent(this::setPrescricaoMedica);
