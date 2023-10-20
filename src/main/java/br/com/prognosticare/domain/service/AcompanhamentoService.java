@@ -142,4 +142,13 @@ public class AcompanhamentoService {
 
         return acompanhamentos;
     }
+
+    public List<DtoDetalheAcompanhamento> listarIntervaloData(UUID id, DtoData dto) {
+        var pessoa = pessoaService.get(id).orElse(null);
+        if(pessoa!=null){
+            var acompanhamentos = acompanhamentoRepository.findByDateBetween(pessoa, dto.dataInicial(), dto.dataFinal());
+            return acompanhamentos;
+        }
+        return null;
+    }
 }

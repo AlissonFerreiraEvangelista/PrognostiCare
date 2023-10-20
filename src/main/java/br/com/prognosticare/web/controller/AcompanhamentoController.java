@@ -76,5 +76,14 @@ public class AcompanhamentoController {
         return ResponseEntity.status(HttpStatus.OK).body(acompanhamentos);
     }
 
+    @GetMapping("/list-between/{id}")
+    public ResponseEntity <List<DtoDetalheAcompanhamento>> listarIntervaloData(@PathVariable(value = "id") UUID id, @RequestBody @Valid DtoData dto){
+        var acompanhamentos = acompanhamentoService.listarIntervaloData(id, dto);
+        if(acompanhamentos==null){
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        return ResponseEntity.status(HttpStatus.OK).body(acompanhamentos);
+    }
+
 
 }

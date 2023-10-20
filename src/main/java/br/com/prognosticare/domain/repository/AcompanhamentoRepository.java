@@ -5,8 +5,6 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
-import org.hibernate.LockMode;
-import org.hibernate.LockOptions;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Lock;
 import org.springframework.data.jpa.repository.Query;
@@ -16,8 +14,7 @@ import org.springframework.data.repository.query.Param;
 import br.com.prognosticare.domain.entity.acompanhamento.AcompanhamentoEntity;
 import br.com.prognosticare.domain.entity.acompanhamento.DtoDetalheAcompanhamento;
 import br.com.prognosticare.domain.entity.pessoa.PessoaEntity;
-import br.com.prognosticare.domain.enums.Status;
-import jakarta.persistence.LockModeType;
+
 import jakarta.persistence.QueryHint;
 
 public interface AcompanhamentoRepository extends JpaRepository<AcompanhamentoEntity, UUID> {
@@ -44,6 +41,10 @@ public interface AcompanhamentoRepository extends JpaRepository<AcompanhamentoEn
 
      @Query(value = "FROM AcompanhamentoEntity a WHERE a.pessoa = :pessoa AND a.statusEvento = 'ABERTO' AND a.dataAcompanhamento BETWEEN :dataAcompanhamento AND :finaldia")
     List<DtoDetalheAcompanhamento> findByDataAcompanhamentoIgual(@Param("pessoa")PessoaEntity pessoa, @Param("dataAcompanhamento")LocalDateTime dataAcompanhamento,@Param("finaldia") LocalDateTime finaldia);
+
+
+    @Query(value = "FROM AcompanhamentoEntity a WHERE a.pessoa = ?1 AND a.dataAcompanhamento BETWEEN ?2 AND ?3")
+    List<DtoDetalheAcompanhamento> findByDateBetween(PessoaEntity pessoa, LocalDateTime dataInicial, LocalDateTime dataFinal);
      
     
 
