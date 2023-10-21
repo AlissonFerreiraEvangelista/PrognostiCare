@@ -77,6 +77,7 @@ public class AcompanhamentoController {
     }
 
     @GetMapping("/list-between/{id}")
+    @Operation(summary= "Lista os Acompanhamentos no intervalo de Data Inicial e Data Final")
     public ResponseEntity <List<DtoDetalheAcompanhamento>> listarIntervaloData(@PathVariable(value = "id") UUID id, @RequestBody @Valid DtoData dto){
         var acompanhamentos = acompanhamentoService.listarIntervaloData(id, dto);
         if(acompanhamentos==null){

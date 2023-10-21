@@ -8,13 +8,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import br.com.prognosticare.domain.entity.acompanhamento.DtoDetalheAcompanhamento;
-import br.com.prognosticare.domain.entity.agenda.DtoCadastroAgenda;
-import br.com.prognosticare.domain.entity.agenda.DtoDetalheAgenda;
-import br.com.prognosticare.domain.entity.agenda.DtoStatus;
+
+import br.com.prognosticare.domain.entity.agenda.*;
 import br.com.prognosticare.domain.entity.dto.DtoData;
-import br.com.prognosticare.domain.enums.Especialidade;
-import br.com.prognosticare.domain.enums.TipoExame;
+import br.com.prognosticare.domain.enums.*;
 import br.com.prognosticare.domain.service.AgendaService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
@@ -101,9 +98,17 @@ public class AgendaController {
     }
 
     @GetMapping("/between-days/{id}")
-    @Operation(summary= "Lista os Agendamentos no intervalo de datas")
-    public ResponseEntity<List<DtoDetalheAgenda>> listarEntredatas(){
-        return null;
+    @Operation(summary= "Lista os Acompanhamentos no intervalo de Data Inicial e Data Final")
+    public ResponseEntity<List<DtoDetalheAgenda>> listarIntervaloData(@PathVariable(value = "id") UUID id, @RequestBody @Valid DtoData dto){
+        var agendamentos = agendaService.listarIntervaloData(id, dto);
+        if(agendamentos==null){
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        return ResponseEntity.status(HttpStatus.OK).body(agendamentos);
+
     }
+
+
+
 
 }

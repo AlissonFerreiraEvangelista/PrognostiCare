@@ -17,6 +17,7 @@ import br.com.prognosticare.domain.enums.TipoExame;
 import br.com.prognosticare.domain.repository.AgendaRepository;
 import br.com.prognosticare.infra.exception.ValidacaoException;
 import jakarta.transaction.Transactional;
+import jakarta.validation.Valid;
 
 
 
@@ -134,5 +135,15 @@ public class AgendaService {
             return null;
         }
         return agendamentos;
+    }
+
+
+    public List<DtoDetalheAgenda> listarIntervaloData(UUID id, DtoData dto) {
+        var pessoa = pessoaService.get(id).orElse(null);
+        if(pessoa != null){
+            var agendamentos = agendaRepository.findByDataBetween(pessoa, dto.dataInicial(), dto.dataFinal());
+            return agendamentos;
+        }
+        return null;
     }
 }

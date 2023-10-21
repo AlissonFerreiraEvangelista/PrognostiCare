@@ -46,6 +46,9 @@ public interface AgendaRepository extends JpaRepository<AgendaEntity, UUID> {
     @Query(value = "FROM AgendaEntity a WHERE a.pessoa =?1 AND a.statusEvento = 'ABERTO' AND a.dataAgenda BETWEEN ?2 AND ?3")
     List<DtoDetalheAgenda> findByDataAgendamentoIgual(PessoaEntity pessoa, LocalDateTime dataInicial, LocalDateTime finaldia);
 
+    @Query(value = "FROM AgendaEntity a WHERE a.pessoa = ?1 AND a.dataAgenda BETWEEN ?2 AND ?3")
+    List<DtoDetalheAgenda> findByDataBetween(PessoaEntity pessoa, LocalDateTime dataInicial, LocalDateTime dataFinal);
+
 
     
     
