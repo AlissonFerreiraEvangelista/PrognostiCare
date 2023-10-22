@@ -1,5 +1,6 @@
 package br.com.prognosticare.domain.service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
@@ -105,24 +106,24 @@ public class AgendaService {
     }
 
 
-    public List<DtoDetalheAgenda> listaAgendamentoData(UUID id, DtoData dto, String filtro) {
+    public List<DtoDetalheAgenda> listaAgendamentoData(UUID id, LocalDateTime dataInicial, String filtro) {
         var pessoa = pessoaService.get(id).orElse(null);
         List<DtoDetalheAgenda> agendamentos;
 
-        if(pessoa == null || dto.dataInicial() == null){
+        if(pessoa == null || dataInicial == null){
             throw new ValidacaoException("Parâmetros inválidos para listaAcompanhamentoData");
         }
 
-        if(filtro.equalsIgnoreCase("maior") && dto.dataInicial() != null){
-            agendamentos = agendaRepository.findByDataAgendamentoMaior(pessoa, dto.dataInicial().plusDays(1));
+        if(filtro.equalsIgnoreCase("maior") && (dataInicial != null)){
+            agendamentos = agendaRepository.findByDataAgendamentoMaior(pessoa, dataInicial.plusDays(1));
 
-        }else if(filtro.equalsIgnoreCase("menor") && dto.dataInicial() != null){
+        }else if(filtro.equalsIgnoreCase("menor") && dataInicial != null){
 
-            agendamentos = agendaRepository.findByDataAgendamentoMenor(pessoa, dto.dataInicial().minusDays(1));
+            agendamentos = agendaRepository.findByDataAgendamentoMenor(pessoa, dataInicial.minusDays(1));
 
-        }else if(filtro.equalsIgnoreCase("igual") && dto.dataInicial() != null){
+        }else if(filtro.equalsIgnoreCase("igual") && dataInicial != null){
 
-            agendamentos = agendaRepository.findByDataAgendamentoIgual(pessoa, dto.dataInicial().minusHours(4), dto.dataInicial().plusHours(5));
+            agendamentos = agendaRepository.findByDataBetween(pessoa, dataInicial.minusHours(4), dataInicial.plusHours(5));
         }else{
             throw new ValidacaoException("Erro no Filtro listaAgendamentoData");
         }

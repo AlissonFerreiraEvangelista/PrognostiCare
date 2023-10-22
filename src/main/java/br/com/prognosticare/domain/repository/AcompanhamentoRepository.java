@@ -36,11 +36,8 @@ public interface AcompanhamentoRepository extends JpaRepository<AcompanhamentoEn
     @Query(value = "FROM AcompanhamentoEntity a WHERE a.pessoa = :pessoa AND a.dataAcompanhamento >= :dataAcompanhamento AND a.statusEvento ='ABERTO'")
     List<DtoDetalheAcompanhamento> findByDataAcompanhamentoMaior(@Param("pessoa")PessoaEntity pessoa, @Param("dataAcompanhamento")LocalDateTime dataAcompanhamento);
 
-     @Query(value = "FROM AcompanhamentoEntity a WHERE a.pessoa = :pessoa AND a.dataAcompanhamento <= :dataAcompanhamento AND a.statusEvento ='ABERTO'")
+     @Query(value = "FROM AcompanhamentoEntity a WHERE a.pessoa = :pessoa AND a.dataAcompanhamento <= :dataAcompanhamentos")
     List<DtoDetalheAcompanhamento> findByDataAcompanhamentoMenor(@Param("pessoa")PessoaEntity pessoa, @Param("dataAcompanhamento")LocalDateTime dataAcompanhamento);
-
-     @Query(value = "FROM AcompanhamentoEntity a WHERE a.pessoa = :pessoa AND a.statusEvento = 'ABERTO' AND a.dataAcompanhamento BETWEEN :dataAcompanhamento AND :finaldia")
-    List<DtoDetalheAcompanhamento> findByDataAcompanhamentoIgual(@Param("pessoa")PessoaEntity pessoa, @Param("dataAcompanhamento")LocalDateTime dataAcompanhamento,@Param("finaldia") LocalDateTime finaldia);
 
 
     @Query(value = "FROM AcompanhamentoEntity a WHERE a.pessoa = ?1 AND a.dataAcompanhamento BETWEEN ?2 AND ?3")

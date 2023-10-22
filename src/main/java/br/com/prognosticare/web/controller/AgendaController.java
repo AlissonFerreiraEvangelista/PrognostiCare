@@ -1,9 +1,11 @@
 package br.com.prognosticare.web.controller;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -89,8 +91,11 @@ public class AgendaController {
 
     @GetMapping("/list-day/{id}")
     @Operation(summary= "Lista os Agendamentos de uma pessoa com base na data")
-    public ResponseEntity<List<DtoDetalheAgenda>>listaAgendamentoData(@PathVariable (value = "id") UUID id, @RequestBody @Valid DtoData dto, @RequestParam String filtro){
-        var agendamentos = agendaService.listaAgendamentoData(id, dto, filtro);
+    public ResponseEntity<List<DtoDetalheAgenda>>listaAgendamentoData(@PathVariable (value = "id") UUID id, 
+        @RequestParam String filtro,
+        @RequestParam @DateTimeFormat(pattern = "dd/MM/yyyy hh:mm:ss a") LocalDateTime dataInicial){
+            
+        var agendamentos = agendaService.listaAgendamentoData(id, dataInicial, filtro);
         if(agendamentos==null){
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
