@@ -71,11 +71,10 @@ public class AgendaEntity {
 
     }
 
-     public void atualizaInformacao(DtoDetalheAgenda dados) {
+     public void atualizaInformacao(DtoAtualizaAgenda dados) {
         Optional.ofNullable(dados.dataAgenda()).ifPresent(this::setDataAgenda);
         Optional.ofNullable(dados.descricao()).ifPresent(this::setDescricao);
         Optional.ofNullable(dados.local()).ifPresent(this::setLocal);
-        Optional.ofNullable(dados.statusEvento()).ifPresent(this::setStatusEvento);
         Optional.ofNullable(dados.observacao()).ifPresent(this::setObservacao);
         Optional.ofNullable(dados.especialista()).ifPresent(this::setEspecialista);
         Optional.ofNullable(dados.tipoExame()).ifPresent(this::setTipoExame);

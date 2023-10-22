@@ -40,7 +40,7 @@ public class AgendaController {
 
     @PutMapping("/update")
     @Operation(summary= "Atualiza a Agenda de uma pessoa")
-    public ResponseEntity<DtoDetalheAgenda>atualizaAgenda(@RequestBody @Valid DtoDetalheAgenda dto){
+    public ResponseEntity<DtoDetalheAgenda>atualizaAgenda(@RequestBody @Valid DtoAtualizaAgenda dto){
         var agenda = agendaService.getReferenceById(dto);
         return ResponseEntity.status(HttpStatus.OK).body(new DtoDetalheAgenda(agenda));
     }

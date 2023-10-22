@@ -7,17 +7,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 
-import br.com.prognosticare.domain.entity.agenda.AgendaEntity;
-import br.com.prognosticare.domain.entity.agenda.DtoCadastroAgenda;
-import br.com.prognosticare.domain.entity.agenda.DtoDetalheAgenda;
-import br.com.prognosticare.domain.entity.agenda.DtoStatus;
+import br.com.prognosticare.domain.entity.agenda.*;
 import br.com.prognosticare.domain.entity.dto.DtoData;
-import br.com.prognosticare.domain.enums.Especialidade;
-import br.com.prognosticare.domain.enums.TipoExame;
+import br.com.prognosticare.domain.enums.*;
 import br.com.prognosticare.domain.repository.AgendaRepository;
 import br.com.prognosticare.infra.exception.ValidacaoException;
 import jakarta.transaction.Transactional;
-import jakarta.validation.Valid;
+
 
 
 
@@ -55,8 +51,7 @@ public class AgendaService {
         return agendaRepository.save(agenda);
     }
 
-
-    public AgendaEntity getReferenceById( DtoDetalheAgenda dto) {
+    public AgendaEntity getReferenceById( DtoAtualizaAgenda dto) {
         var agenda = agendaRepository.getReferenceById(dto.id());
         if (agenda == null){
             throw new ValidacaoException("Agenda não Encontrada!!");

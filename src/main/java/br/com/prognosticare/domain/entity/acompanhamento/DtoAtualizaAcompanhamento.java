@@ -20,9 +20,6 @@ public record DtoAtualizaAcompanhamento (
         String medicacao,
 
         @NotNull
-        Status statusEvento,
-
-        @NotNull
         @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy hh:mm:ss a")
         LocalDateTime dataAcompanhamento,
 

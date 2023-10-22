@@ -72,7 +72,6 @@ public class AcompanhamentoEntity {
         Optional.ofNullable(dados.tipoAcompanhamento()).ifPresent(this::setTipoAcompanhamento);
         Optional.ofNullable(dados.intervaloHora()).ifPresent(this::setIntervaloHora);
         Optional.ofNullable(dados.medicacao()).ifPresent(this::setMedicacao);
-        Optional.ofNullable(dados.statusEvento()).ifPresent(this::setStatusEvento);
         Optional.ofNullable(dados.dataAcompanhamento()).ifPresent(this::setDataAcompanhamento);
         Optional.ofNullable(dados.notificacao()).ifPresent(this::setNotificacao);
         Optional.ofNullable(dados.intervaloHora()).ifPresent(this::setIntervaloHora);
