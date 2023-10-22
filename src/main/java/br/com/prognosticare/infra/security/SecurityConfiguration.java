@@ -35,17 +35,12 @@ public class SecurityConfiguration {
                         .requestMatchers(HttpMethod.POST, "/register-person/save").permitAll()
                         .requestMatchers(HttpMethod.POST, "/register-person/public/forgot-password").permitAll()
                         .requestMatchers(HttpMethod.PUT, "/register-person/public/change-password/**").permitAll()
-                        .requestMatchers("/email/**").permitAll()
-                        .requestMatchers(HttpMethod.POST,"/register-person/add-dependent").permitAll()
-                        .requestMatchers(HttpMethod.GET,"/register-person/list-dependents").permitAll()
                         .requestMatchers("/notification").permitAll()
-                        .requestMatchers("/to-accompany/**").permitAll()
-                        .requestMatchers("/to-scheduling/**").permitAll()
                         .requestMatchers("/vaccines/**").permitAll()
                         .anyRequest().authenticated())
                 .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)
-                .httpBasic(Customizer.withDefaults())
-                .logout(Customizer.withDefaults());
+                .httpBasic(Customizer.withDefaults());
+               // .logout(Customizer.withDefaults());
                 
         return httpSecurity.build();
 

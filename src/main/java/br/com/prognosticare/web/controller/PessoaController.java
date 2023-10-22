@@ -17,18 +17,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import br.com.prognosticare.domain.entity.dto.DtoSenha;
-import br.com.prognosticare.domain.entity.dto.DtoSenhaRestInput;
-import br.com.prognosticare.domain.entity.pessoa.DtoAtualizaPessoa;
-import br.com.prognosticare.domain.entity.pessoa.DtoCadastroDependente;
-import br.com.prognosticare.domain.entity.pessoa.DtoCadastroPessoa;
-import br.com.prognosticare.domain.entity.pessoa.DtoDependente;
-import br.com.prognosticare.domain.entity.pessoa.DtoDetalheDependente;
-import br.com.prognosticare.domain.entity.pessoa.DtoDetalhePessoa;
-import br.com.prognosticare.domain.entity.pessoa.PessoaEntity;
+import br.com.prognosticare.domain.entity.dto.*;
+import br.com.prognosticare.domain.entity.pessoa.*;
 import br.com.prognosticare.domain.repository.PessoaRepository;
-import br.com.prognosticare.domain.service.EmailService;
-import br.com.prognosticare.domain.service.PessoaService;
+import br.com.prognosticare.domain.service.*;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import jakarta.validation.Valid;
@@ -62,10 +54,8 @@ public class PessoaController {
 
     @PutMapping("/update")
     @Operation(summary = "Atualiza as informações da Pessoa")
-    @Transactional
     public ResponseEntity<DtoDetalhePessoa> atualizaPessoa(@RequestBody @Valid DtoAtualizaPessoa dto) {
         var pessoa = pessoaService.getReferenceById(dto);
-        pessoa.atualizarInformacoes(dto);
         return ResponseEntity.ok(new DtoDetalhePessoa(pessoa));
     }
 
@@ -121,6 +111,14 @@ public class PessoaController {
         return ResponseEntity.created(uri).body(dependente);
     }
 
+    @PutMapping("/update-dependent")
+    @Operation(summary = "Atualiza as informações do dependent")
+    @Transactional
+    public ResponseEntity<DtoDetalheDependente> atualizaDependente(@RequestBody @Valid DtoAtualizaDependente dto) {
+        var dependent = pessoaService.getReferenceById(dto);
+        return ResponseEntity.ok(new DtoDetalheDependente(dependent));
+    }
+
     @GetMapping("/list-dependents/{id}")
     @Operation(summary = "Lista os dependentes de uma pessoa responsável")
     public ResponseEntity<List<DtoDependente>> listarDependentes(@PathVariable(value = "id") @Valid UUID id) {
@@ -142,6 +140,17 @@ public class PessoaController {
 
         pessoaService.setTokenFCM(id, tokenFCM.tokenFCM());
         return ResponseEntity.ok().body("TokenFCM Cadastrado!!");
+
+    }
+
+    @PutMapping("/disable/{pessoa_id}")
+    public ResponseEntity<?> inativaPessoa(@PathVariable(value = "pessoa_id") UUID id){
+
+        var pessoa = pessoaService.inativaPessoa(id);
+        if(pessoa == false){
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).body("Pessoa Excluida com Sucesso!");
 
     }
 }

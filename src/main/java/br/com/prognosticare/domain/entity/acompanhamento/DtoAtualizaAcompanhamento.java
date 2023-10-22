@@ -13,16 +13,22 @@ import java.util.UUID;
 public record DtoAtualizaAcompanhamento (
         @NotNull
         UUID id,
+
         @NotNull
         TipoAcompanhamento tipoAcompanhamento,
+
         String medicacao,
-        @NotNull
-        Status statusEvento,
+
         @NotNull
         @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy hh:mm:ss a")
         LocalDateTime dataAcompanhamento,
+
+        Boolean notificacao,
+
         int intervaloHora,
+
         TipoTemporarioControlado tipoTemporarioControlado,
+
         String prescricaoMedica
 ){
 }

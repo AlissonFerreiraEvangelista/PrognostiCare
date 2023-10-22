@@ -14,6 +14,7 @@ import com.google.firebase.messaging.Notification;
 import br.com.prognosticare.domain.entity.agenda.AgendaEntity;
 import br.com.prognosticare.domain.enums.Status;
 import br.com.prognosticare.domain.service.AgendaService;
+import br.com.prognosticare.infra.exception.ValidacaoException;
 
 @Component
 public class AgendaSchedule {
@@ -37,10 +38,12 @@ public class AgendaSchedule {
             int intervaloData = agendaEntity.getIntervaloData();
             LocalDateTime dataNotificacao = dataAgenda.minusDays(intervaloData);
 
-            if(agendaEntity.getStatusEvento() == Status.ABERTO && dataNotificacao.toLocalDate().isEqual(now.toLocalDate()) && agendaEntity.getNotificacao() == false){
-                System.out.println("Agendamento Marcado para: " + agendaEntity.getDataAgenda());
+            if(agendaEntity.getStatusEvento() == Status.ABERTO
+                && dataNotificacao.toLocalDate().isEqual(now.toLocalDate()) 
+                && Boolean.TRUE.equals(agendaEntity.getNotificacao()) ){
+
                 sendNotification(agendaEntity);
-                agendaEntity.atualizaAgenda();
+                agendaEntity.atualizaNotificacao();
                 aService.save(agendaEntity);
             }
 
@@ -52,19 +55,24 @@ public class AgendaSchedule {
 
         String tokenFCM = agendaEntity.getPessoa().getTokenFCM();
 
-        Message message = Message.builder()
-                .setNotification(Notification.builder()
-                        .setTitle("Lembrete de Compromisso!")
-                        .setBody("Sua Consulta é: " + agendaEntity.getDataAgenda())
-                        .build())
-                .setToken(tokenFCM)
-                .build();
+        if(tokenFCM != null && !tokenFCM.isEmpty()){
 
-        try {
-            firebaseMessaging.send(message);
-        } catch (FirebaseMessagingException e) {
-            e.printStackTrace();
+            Message message = Message.builder()
+                    .setNotification(Notification.builder()
+                            .setTitle("Lembrete de Compromisso!")
+                            .setBody("Sua Consulta é: " + agendaEntity.getDataAgenda())
+                            .build())
+                    .setToken(tokenFCM)
+                    .build();
+            try {
+                firebaseMessaging.send(message);
+            } catch (FirebaseMessagingException e) {
+                e.printStackTrace();
+            }
+        }else{
+            throw new ValidacaoException("Erro no AgendaSchedule");
         }
+
     }
     
 }

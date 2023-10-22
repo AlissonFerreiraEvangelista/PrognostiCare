@@ -15,7 +15,9 @@ public record DtoCadastroAcompanhamento(
 
                 @NotNull @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy hh:mm:ss a") LocalDateTime dataAcompanhamento,
 
-                Integer intervaloHora,
+        Boolean notificacao,
+        
+        Integer intervaloHora,
 
                 @NotNull TipoTemporarioControlado tipoTemporarioControlado,
 

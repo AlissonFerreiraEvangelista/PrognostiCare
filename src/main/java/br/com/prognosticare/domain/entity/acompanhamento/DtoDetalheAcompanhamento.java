@@ -26,13 +26,21 @@ public record DtoDetalheAcompanhamento(
         @JsonProperty(defaultValue = "0")
         Integer intervaloHora,
 
+        Boolean notificacao,
+
         TipoTemporarioControlado tipoTemporarioControlado,
 
         String prescricaoMedica
 ) {
     public DtoDetalheAcompanhamento(AcompanhamentoEntity acompanhamentoEntity){
-        this(acompanhamentoEntity.getId(), acompanhamentoEntity.getTipoAcompanhamento(),acompanhamentoEntity.getMedicacao(),acompanhamentoEntity.getStatusEvento(), acompanhamentoEntity.getDataAcompanhamento(),
-                acompanhamentoEntity.getIntervaloHora(), acompanhamentoEntity.getTipoTemporarioControlado(),acompanhamentoEntity.getPrescricaoMedica()
+        this(acompanhamentoEntity.getId(),
+         acompanhamentoEntity.getTipoAcompanhamento(),
+         acompanhamentoEntity.getMedicacao(),
+         acompanhamentoEntity.getStatusEvento(), 
+         acompanhamentoEntity.getDataAcompanhamento(),
+                acompanhamentoEntity.getIntervaloHora(), 
+                acompanhamentoEntity.getNotificacao(),
+                acompanhamentoEntity.getTipoTemporarioControlado(),acompanhamentoEntity.getPrescricaoMedica()
         );
     }
 }

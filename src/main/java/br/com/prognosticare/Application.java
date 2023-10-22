@@ -30,10 +30,8 @@ public class Application {
 				new ClassPathResource("firebase-service-account.json").getInputStream());
 
 		FirebaseOptions firebaseOptions = FirebaseOptions.builder()
-			.setCredentials(googleCredentials).build();
-		FirebaseApp app = FirebaseApp.initializeApp(firebaseOptions, "API PrognostiCare");
-		return FirebaseMessaging.getInstance(app);
-
+				.setCredentials(googleCredentials).build();
+		return FirebaseApp.initializeApp(firebaseOptions, "API PrognostiCare");
 	}
 
 

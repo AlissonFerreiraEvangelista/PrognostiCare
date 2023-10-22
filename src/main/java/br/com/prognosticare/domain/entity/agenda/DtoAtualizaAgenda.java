@@ -5,12 +5,12 @@ import java.util.UUID;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
-import br.com.prognosticare.domain.enums.*;
+import br.com.prognosticare.domain.enums.Especialidade;
+import br.com.prognosticare.domain.enums.TipoExame;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
-public record DtoDetalheAgenda(
-
+public record DtoAtualizaAgenda(
     UUID id,
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy hh:mm:ss a")
@@ -18,8 +18,6 @@ public record DtoDetalheAgenda(
 
     @NotBlank
     String local,
-
-    Status statusEvento,
 
     String descricao,
 
@@ -32,24 +30,7 @@ public record DtoDetalheAgenda(
     Especialidade especialista,
 
     @NotNull
-    TipoExame tipoExame    
-
+    TipoExame tipoExame   
 ) {
-
-    public DtoDetalheAgenda(AgendaEntity agenda){
-        this(
-            agenda.getId(),
-            agenda.getDataAgenda(),
-            agenda.getLocal(),
-            agenda.getStatusEvento(),
-            agenda.getDescricao(),
-            agenda.getIntervaloData(),
-            agenda.getNotificacao(),
-            agenda.getObservacao(),
-            agenda.getEspecialista(),
-            agenda.getTipoExame()
-        );
-
-    }
     
 }
