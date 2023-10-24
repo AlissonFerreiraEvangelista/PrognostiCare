@@ -135,7 +135,8 @@ public class PessoaController {
     @PutMapping("/tokenFCM/{id}")
     @Transactional
     @ApiResponse(description = "Token FCM")
-    public ResponseEntity<?> tokenFCM(@PathVariable(value = "id") @Valid UUID id, @RequestBody @Valid DtoTokenFCM tokenFCM) {
+    public ResponseEntity<?> tokenFCM(@PathVariable(value = "id") @Valid UUID id,
+            @RequestBody @Valid DtoTokenFCM tokenFCM) {
 
         pessoaService.setTokenFCM(id, tokenFCM.tokenFCM());
         return ResponseEntity.ok().body("TokenFCM Cadastrado!!");
@@ -143,13 +144,24 @@ public class PessoaController {
     }
 
     @PutMapping("/disable/{pessoa_id}")
-    public ResponseEntity<?> inativaPessoa(@PathVariable(value = "pessoa_id") UUID id){
+    public ResponseEntity<?> inativaPessoa(@PathVariable(value = "pessoa_id") UUID id) {
 
         var pessoa = pessoaService.inativaPessoa(id);
-        if(pessoa == false){
+        if (pessoa == false) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         return ResponseEntity.status(HttpStatus.NO_CONTENT).body("Pessoa Excluida com Sucesso!");
 
     }
+
+    @GetMapping("/profiles/{pessoa_id}")
+    public ResponseEntity<List<DtoPessoaComDependenteDto>> findResponsavelComDependentes(
+            @PathVariable(value = "pessoa_id") UUID id) {
+        List<DtoPessoaComDependenteDto> listaProfile = pessoaService.findResponsavelComDependentes(id);
+        if (listaProfile == null || listaProfile.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        return ResponseEntity.status(HttpStatus.OK).body(listaProfile);
+    }
+
 }

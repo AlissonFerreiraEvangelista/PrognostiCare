@@ -154,5 +154,14 @@ public class PessoaService {
         return true;
     }
 
+    public List<DtoPessoaComDependenteDto>findResponsavelComDependentes(UUID id){
+
+        var listaPessoaDependentes = pessoaRepository.findResponsavelComDependentes(id);
+        if(listaPessoaDependentes.isEmpty()){
+            return null;
+        }
+        return listaPessoaDependentes;
+    }
+
    
 }
