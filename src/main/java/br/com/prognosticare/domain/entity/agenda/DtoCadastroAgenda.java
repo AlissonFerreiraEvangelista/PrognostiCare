@@ -23,6 +23,8 @@ public record DtoCadastroAgenda(
 
     Integer intervaloData,
 
+    Boolean notificacao,
+
     Especialidade especialista,
 
     @NotNull

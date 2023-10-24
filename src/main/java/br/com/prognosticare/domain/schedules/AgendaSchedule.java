@@ -45,6 +45,7 @@ public class AgendaSchedule {
                 sendNotification(agendaEntity);
                 agendaEntity.atualizaNotificacao();
                 aService.save(agendaEntity);
+                System.out.println("Notificação foi enviada Sucesso!");
             }
 
         }

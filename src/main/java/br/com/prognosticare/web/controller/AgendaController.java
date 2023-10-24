@@ -104,8 +104,11 @@ public class AgendaController {
 
     @GetMapping("/between-days/{id}")
     @Operation(summary= "Lista os Acompanhamentos no intervalo de Data Inicial e Data Final")
-    public ResponseEntity<List<DtoDetalheAgenda>> listarIntervaloData(@PathVariable(value = "id") UUID id, @RequestBody @Valid DtoData dto){
-        var agendamentos = agendaService.listarIntervaloData(id, dto);
+    public ResponseEntity<List<DtoDetalheAgenda>> listarIntervaloData(@PathVariable(value = "id") UUID id,
+    @RequestParam @DateTimeFormat(pattern = "dd/MM/yyyy hh:mm:ss a") LocalDateTime dataInicia,
+    @RequestParam @DateTimeFormat(pattern = "dd/MM/yyyy hh:mm:ss a") LocalDateTime dataFinal
+    ){
+        var agendamentos = agendaService.listarIntervaloData(id, dataInicia, dataFinal);
         if(agendamentos==null){
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }

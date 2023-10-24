@@ -52,7 +52,7 @@ public class AgendaEntity {
     @Enumerated(EnumType.STRING)
     private TipoExame tipoExame;
 
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name = "pessoa_id")
     private PessoaEntity pessoa;
 
@@ -63,7 +63,7 @@ public class AgendaEntity {
         this.descricao= dto.descricao();
         this.local= dto.local();
         this.statusEvento= Status.ABERTO;
-        this.notificacao = false;
+        this.notificacao = dto.notificacao();
         this.intervaloData = dto.intervaloData();
         this.observacao= dto.observacao();
         this.especialista= dto.especialista();

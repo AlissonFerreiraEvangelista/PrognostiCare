@@ -134,10 +134,10 @@ public class AgendaService {
     }
 
 
-    public List<DtoDetalheAgenda> listarIntervaloData(UUID id, DtoData dto) {
+    public List<DtoDetalheAgenda> listarIntervaloData(UUID id, LocalDateTime dataInicial, LocalDateTime dataFinal) {
         var pessoa = pessoaService.get(id).orElse(null);
         if(pessoa != null){
-            var agendamentos = agendaRepository.findByDataBetween(pessoa, dto.dataInicial(), dto.dataFinal());
+            var agendamentos = agendaRepository.findByDataBetween(pessoa, dataInicial, dataFinal);
             return agendamentos;
         }
         return null;
