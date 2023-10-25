@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.*;
 
 
 import br.com.prognosticare.domain.entity.agenda.*;
-import br.com.prognosticare.domain.entity.dto.DtoData;
 import br.com.prognosticare.domain.enums.*;
 import br.com.prognosticare.domain.service.AgendaService;
 import io.swagger.v3.oas.annotations.Operation;

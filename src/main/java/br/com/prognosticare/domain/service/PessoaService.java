@@ -154,14 +154,13 @@ public class PessoaService {
         return true;
     }
 
-    public List<DtoPessoaComDependenteDto>findResponsavelComDependentes(UUID id){
 
-        var listaPessoaDependentes = pessoaRepository.findResponsavelComDependentes(id);
-        if(listaPessoaDependentes.isEmpty()){
-            return null;
-        }
-        return listaPessoaDependentes;
+    public List<PessoaEntity> listProfiles(UUID id) {
+
+       return pessoaRepository.findBypessoa(id);
     }
+
+    
 
    
 }

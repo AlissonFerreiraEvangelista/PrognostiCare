@@ -5,7 +5,6 @@ import br.com.prognosticare.domain.entity.acompanhamento.DtoAtualizaAcompanhamen
 import br.com.prognosticare.domain.entity.acompanhamento.DtoCadastroAcompanhamento;
 import br.com.prognosticare.domain.entity.acompanhamento.DtoDetalheAcompanhamento;
 import br.com.prognosticare.domain.entity.agenda.DtoStatus;
-import br.com.prognosticare.domain.entity.dto.DtoData;
 import br.com.prognosticare.domain.service.AcompanhamentoService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;

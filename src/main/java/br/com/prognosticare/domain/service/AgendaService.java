@@ -9,7 +9,6 @@ import org.springframework.stereotype.Service;
 
 
 import br.com.prognosticare.domain.entity.agenda.*;
-import br.com.prognosticare.domain.entity.dto.DtoData;
 import br.com.prognosticare.domain.enums.*;
 import br.com.prognosticare.domain.repository.AgendaRepository;
 import br.com.prognosticare.infra.exception.ValidacaoException;

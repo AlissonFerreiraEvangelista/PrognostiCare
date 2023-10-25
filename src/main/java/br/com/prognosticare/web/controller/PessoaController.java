@@ -144,6 +144,7 @@ public class PessoaController {
     }
 
     @PutMapping("/disable/{pessoa_id}")
+    @ApiResponse(description = "Inativa uma Pessoa ou Dependente")
     public ResponseEntity<?> inativaPessoa(@PathVariable(value = "pessoa_id") UUID id) {
 
         var pessoa = pessoaService.inativaPessoa(id);
@@ -155,13 +156,17 @@ public class PessoaController {
     }
 
     @GetMapping("/profiles/{pessoa_id}")
-    public ResponseEntity<List<DtoPessoaComDependenteDto>> findResponsavelComDependentes(
-            @PathVariable(value = "pessoa_id") UUID id) {
-        List<DtoPessoaComDependenteDto> listaProfile = pessoaService.findResponsavelComDependentes(id);
-        if (listaProfile == null || listaProfile.isEmpty()) {
+    public ResponseEntity<List<PessoaEntity>> listProfiles(@PathVariable(value = "pessoa_id") UUID id) {
+
+        var pessoa = pessoaService.listProfiles(id);
+        if (pessoa.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-        return ResponseEntity.status(HttpStatus.OK).body(listaProfile);
+        return ResponseEntity.status(HttpStatus.OK).body(pessoa);
+
     }
+
+
+    
 
 }

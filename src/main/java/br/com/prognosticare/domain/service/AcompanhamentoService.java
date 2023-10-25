@@ -9,7 +9,6 @@ import java.util.UUID;
 
 import br.com.prognosticare.domain.entity.acompanhamento.*;
 import br.com.prognosticare.domain.entity.agenda.DtoStatus;
-import br.com.prognosticare.domain.entity.dto.DtoData;
 import jakarta.persistence.LockModeType;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
