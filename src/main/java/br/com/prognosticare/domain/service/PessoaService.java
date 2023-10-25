@@ -1,5 +1,6 @@
 package br.com.prognosticare.domain.service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -155,10 +156,23 @@ public class PessoaService {
     }
 
 
-    public List<PessoaEntity> listProfiles(UUID id) {
+    public List<DtoProfile> findDtoProfilesByDependente(UUID responsavelId) {
+    List<DtoProfileProjection> projections = pessoaRepository.findByDependente(responsavelId);
+    List<DtoProfile> dtoProfiles = new ArrayList<>();
 
-       return pessoaRepository.findBypessoa(id);
+    for (DtoProfileProjection projection : projections) {
+        DtoProfile dtoProfile = new DtoProfile(
+            projection.getPessoaId(),
+            projection.getNome(),
+            projection.getAtivo(),
+            projection.getTipoResponsavel()
+        );
+        dtoProfiles.add(dtoProfile);
     }
+
+    return dtoProfiles;
+}
+
 
     
 

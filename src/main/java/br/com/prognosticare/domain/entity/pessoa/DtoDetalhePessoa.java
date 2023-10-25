@@ -25,7 +25,7 @@ public record DtoDetalhePessoa(
         String password) {
     public DtoDetalhePessoa(PessoaEntity pessoa) {
         this(
-                pessoa.getPessoa_id(),
+                pessoa.getPessoaId(),
                 pessoa.getNome(),
                 pessoa.getCpf(),
                 pessoa.getDataNascimento(),

@@ -33,7 +33,7 @@ public class PessoaEntity implements UserDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private UUID pessoa_id;
+    private UUID pessoaId;
 
     private String nome;
 
