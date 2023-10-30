@@ -9,7 +9,6 @@ import java.util.UUID;
 
 import br.com.prognosticare.domain.entity.acompanhamento.*;
 import br.com.prognosticare.domain.entity.agenda.DtoStatus;
-import br.com.prognosticare.domain.entity.dto.DtoData;
 import jakarta.persistence.LockModeType;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
@@ -109,29 +108,29 @@ public class AcompanhamentoService {
         return null;
     }
 
-    public List<DtoDetalheAcompanhamento> listaAcompanhamentoData(UUID id, DtoData data, String filtro) {
+    public List<DtoDetalheAcompanhamento> listaAcompanhamentoData(UUID id, LocalDateTime dataInicial, String filtro) {
         var pessoa = pessoaService.get(id).orElse(null);
 
         List<DtoDetalheAcompanhamento> acompanhamentos;
 
-        if (pessoa == null || data.dataInicial() == null) {
+        if (pessoa == null || dataInicial == null) {
             throw new ValidacaoException("Parâmetros inválidos para listaAcompanhamentoData");
         }
 
-        if (filtro.equalsIgnoreCase("maior") && data.dataInicial() != null) {
+        if (filtro.equalsIgnoreCase("maior") && dataInicial != null) {
 
             acompanhamentos = acompanhamentoRepository.findByDataAcompanhamentoMaior(pessoa,
-                    data.dataInicial().plusDays(1));
+                    dataInicial.plusDays(1));
 
-        } else if (filtro.equalsIgnoreCase("menor") && data.dataInicial() != null) {
+        } else if (filtro.equalsIgnoreCase("menor") && dataInicial != null) {
 
             acompanhamentos = acompanhamentoRepository.findByDataAcompanhamentoMenor(pessoa,
-                    data.dataInicial().minusDays(1));
+                    dataInicial.minusDays(1));
 
-        } else if (filtro.equalsIgnoreCase("igual") && data.dataInicial() != null) {
+        } else if (filtro.equalsIgnoreCase("igual") && dataInicial != null) {
 
-            acompanhamentos = acompanhamentoRepository.findByDataAcompanhamentoIgual(pessoa,
-                    data.dataInicial().minusHours(4), data.dataInicial().plusHours(5));
+            acompanhamentos = acompanhamentoRepository.findByDateBetween(pessoa,
+                    dataInicial.minusHours(4), dataInicial.plusHours(5));
         } else {
             throw new ValidacaoException("Erro no Filtro listaAcompanhamentoData");
         }
@@ -143,10 +142,10 @@ public class AcompanhamentoService {
         return acompanhamentos;
     }
 
-    public List<DtoDetalheAcompanhamento> listarIntervaloData(UUID id, DtoData dto) {
+    public List<DtoDetalheAcompanhamento> listarIntervaloData(UUID id, LocalDateTime dataInicial, LocalDateTime dataFinal) {
         var pessoa = pessoaService.get(id).orElse(null);
         if(pessoa!=null){
-            var acompanhamentos = acompanhamentoRepository.findByDateBetween(pessoa, dto.dataInicial(), dto.dataFinal());
+            var acompanhamentos = acompanhamentoRepository.findByDateBetween(pessoa, dataInicial, dataFinal);
             return acompanhamentos;
         }
         return null;

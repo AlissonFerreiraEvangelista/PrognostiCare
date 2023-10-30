@@ -29,7 +29,6 @@ public class AgendaSchedule {
     @Scheduled(fixedRate = 60000)
     public void checkAgendamentos(){
        
-        LocalDateTime now = LocalDateTime.now();
         
         var agendamentos = aService.findAllByStatusEventoAberto();
 
@@ -37,14 +36,16 @@ public class AgendaSchedule {
             LocalDateTime dataAgenda = agendaEntity.getDataAgenda();
             int intervaloData = agendaEntity.getIntervaloData();
             LocalDateTime dataNotificacao = dataAgenda.minusDays(intervaloData);
+            LocalDateTime now = LocalDateTime.now();
 
-            if(agendaEntity.getStatusEvento() == Status.ABERTO
-                && dataNotificacao.toLocalDate().isEqual(now.toLocalDate()) 
-                && Boolean.TRUE.equals(agendaEntity.getNotificacao()) ){
+            if(now.isAfter(dataNotificacao)
+                && Boolean.TRUE.equals(agendaEntity.getNotificacao()
+                && agendaEntity.getStatusEvento() == Status.ABERTO) ){
 
                 sendNotification(agendaEntity);
                 agendaEntity.atualizaNotificacao();
                 aService.save(agendaEntity);
+                System.out.println("Notificação foi enviada Sucesso!");
             }
 
         }

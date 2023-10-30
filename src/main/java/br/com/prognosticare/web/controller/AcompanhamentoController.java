@@ -5,17 +5,18 @@ import br.com.prognosticare.domain.entity.acompanhamento.DtoAtualizaAcompanhamen
 import br.com.prognosticare.domain.entity.acompanhamento.DtoCadastroAcompanhamento;
 import br.com.prognosticare.domain.entity.acompanhamento.DtoDetalheAcompanhamento;
 import br.com.prognosticare.domain.entity.agenda.DtoStatus;
-import br.com.prognosticare.domain.entity.dto.DtoData;
 import br.com.prognosticare.domain.service.AcompanhamentoService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 
-import java.time.LocalDate;
+
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -68,8 +69,10 @@ public class AcompanhamentoController {
 
     @GetMapping("/list-day/{id}")
     @Operation(summary= "Lista os Acompanhamentos de uma pessoa com base na data")
-    public ResponseEntity<List<DtoDetalheAcompanhamento>>listaAcompanhamentoData(@PathVariable (value = "id") UUID id, @RequestBody @Valid DtoData dto, @RequestParam String filtro){
-        var acompanhamentos = acompanhamentoService.listaAcompanhamentoData(id, dto, filtro);
+    public ResponseEntity<List<DtoDetalheAcompanhamento>>listaAcompanhamentoData(@PathVariable (value = "id") UUID id, 
+    @RequestParam @DateTimeFormat(pattern = "dd/MM/yyyy hh:mm:ss a") LocalDateTime dataInicial,
+    @RequestParam String filtro){
+        var acompanhamentos = acompanhamentoService.listaAcompanhamentoData(id, dataInicial, filtro);
         if(acompanhamentos==null){
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
@@ -78,8 +81,10 @@ public class AcompanhamentoController {
 
     @GetMapping("/list-between/{id}")
     @Operation(summary= "Lista os Acompanhamentos no intervalo de Data Inicial e Data Final")
-    public ResponseEntity <List<DtoDetalheAcompanhamento>> listarIntervaloData(@PathVariable(value = "id") UUID id, @RequestBody @Valid DtoData dto){
-        var acompanhamentos = acompanhamentoService.listarIntervaloData(id, dto);
+    public ResponseEntity <List<DtoDetalheAcompanhamento>> listarIntervaloData(@PathVariable(value = "id") UUID id, 
+    @RequestParam @DateTimeFormat(pattern = "dd/MM/yyyy hh:mm:ss a") LocalDateTime dataInicial,
+    @RequestParam @DateTimeFormat(pattern = "dd/MM/yyyy hh:mm:ss a") LocalDateTime dataFinal){
+        var acompanhamentos = acompanhamentoService.listarIntervaloData(id, dataInicial, dataFinal);
         if(acompanhamentos==null){
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
