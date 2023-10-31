@@ -55,6 +55,7 @@ public class AcompanhamentoSchedule {
                             .build())
                     .setToken(tokenFCM)
                     .build();
+                    
     
             try {
                 firebaseMessaging.send(message);
