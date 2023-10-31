@@ -32,7 +32,7 @@ public class Application {
 
 		FirebaseOptions firebaseOptions = FirebaseOptions.builder()
 				.setCredentials(googleCredentials).build();
-		return FirebaseApp.initializeApp(firebaseOptions, "API PrognostiCare");
+		return FirebaseApp.initializeApp(firebaseOptions, "API Prognosti_Care");
 	}
 
 	@Bean

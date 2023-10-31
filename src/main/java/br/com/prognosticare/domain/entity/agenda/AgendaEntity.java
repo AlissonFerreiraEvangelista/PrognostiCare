@@ -52,7 +52,7 @@ public class AgendaEntity {
     @Enumerated(EnumType.STRING)
     private TipoExame tipoExame;
 
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name = "pessoa_id")
     private PessoaEntity pessoa;
 
@@ -63,7 +63,7 @@ public class AgendaEntity {
         this.descricao= dto.descricao();
         this.local= dto.local();
         this.statusEvento= Status.ABERTO;
-        this.notificacao = false;
+        this.notificacao = dto.notificacao();
         this.intervaloData = dto.intervaloData();
         this.observacao= dto.observacao();
         this.especialista= dto.especialista();
@@ -71,20 +71,20 @@ public class AgendaEntity {
 
     }
 
-     public void atualizaInformacao(DtoDetalheAgenda dados) {
+     public void atualizaInformacao(DtoAtualizaAgenda dados) {
         Optional.ofNullable(dados.dataAgenda()).ifPresent(this::setDataAgenda);
         Optional.ofNullable(dados.descricao()).ifPresent(this::setDescricao);
         Optional.ofNullable(dados.local()).ifPresent(this::setLocal);
-        Optional.ofNullable(dados.statusEvento()).ifPresent(this::setStatusEvento);
         Optional.ofNullable(dados.observacao()).ifPresent(this::setObservacao);
         Optional.ofNullable(dados.especialista()).ifPresent(this::setEspecialista);
         Optional.ofNullable(dados.tipoExame()).ifPresent(this::setTipoExame);
         Optional.ofNullable(dados.intervaloData()).ifPresent(this::setIntervaloData);
+        Optional.ofNullable(dados.notificacao()).ifPresent(this::setNotificacao);
 
     }
 
-    public void atualizaAgenda(){
-        this.notificacao = true;
+    public void atualizaNotificacao(){
+        this.notificacao = false;
     }
 
    

@@ -19,7 +19,7 @@ public record DtoDependente(
                 String cartaoPlanoSaude) {
 
         public DtoDependente(PessoaEntity pessoa) {
-                this(pessoa.getPessoa_id(),
+                this(pessoa.getPessoaId(),
                 pessoa.getNome(),
                 pessoa.getCpf(),
                 pessoa.getDataNascimento(),

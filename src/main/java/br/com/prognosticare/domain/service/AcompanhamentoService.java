@@ -1,6 +1,8 @@
 package br.com.prognosticare.domain.service;
 
-
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -12,6 +14,7 @@ import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cglib.core.Local;
 import org.springframework.data.jpa.repository.Lock;
 import org.springframework.stereotype.Service;
 
@@ -27,8 +30,6 @@ public class AcompanhamentoService {
 
     @Autowired
     PessoaService pessoaService;
-
-    
 
     public List<AcompanhamentoEntity> findAll() {
         List<AcompanhamentoEntity> acompanhamentos = acompanhamentoRepository.findAll();
@@ -62,13 +63,26 @@ public class AcompanhamentoService {
         return acompanhamento;
     }
 
+    @Transactional
     public DtoDetalheAcompanhamento adicionaAcompanhamento(UUID id, DtoCadastroAcompanhamento dto) {
+
         var pessoa = pessoaService.get(id).orElse(null);
-        var acompanhamento = new AcompanhamentoEntity(dto);
-        acompanhamento.setPessoa(pessoa);
-        pessoa.getAcompanhamentos().add(acompanhamento);
-        save(acompanhamento);
-        return new DtoDetalheAcompanhamento(acompanhamento);
+
+        if (pessoa != null) {
+            var acompanhamento = new AcompanhamentoEntity(dto);
+            acompanhamento.setPessoa(pessoa);
+
+            if (acompanhamento.getIntervaloHora() == null) {
+                acompanhamento.setIntervaloHora(0);
+            }
+
+            save(acompanhamento);
+            pessoa.getAcompanhamentos().add(acompanhamento);
+
+            return new DtoDetalheAcompanhamento(acompanhamento);
+        } else {
+            return null;
+        }
     }
 
     public List<DtoDetalheAcompanhamento> listaAcompanhamentos(UUID id) {
@@ -85,12 +99,55 @@ public class AcompanhamentoService {
 
     public DtoDetalheAcompanhamento atualizaStatus(UUID id, @Valid DtoStatus dto) {
         var acompanhamento = acompanhamentoRepository.getReferenceById(id);
-        if(acompanhamento !=null){
+        if (acompanhamento != null) {
             acompanhamento.setStatusEvento(dto.statusEvento());
             acompanhamentoRepository.save(acompanhamento);
             return new DtoDetalheAcompanhamento(acompanhamento);
         }
 
+        return null;
+    }
+
+    public List<DtoDetalheAcompanhamento> listaAcompanhamentoData(UUID id, LocalDateTime dataInicial, String filtro) {
+        var pessoa = pessoaService.get(id).orElse(null);
+
+        List<DtoDetalheAcompanhamento> acompanhamentos;
+
+        if (pessoa == null || dataInicial == null) {
+            throw new ValidacaoException("Parâmetros inválidos para listaAcompanhamentoData");
+        }
+
+        if (filtro.equalsIgnoreCase("maior") && dataInicial != null) {
+
+            acompanhamentos = acompanhamentoRepository.findByDataAcompanhamentoMaior(pessoa,
+                    dataInicial.plusDays(1));
+
+        } else if (filtro.equalsIgnoreCase("menor") && dataInicial != null) {
+
+            acompanhamentos = acompanhamentoRepository.findByDataAcompanhamentoMenor(pessoa,
+                    dataInicial.minusDays(1));
+
+        } else if (filtro.equalsIgnoreCase("igual") && dataInicial != null) {
+
+            acompanhamentos = acompanhamentoRepository.findByDateBetween(pessoa,
+                    dataInicial.minusHours(4), dataInicial.plusHours(5));
+        } else {
+            throw new ValidacaoException("Erro no Filtro listaAcompanhamentoData");
+        }
+
+        if (acompanhamentos.isEmpty()) {
+            return null;
+        }
+
+        return acompanhamentos;
+    }
+
+    public List<DtoDetalheAcompanhamento> listarIntervaloData(UUID id, LocalDateTime dataInicial, LocalDateTime dataFinal) {
+        var pessoa = pessoaService.get(id).orElse(null);
+        if(pessoa!=null){
+            var acompanhamentos = acompanhamentoRepository.findByDateBetween(pessoa, dataInicial, dataFinal);
+            return acompanhamentos;
+        }
         return null;
     }
 }

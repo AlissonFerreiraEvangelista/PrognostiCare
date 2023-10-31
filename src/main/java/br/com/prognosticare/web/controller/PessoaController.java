@@ -59,9 +59,9 @@ public class PessoaController {
         return ResponseEntity.ok(new DtoDetalhePessoa(pessoa));
     }
 
-    @GetMapping("find/{pessoa_id}")
+    @GetMapping("find/{pessoaId}")
     @Operation(summary = "Encontra uma pessoa por ID")
-    public ResponseEntity<DtoDetalhePessoa> encontraPorID(@PathVariable(value = "pessoa_id") @Valid UUID id) {
+    public ResponseEntity<DtoDetalhePessoa> encontraPorID(@PathVariable(value = "pessoaId") @Valid UUID id) {
 
         var pessoa = pessoaService.get(id).orElse(null);
         if (pessoa == null) {
@@ -80,9 +80,9 @@ public class PessoaController {
 
     }
 
-    @PutMapping("/public/change-password/{pessoa_id}")
+    @PutMapping("/public/change-password/{pessoaId}")
     @Operation(summary = "Troca da senha")
-    public ResponseEntity<?> changePassword(@PathVariable(value = "pessoa_id") UUID id,
+    public ResponseEntity<?> changePassword(@PathVariable(value = "pessoaId") UUID id,
             @RequestBody @Valid DtoSenha dto) {
 
         var pessoa = pessoaService.savePassword(id, dto.password());
@@ -93,11 +93,11 @@ public class PessoaController {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Usuario não encontrado");
     }
 
-    @PostMapping("/add-dependent/{pessoa_id}")
+    @PostMapping("/add-dependent/{pessoaId}")
     @Operation(summary = "Adiciona um dependente a uma pessoa")
     @Transactional
     public ResponseEntity<DtoDetalheDependente> adicionarDependente(
-            @PathVariable(value = "pessoa_id") @Valid UUID id,
+            @PathVariable(value = "pessoaId") @Valid UUID id,
             @RequestBody @Valid DtoCadastroDependente dto,
             UriComponentsBuilder uriBuilder) {
 
@@ -107,7 +107,7 @@ public class PessoaController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
-        var uri = uriBuilder.path("/dependente/{id}").buildAndExpand(dependente.getClass()).toUri();
+        var uri = uriBuilder.path("/dependente/{pessoaId}").buildAndExpand(dependente.getClass()).toUri();
         return ResponseEntity.created(uri).body(dependente);
     }
 
@@ -119,9 +119,9 @@ public class PessoaController {
         return ResponseEntity.ok(new DtoDetalheDependente(dependent));
     }
 
-    @GetMapping("/list-dependents/{id}")
+    @GetMapping("/list-dependents/{pessoaId}")
     @Operation(summary = "Lista os dependentes de uma pessoa responsável")
-    public ResponseEntity<List<DtoDependente>> listarDependentes(@PathVariable(value = "id") @Valid UUID id) {
+    public ResponseEntity<List<DtoDependente>> listarDependentes(@PathVariable(value = "pessoaId") @Valid UUID id) {
 
         var listaDependentes = pessoaService.listarDependentes(id);
 
@@ -132,24 +132,41 @@ public class PessoaController {
         return ResponseEntity.status(HttpStatus.OK).body(listaDependentes);
     }
 
-    @PutMapping("/tokenFCM/{id}")
+    @PutMapping("/tokenFCM/{pessoaId}")
     @Transactional
     @ApiResponse(description = "Token FCM")
-    public ResponseEntity<?> tokenFCM(@PathVariable(value = "id") @Valid UUID id, @RequestBody @Valid DtoTokenFCM tokenFCM) {
+    public ResponseEntity<?> tokenFCM(@PathVariable(value = "pessoaId") @Valid UUID id,
+            @RequestBody @Valid DtoTokenFCM tokenFCM) {
 
         pessoaService.setTokenFCM(id, tokenFCM.tokenFCM());
         return ResponseEntity.ok().body("TokenFCM Cadastrado!!");
 
     }
 
-    @PutMapping("/disable/{pessoa_id}")
-    public ResponseEntity<?> inativaPessoa(@PathVariable(value = "pessoa_id") UUID id){
+    @PutMapping("/disable/{pessoaId}")
+    @ApiResponse(description = "Inativa uma Pessoa ou Dependente")
+    public ResponseEntity<?> inativaPessoa(@PathVariable(value = "pessoaId") UUID id) {
 
         var pessoa = pessoaService.inativaPessoa(id);
-        if(pessoa == false){
+        if (pessoa == false) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         return ResponseEntity.status(HttpStatus.NO_CONTENT).body("Pessoa Excluida com Sucesso!");
 
     }
+
+    @GetMapping("/profiles/{pessoaId}")
+    public ResponseEntity<List<DtoProfile>> listProfiles(@PathVariable(value = "pessoaId") UUID id) {
+
+        var pessoa = pessoaService.findDtoProfilesByDependente(id);
+        if (pessoa.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        return ResponseEntity.status(HttpStatus.OK).body(pessoa);
+
+    }
+
+
+    
+
 }
