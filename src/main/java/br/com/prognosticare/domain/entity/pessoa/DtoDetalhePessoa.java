@@ -9,7 +9,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 public record DtoDetalhePessoa(
-        UUID pessoa_id,
+        UUID pessoaId,
         String nome,
         String cpf,
         @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy") LocalDate dataNascimento,
