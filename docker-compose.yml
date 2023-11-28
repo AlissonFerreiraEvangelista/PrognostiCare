@@ -28,8 +28,6 @@ services:
       - "5432:5432"
     networks:
       - api-network
-    # volumes:
-    #   - ./postgres-data:/var/lib/postgresql/data
 
   app:
     build:
