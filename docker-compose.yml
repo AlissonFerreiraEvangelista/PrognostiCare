@@ -40,8 +40,8 @@ services:
     env_file: ./env.properties
     environment:
       - SPRING_DATASOURCE_URL=jdbc:postgresql://postgresdb:5432/postgres
-      - SPRING_DATASOURCE_USERNAME=postgres
-      - SPRING_DATASOURCE_PASSWORD=Ta$2506f
+      - SPRING_DATASOURCE_USERNAME=prognosticare
+      - SPRING_DATASOURCE_PASSWORD=prognosticare
       - SPRING_JPA_HIBERNATE_DDL_AUTO=update
     ports:
       - "8080"
@@ -59,8 +59,8 @@ services:
     env_file: ./env.properties
     environment:
       - SPRING_DATASOURCE_URL=jdbc:postgresql://postgresdb:5432/postgres
-      - SPRING_DATASOURCE_USERNAME=postgres
-      - SPRING_DATASOURCE_PASSWORD=Ta$2506f
+      - SPRING_DATASOURCE_USERNAME=prognosticare
+      - SPRING_DATASOURCE_PASSWORD=prognosticare
       - SPRING_JPA_HIBERNATE_DDL_AUTO=update
     ports:
       - "8080"
