@@ -1,5 +1,5 @@
 FROM postgres:latest
-ENV POSTGRES_USER=prognosticare
-ENV POSTGRES_PASSWORD=prognosticare
-ENV POSTGRES_DB=prognosticare
+ENV POSTGRES_USER=postgres
+ENV POSTGRES_PASSWORD=Ta$2506f
+ENV POSTGRES_DB=postgres
 EXPOSE 5432
