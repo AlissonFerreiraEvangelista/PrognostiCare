@@ -48,7 +48,9 @@ public class AgendaSchedule {
                
             }
 
+
         }
+        System.out.println("Job Agendamento Executado!");
 
     }
 
@@ -67,6 +69,7 @@ public class AgendaSchedule {
                     .build();
             try {
                 firebaseMessaging.send(message);
+                System.out.println("Enviado o Agendamento para o firebase");
             } catch (FirebaseMessagingException e) {
                 e.printStackTrace();
             }

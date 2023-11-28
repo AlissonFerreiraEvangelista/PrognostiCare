@@ -38,7 +38,7 @@ public class AcompanhamentoSchedule {
                 aService.save(acompanhamentoEntity);
             }
         }
-
+        System.out.println("Job Acompanhamento Executado!");
     }
 
     
@@ -59,6 +59,7 @@ public class AcompanhamentoSchedule {
     
             try {
                 firebaseMessaging.send(message);
+                System.out.println("Enviado o Acompanhamento para o firebase");
             } catch (FirebaseMessagingException e) {
                 e.printStackTrace();
             }
