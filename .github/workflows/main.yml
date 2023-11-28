@@ -63,6 +63,9 @@ jobs:
           key: ${{ secrets.SSH_KEY }}
           script: |
             cd ~/prognosticare
+            mkdir -p postgres-data
+            find postgres-data -type d -exec chmod 750 {} +  # Define permissões para diretórios
+            find postgres-data -type f -exec chmod 640 {} +  # Define permissões para arquivos
             docker-compose build --no-cache
             docker-compose up -d
 
