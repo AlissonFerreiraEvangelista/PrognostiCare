@@ -9,7 +9,7 @@ O aplicativo Prognóstico de Saúde tem como objetivo proporcionar aos usuários
 # 🛠 Ferramentas e Tecnologias utilizadas
 <p align="left">
   <a href="https://skillicons.dev">
-    <img src="https://skillicons.dev/icons?i=java,spring,vscode,postgres,docker,nginx,flutter" />
+    <img src="https://skillicons.dev/icons?i=java,spring,vscode,postgres,docker,nginx,flutter,azure,github,git,githubactions" />
   </a>
 </p>
  
@@ -77,15 +77,17 @@ spring.mail.properties.mail.smtp.starttls.enable=true
 ```
 
 # Endpoints
-### Swagger
-http://localhost:8080/swagger-ui.html
+### 🚧 Swagger Homologação
+http://prognosticare.ddns.net:8085/swagger-ui/index.html
 
+### 🚀 Swagger Produção
+http://20.25.55.231/swagger-ui/index.html
 
 # 🍻Contato
 
 Se você tiver alguma dúvida, sugestão ou feedback, sinta-se à vontade para entrar em contato com nossa equipe:
 
-- [Contato do Alisson](https://github.com/usuario-alisson) 😊
+- [Contato do Alisson](https://github.com/AlissonFerreiraEvangelista) 😊
 - [Contato do Pedro Prazeres](https://github.com/PedroPrazz) 🚀
 - [Contato do Pedro Paulo](https://github.com/pdropaullo) 🎉
 - [Contato do Mauricio](https://github.com/MauricioDevJS) 🌟

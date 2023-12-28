@@ -55,7 +55,7 @@ public class PessoaService {
     
     @Transactional
     public PessoaEntity getReferenceById(DtoAtualizaPessoa dto) {
-        var pessoa = pessoaRepository.getReferenceById(dto.pessoa_id());
+        var pessoa = pessoaRepository.getReferenceById(dto.pessoaId());
         if(pessoa == null){
             throw  new ValidacaoException("Pessoa não encontrada!!");
         }
@@ -140,7 +140,7 @@ public class PessoaService {
 
 
     public PessoaEntity getReferenceById(DtoAtualizaDependente dto) {
-        var dependent = pessoaRepository.getReferenceById(dto.pessoa_id());
+        var dependent = pessoaRepository.getReferenceById(dto.pessoaId());
         if(dependent == null){
             throw new ValidacaoException("Dependente não encontrado!");
         }

@@ -6,7 +6,7 @@ import java.util.UUID;
 import br.com.prognosticare.domain.enums.TipoSanguineo;
 
 public record DtoDependente(
-                UUID pessoa_id,
+                UUID pessoaId,
                 String nome,
                 String cpf,
                 LocalDate dataNascimento,

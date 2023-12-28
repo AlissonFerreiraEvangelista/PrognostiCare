@@ -13,7 +13,7 @@ import jakarta.validation.constraints.Pattern;
 
 public record DtoAtualizaPessoa(
     @NotNull
-    UUID pessoa_id,
+    UUID pessoaId,
     @NotBlank
     String nome,
 

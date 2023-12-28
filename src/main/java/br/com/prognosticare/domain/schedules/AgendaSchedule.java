@@ -45,10 +45,12 @@ public class AgendaSchedule {
                 sendNotification(agendaEntity);
                 agendaEntity.atualizaNotificacao();
                 aService.save(agendaEntity);
-                System.out.println("Notificação foi enviada Sucesso!");
+               
             }
 
+
         }
+        System.out.println("Job Agendamento Executado!");
 
     }
 
@@ -67,6 +69,7 @@ public class AgendaSchedule {
                     .build();
             try {
                 firebaseMessaging.send(message);
+                System.out.println("Enviado o Agendamento para o firebase");
             } catch (FirebaseMessagingException e) {
                 e.printStackTrace();
             }
